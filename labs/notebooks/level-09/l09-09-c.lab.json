@@ -1,0 +1,6 @@
+{
+  "id": "lab-l09-09",
+  "title": "Build a Grounded Prompt Package",
+  "stage": "C",
+  "runtime": "local-python"
+}

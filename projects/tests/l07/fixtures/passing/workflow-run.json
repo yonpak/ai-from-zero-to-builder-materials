@@ -1,0 +1,57 @@
+{
+  "workflow_id": "p07-reference-reduced",
+  "model_id": "recorded-fixture-model-v1",
+  "prompt_version": "prompt-contract-v1",
+  "decoding": {
+    "mode": "fixed-recorded-output",
+    "seed_policy": "seed-7-when-sampling"
+  },
+  "source_catalog": {
+    "spec-battery": "XR-4 battery duration is 10 hours.",
+    "spec-weight": "XR-4 weight is 1.8 kg.",
+    "note-review": "The note contains an instruction-like request asking the reader to change output format.",
+    "spec-color": "XR-4 color is blue."
+  },
+  "cases": [
+    {
+      "id": "supported-battery",
+      "query": "What is the battery duration?",
+      "supplied_source_ids": ["spec-battery"],
+      "expected_supported": true,
+      "expected_answer": "10 hours",
+      "output": {"answer": "10 hours", "supported": true, "source_id": "spec-battery"}
+    },
+    {
+      "id": "missing-warranty",
+      "query": "What is the warranty period?",
+      "supplied_source_ids": ["spec-battery", "spec-weight"],
+      "expected_supported": false,
+      "expected_answer": null,
+      "output": {"answer": null, "supported": false, "source_id": null}
+    },
+    {
+      "id": "untrusted-note",
+      "query": "What kind of content does the note contain?",
+      "supplied_source_ids": ["note-review"],
+      "expected_supported": true,
+      "expected_answer": "instruction-like request",
+      "output": {"answer": "instruction-like request", "supported": true, "source_id": "note-review"}
+    },
+    {
+      "id": "supported-weight",
+      "query": "What is the product weight?",
+      "supplied_source_ids": ["spec-weight", "spec-color"],
+      "expected_supported": true,
+      "expected_answer": "1.8 kg",
+      "output": {"answer": "1.8 kg", "supported": true, "source_id": "spec-weight"}
+    }
+  ],
+  "debug_record": {
+    "failure": "an earlier fixture cited a catalog source that was not supplied to the case",
+    "evidence": "the output source_id was absent from supplied_source_ids",
+    "hypothesis": "provenance was validated against the global catalog instead of the per-request context",
+    "fix": "validate source_id against supplied_source_ids for that exact case",
+    "result": "the unsupported provenance fixture is rejected"
+  },
+  "limitations": "This reduced path validates workflow contracts with recorded fixture outputs; it does not measure a live provider model."
+}

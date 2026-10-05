@@ -1,0 +1,12 @@
+{
+  "id": "lab-l03-11",
+  "title": "Pretrained Models and Transfer Learning",
+  "stage": "B",
+  "runtime": "colab",
+  "notebook": "labs/notebooks/level-03/l03-11-pretrained-models.ipynb",
+  "url": "https://colab.research.google.com/github/yonpak/ai-from-zero-to-builder-materials/blob/main/labs/notebooks/level-03/l03-11-pretrained-models.ipynb",
+  "packages": ["numpy>=1.26,<3", "scikit-learn>=1.5,<2", "torch>=2,<3"],
+  "python": ">=3.11",
+  "gpu": "optional",
+  "troubleshooting": "CPU is sufficient. Run all cells from the top after changing the target sample count, model state, or preprocessing. The state-dict shape mismatch is intentional."
+}

@@ -1,0 +1,6 @@
+{
+  "id": "lab-l13-04",
+  "title": "MCP Server Boundary Preflight",
+  "stage": "C",
+  "runtime": "local-python"
+}

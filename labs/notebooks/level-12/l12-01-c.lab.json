@@ -1,0 +1,6 @@
+{
+  "id": "lab-l12-01",
+  "title": "Agent Harnesses and Runtime Structure",
+  "stage": "C",
+  "runtime": "local-python"
+}

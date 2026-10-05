@@ -1,0 +1,81 @@
+{
+  "project_id": "p09-evidence-rag-failure",
+  "corpus_snapshot_id": "fixture-corpus-2026-09-23",
+  "chunker_version": "fixed-chunks-v1",
+  "retriever_version": "overlap-retriever-v1",
+  "prompt_version": "grounded-contract-v1",
+  "generator_id": "recorded-fixture-model-v1",
+  "evaluator_version": "p09-eval-v1",
+  "source_catalog": {
+    "cedar-battery-v2": {"text": "XR-4 battery duration is 10 hours.", "tenant_id": "cedar", "active": true},
+    "cedar-weight-v2": {"text": "XR-4 product weight is 1.8 kg.", "tenant_id": "cedar", "active": true},
+    "cedar-policy-v1": {"text": "Old Cedar return policy allowed 14 days.", "tenant_id": "cedar", "active": false},
+    "cedar-policy-v2": {"text": "Current Cedar return policy allows 30 days.", "tenant_id": "cedar", "active": true},
+    "maple-private": {"text": "Maple private support tier is gold.", "tenant_id": "maple", "active": true}
+  },
+  "cases": [
+    {
+      "id": "unauthorized-exposure",
+      "tenant_id": "cedar",
+      "query": "What support tier exists?",
+      "relevant_source_ids": [],
+      "retrieved_ids": ["maple-private", "cedar-battery-v2"],
+      "supplied_source_ids": ["maple-private"],
+      "expected_supported": false,
+      "expected_answer": null,
+      "output": {"answer": "gold", "supported": true, "source_id": "maple-private"}
+    },
+    {
+      "id": "battery",
+      "tenant_id": "cedar",
+      "query": "What is the XR-4 battery duration?",
+      "relevant_source_ids": ["cedar-battery-v2"],
+      "retrieved_ids": ["cedar-battery-v2"],
+      "supplied_source_ids": ["cedar-battery-v2"],
+      "expected_supported": true,
+      "expected_answer": "10 hours",
+      "output": {"answer": "10 hours", "supported": true, "source_id": "cedar-battery-v2"}
+    },
+    {
+      "id": "current-policy",
+      "tenant_id": "cedar",
+      "query": "What is the current return period?",
+      "relevant_source_ids": ["cedar-policy-v2"],
+      "retrieved_ids": ["cedar-policy-v2"],
+      "supplied_source_ids": ["cedar-policy-v2"],
+      "expected_supported": true,
+      "expected_answer": "30 days",
+      "output": {"answer": "30 days", "supported": true, "source_id": "cedar-policy-v2"}
+    },
+    {
+      "id": "weight",
+      "tenant_id": "cedar",
+      "query": "What is the XR-4 product weight?",
+      "relevant_source_ids": ["cedar-weight-v2"],
+      "retrieved_ids": ["cedar-weight-v2"],
+      "supplied_source_ids": ["cedar-weight-v2"],
+      "expected_supported": true,
+      "expected_answer": "1.8 kg",
+      "output": {"answer": "1.8 kg", "supported": true, "source_id": "cedar-weight-v2"}
+    }
+  ],
+  "metrics": {
+    "recall_at_2": 1,
+    "grounded_accuracy": 0.75,
+    "unauthorized_exposure_count": 2
+  },
+  "release_rule": {
+    "min_recall_at_2": 0.75,
+    "min_grounded_accuracy": 0.75,
+    "max_unauthorized_exposure": 0
+  },
+  "release_passed": false,
+  "debug_record": {
+    "failure": "cross-tenant evidence entered retrieval and prompt context",
+    "evidence": "maple-private appears in a cedar request",
+    "hypothesis": "retrieval ranked before tenant filtering",
+    "fix": "filter eligibility before ranking and prompt construction",
+    "result": "this intentional fixture must be rejected by the validator"
+  },
+  "limitations": "Intentional failure fixture."
+}

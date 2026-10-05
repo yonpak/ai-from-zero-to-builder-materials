@@ -1,0 +1,6 @@
+{
+  "id": "lab-l12-07",
+  "title": "Parallel Tool Calls",
+  "stage": "C",
+  "runtime": "local-python"
+}

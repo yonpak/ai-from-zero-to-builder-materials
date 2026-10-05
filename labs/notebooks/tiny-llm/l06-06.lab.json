@@ -1,0 +1,12 @@
+{
+  "id": "lab-l06-06",
+  "title": "Train and Sample the Tiny Language Model",
+  "stage": "B",
+  "runtime": "colab",
+  "notebook": "labs/notebooks/tiny-llm/l06-06-train-and-sample.ipynb",
+  "url": "https://colab.research.google.com/github/yonpak/ai-from-zero-to-builder-materials/blob/main/labs/notebooks/tiny-llm/l06-06-train-and-sample.ipynb",
+  "packages": ["torch>=2,<3"],
+  "python": ">=3.11",
+  "gpu": "optional",
+  "troubleshooting": "If the repository is private, Colab may ask you to authenticate with GitHub. The default teaching run is CPU-first; GPU is optional. Re-run from the top if model state or seeds become inconsistent."
+}

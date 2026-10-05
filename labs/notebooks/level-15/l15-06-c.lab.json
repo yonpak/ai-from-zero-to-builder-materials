@@ -1,0 +1,6 @@
+{
+  "id": "lab-l15-06",
+  "title": "Prompt Injection and Data Exfiltration",
+  "stage": "C",
+  "runtime": "local-python"
+}

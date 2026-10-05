@@ -1,0 +1,6 @@
+{
+  "id": "lab-l12-02",
+  "title": "Task Queues and Durable State",
+  "stage": "C",
+  "runtime": "local-python"
+}

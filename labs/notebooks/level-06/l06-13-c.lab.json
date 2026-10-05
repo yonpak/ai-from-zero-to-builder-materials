@@ -1,0 +1,6 @@
+{
+  "id": "lab-l06-13",
+  "title": "Package a Reproducible Tiny LLM Run",
+  "stage": "C",
+  "runtime": "local-python"
+}

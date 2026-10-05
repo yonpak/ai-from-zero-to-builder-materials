@@ -1,0 +1,6 @@
+{
+  "id": "lab-l13-10",
+  "title": "Shared State and Conflict Resolution",
+  "stage": "D",
+  "runtime": "docker"
+}

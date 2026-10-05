@@ -1,0 +1,6 @@
+{
+  "id": "lab-l10-05",
+  "title": "Error Handling and Retries",
+  "stage": "C",
+  "runtime": "local-python"
+}

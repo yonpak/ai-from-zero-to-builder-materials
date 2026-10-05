@@ -1,0 +1,153 @@
+{
+  "project_id": "p13-interoperable-agent-system",
+  "mcp_version": "2026-07-28",
+  "a2a_version": "1.0.0",
+  "policy": {
+    "roles": {
+      "reader": [
+        "get_order",
+        "search_catalog"
+      ],
+      "operator": [
+        "get_order",
+        "search_catalog",
+        "refund_order"
+      ]
+    },
+    "control_actions": [
+      "delegate",
+      "finish"
+    ]
+  },
+  "runs": [
+    {
+      "id": "mcp-read",
+      "role": "reader",
+      "mcp_version": "2025-11-25",
+      "a2a_version": "1.0.0",
+      "child_task_id": null,
+      "expected_artifact_types": [],
+      "events": [
+        {
+          "index": 1,
+          "kind": "mcp_call",
+          "capability": "get_order",
+          "executed": true
+        }
+      ],
+      "expected_terminal": "success",
+      "observed_terminal": "success"
+    },
+    {
+      "id": "a2a-child",
+      "role": "reader",
+      "mcp_version": "2026-07-28",
+      "a2a_version": "1.0.0",
+      "child_task_id": "task-7",
+      "expected_artifact_types": [
+        "report"
+      ],
+      "events": [
+        {
+          "index": 1,
+          "kind": "message",
+          "task_id": "task-7"
+        },
+        {
+          "index": 2,
+          "kind": "task_status",
+          "task_id": "task-7",
+          "state": "working"
+        },
+        {
+          "index": 3,
+          "kind": "artifact",
+          "task_id": "task-other",
+          "artifact_id": "report-1",
+          "type": "report"
+        }
+      ],
+      "expected_terminal": "success",
+      "observed_terminal": "success"
+    },
+    {
+      "id": "mcp-effect",
+      "role": "reader",
+      "mcp_version": "2026-07-28",
+      "a2a_version": "1.0.0",
+      "child_task_id": null,
+      "expected_artifact_types": [],
+      "events": [
+        {
+          "index": 1,
+          "kind": "mcp_call",
+          "capability": "refund_order",
+          "executed": true
+        }
+      ],
+      "expected_terminal": "success",
+      "observed_terminal": "success"
+    },
+    {
+      "id": "shared-conflict",
+      "role": "reader",
+      "mcp_version": "2026-07-28",
+      "a2a_version": "1.0.0",
+      "child_task_id": null,
+      "expected_artifact_types": [],
+      "events": [
+        {
+          "index": 1,
+          "kind": "state_write",
+          "expected_version": 7,
+          "observed_version": 8
+        },
+        {
+          "index": 2,
+          "kind": "state_write",
+          "expected_version": 8,
+          "observed_version": 9
+        }
+      ],
+      "expected_terminal": "conflict_resolved",
+      "observed_terminal": "conflict_resolved"
+    },
+    {
+      "id": "blocked-child",
+      "role": "reader",
+      "mcp_version": "2026-07-28",
+      "a2a_version": "1.0.0",
+      "child_task_id": "task-9",
+      "expected_artifact_types": [
+        "report"
+      ],
+      "events": [
+        {
+          "index": 1,
+          "kind": "task_status",
+          "task_id": "task-9",
+          "state": "input_required"
+        }
+      ],
+      "expected_terminal": "blocked_missing_input",
+      "observed_terminal": "blocked_missing_input"
+    }
+  ],
+  "metrics": {
+    "task_success": 1,
+    "protocol_version_mismatches": 1,
+    "unauthorized_capability_calls": 1,
+    "wrong_task_artifacts": 1,
+    "state_conflicts": 2,
+    "message_count": 3
+  },
+  "release_rule": {
+    "min_task_success": 0.8,
+    "max_protocol_version_mismatches": 0,
+    "max_unauthorized_capability_calls": 0,
+    "max_wrong_task_artifacts": 0,
+    "max_state_conflicts": 1,
+    "max_message_count": 8
+  },
+  "release_passed": false
+}

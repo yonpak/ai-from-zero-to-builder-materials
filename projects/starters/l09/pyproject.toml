@@ -1,0 +1,9 @@
+[project]
+name = "p09-evidence-rag-reduced-path"
+version = "0.1.0"
+description = "Deterministic reduced validation path for the Level 9 Evidence-Backed RAG project"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.uv]
+package = false

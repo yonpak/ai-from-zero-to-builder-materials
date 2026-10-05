@@ -1,0 +1,274 @@
+{
+  "project_id": "p15-ai-product-capstone",
+  "policy": {
+    "authorization": {
+      "support": [
+        "read_order"
+      ],
+      "admin": [
+        "read_order",
+        "refund_order"
+      ]
+    },
+    "current_day": 40,
+    "frontier_reviewed_through": "2026-09-26",
+    "required_artifacts": [
+      "base-model",
+      "application-code"
+    ],
+    "required_governance_requirements": [
+      "external-obligations-review",
+      "scope-review"
+    ]
+  },
+  "regression_cases": [
+    {
+      "id": "faq-1",
+      "slice": "common",
+      "passed": true,
+      "critical": false
+    },
+    {
+      "id": "grounding-1",
+      "slice": "grounding",
+      "passed": true,
+      "critical": false
+    },
+    {
+      "id": "authorization-1",
+      "slice": "authorization",
+      "passed": false,
+      "critical": true
+    },
+    {
+      "id": "privacy-1",
+      "slice": "privacy",
+      "passed": true,
+      "critical": true
+    },
+    {
+      "id": "tool-1",
+      "slice": "tools",
+      "passed": true,
+      "critical": false
+    }
+  ],
+  "human_ratings": [
+    {
+      "case_id": "help-1",
+      "reviewer": "r1",
+      "score": 4
+    },
+    {
+      "case_id": "help-1",
+      "reviewer": "r2",
+      "score": 4
+    },
+    {
+      "case_id": "help-1",
+      "reviewer": "r3",
+      "score": 5
+    },
+    {
+      "case_id": "help-2",
+      "reviewer": "r1",
+      "score": 1
+    },
+    {
+      "case_id": "help-2",
+      "reviewer": "r2",
+      "score": 5
+    },
+    {
+      "case_id": "help-2",
+      "reviewer": "r3",
+      "score": 5
+    }
+  ],
+  "actions": [
+    {
+      "id": "act-1",
+      "principal": {
+        "user_id": "u1",
+        "role": "support"
+      },
+      "proposal": {
+        "action": "read_order",
+        "order_id": "4172",
+        "role": "admin"
+      },
+      "executed": true
+    },
+    {
+      "id": "act-2",
+      "principal": {
+        "user_id": "u1",
+        "role": "support"
+      },
+      "proposal": {
+        "action": "refund_order",
+        "order_id": "4172",
+        "role": "admin"
+      },
+      "executed": true
+    },
+    {
+      "id": "act-3",
+      "principal": {
+        "user_id": "u2",
+        "role": "admin"
+      },
+      "proposal": {
+        "action": "refund_order",
+        "order_id": "9001"
+      },
+      "executed": true
+    }
+  ],
+  "records": [
+    {
+      "id": "rec-1",
+      "created_day": 0,
+      "retention_days": 30,
+      "legal_hold": false,
+      "retained": true,
+      "classification": "restricted"
+    },
+    {
+      "id": "rec-2",
+      "created_day": 0,
+      "retention_days": 30,
+      "legal_hold": true,
+      "retained": true,
+      "classification": "restricted"
+    },
+    {
+      "id": "rec-3",
+      "created_day": 20,
+      "retention_days": 30,
+      "legal_hold": false,
+      "retained": true,
+      "classification": "internal"
+    }
+  ],
+  "threat_tests": [
+    {
+      "id": "rt-1",
+      "severity": "critical",
+      "expected": "blocked",
+      "observed": "executed",
+      "category": "indirect_prompt_injection"
+    },
+    {
+      "id": "rt-2",
+      "severity": "critical",
+      "expected": "blocked",
+      "observed": "blocked",
+      "category": "jailbreak"
+    },
+    {
+      "id": "rt-3",
+      "severity": "medium",
+      "expected": "rejected",
+      "observed": "rejected",
+      "category": "ordinary_input_validation"
+    }
+  ],
+  "frontier_claims": [
+    {
+      "claim": "external benchmark evidence motivates a local evaluation",
+      "evidence_source": "reviewed benchmark report",
+      "system_version": "example-v1",
+      "snapshot_date": "2026-09-27",
+      "scope": "reported benchmark conditions only",
+      "local_test": "run product regression suite"
+    },
+    {
+      "claim": "protocol behavior is evaluated against the pinned snapshot",
+      "evidence_source": "pinned protocol specifications",
+      "system_version": "mcp-2026-07-28+a2a-1.0.0",
+      "snapshot_date": "2026-09-08",
+      "scope": "pinned protocol snapshots",
+      "local_test": "run compatibility and authorization tests"
+    }
+  ],
+  "reproductions": [
+    {
+      "claim": "candidate improves the reduced evaluation metric",
+      "environment": {
+        "python": "3.11",
+        "platform": "cpu"
+      },
+      "seed_policy": "fixed seed 13",
+      "baseline": 0.72,
+      "candidate": 0.78,
+      "conclusion": "fully_proven",
+      "expected_relation": "candidate_gt_baseline"
+    }
+  ],
+  "metrics": {
+    "regression_success": 0.8,
+    "critical_regressions": 1,
+    "human_mean_score": 4,
+    "high_disagreement_cases": 1,
+    "unauthorized_actions": 1,
+    "retention_violations": 1,
+    "critical_threat_failures": 1,
+    "frontier_evidence_violations": 1,
+    "reproduction_evidence_violations": 1,
+    "artifact_evidence_violations": 0,
+    "governance_evidence_violations": 0
+  },
+  "release_rule": {
+    "min_regression_success": 0.8,
+    "max_critical_regressions": 0,
+    "min_human_mean_score": 4,
+    "max_high_disagreement_cases": 0,
+    "max_unauthorized_actions": 0,
+    "max_retention_violations": 0,
+    "max_critical_threat_failures": 0,
+    "max_frontier_evidence_violations": 0,
+    "max_reproduction_evidence_violations": 0,
+    "max_artifact_evidence_violations": 0,
+    "max_governance_evidence_violations": 0
+  },
+  "release_passed": false,
+  "artifact_evidence": [
+    {
+      "artifact_id": "base-model",
+      "artifact": "example-base-model",
+      "revision": "reviewed-revision",
+      "source": "approved artifact registry",
+      "terms_reviewed": true,
+      "license_or_terms": "example-model-license-v2",
+      "review_evidence": "model-terms-review-17"
+    },
+    {
+      "artifact_id": "application-code",
+      "artifact": "application-code",
+      "revision": "reviewed-commit",
+      "source": "course repository",
+      "terms_reviewed": true,
+      "license_or_terms": "repository license and dependency terms inventory",
+      "review_evidence": "dependency-and-license-review-22"
+    }
+  ],
+  "governance_obligations": [
+    {
+      "requirement_id": "external-obligations-review",
+      "requirement": "document applicable external obligations before release",
+      "applicable": true,
+      "owner": "compliance-review",
+      "evidence": "governance-review-17",
+      "reviewed_date": "2026-10-02"
+    },
+    {
+      "requirement_id": "scope-review",
+      "requirement": "record why a non-applicable obligation is out of scope",
+      "applicable": false,
+      "owner": "compliance-review",
+      "evidence": "role-and-scope review recorded",
+      "reviewed_date": "2026-10-02"
+    }
+  ]
+}

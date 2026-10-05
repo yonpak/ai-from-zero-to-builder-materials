@@ -1,0 +1,120 @@
+the moon is bright .
+the lake is quiet .
+the small boat moves slowly .
+a builder reads the next token .
+a model predicts the next token .
+attention looks back at earlier tokens .
+the causal mask hides future tokens .
+a transformer mixes attention and a feed forward network .
+training compares a prediction with the next token .
+the loss tells the model how surprised it was .
+gradients change the weights a little .
+sampling chooses one possible next token .
+low temperature makes choices sharper .
+higher temperature makes choices less predictable .
+debugging starts with shapes masks and seeds .
+the moon is bright .
+the lake is quiet .
+the small boat moves slowly .
+a builder reads the next token .
+a model predicts the next token .
+attention looks back at earlier tokens .
+the causal mask hides future tokens .
+a transformer mixes attention and a feed forward network .
+training compares a prediction with the next token .
+the loss tells the model how surprised it was .
+gradients change the weights a little .
+sampling chooses one possible next token .
+low temperature makes choices sharper .
+higher temperature makes choices less predictable .
+debugging starts with shapes masks and seeds .
+the moon is bright .
+the lake is quiet .
+the small boat moves slowly .
+a builder reads the next token .
+a model predicts the next token .
+attention looks back at earlier tokens .
+the causal mask hides future tokens .
+a transformer mixes attention and a feed forward network .
+training compares a prediction with the next token .
+the loss tells the model how surprised it was .
+gradients change the weights a little .
+sampling chooses one possible next token .
+low temperature makes choices sharper .
+higher temperature makes choices less predictable .
+debugging starts with shapes masks and seeds .
+the moon is bright .
+the lake is quiet .
+the small boat moves slowly .
+a builder reads the next token .
+a model predicts the next token .
+attention looks back at earlier tokens .
+the causal mask hides future tokens .
+a transformer mixes attention and a feed forward network .
+training compares a prediction with the next token .
+the loss tells the model how surprised it was .
+gradients change the weights a little .
+sampling chooses one possible next token .
+low temperature makes choices sharper .
+higher temperature makes choices less predictable .
+debugging starts with shapes masks and seeds .
+the moon is bright .
+the lake is quiet .
+the small boat moves slowly .
+a builder reads the next token .
+a model predicts the next token .
+attention looks back at earlier tokens .
+the causal mask hides future tokens .
+a transformer mixes attention and a feed forward network .
+training compares a prediction with the next token .
+the loss tells the model how surprised it was .
+gradients change the weights a little .
+sampling chooses one possible next token .
+low temperature makes choices sharper .
+higher temperature makes choices less predictable .
+debugging starts with shapes masks and seeds .
+the moon is bright .
+the lake is quiet .
+the small boat moves slowly .
+a builder reads the next token .
+a model predicts the next token .
+attention looks back at earlier tokens .
+the causal mask hides future tokens .
+a transformer mixes attention and a feed forward network .
+training compares a prediction with the next token .
+the loss tells the model how surprised it was .
+gradients change the weights a little .
+sampling chooses one possible next token .
+low temperature makes choices sharper .
+higher temperature makes choices less predictable .
+debugging starts with shapes masks and seeds .
+the moon is bright .
+the lake is quiet .
+the small boat moves slowly .
+a builder reads the next token .
+a model predicts the next token .
+attention looks back at earlier tokens .
+the causal mask hides future tokens .
+a transformer mixes attention and a feed forward network .
+training compares a prediction with the next token .
+the loss tells the model how surprised it was .
+gradients change the weights a little .
+sampling chooses one possible next token .
+low temperature makes choices sharper .
+higher temperature makes choices less predictable .
+debugging starts with shapes masks and seeds .
+the moon is bright .
+the lake is quiet .
+the small boat moves slowly .
+a builder reads the next token .
+a model predicts the next token .
+attention looks back at earlier tokens .
+the causal mask hides future tokens .
+a transformer mixes attention and a feed forward network .
+training compares a prediction with the next token .
+the loss tells the model how surprised it was .
+gradients change the weights a little .
+sampling chooses one possible next token .
+low temperature makes choices sharper .
+higher temperature makes choices less predictable .
+debugging starts with shapes masks and seeds .

@@ -1,0 +1,9 @@
+[project]
+name = "p08-adapt-small-llm-reduced-path"
+version = "0.1.0"
+description = "Deterministic reduced acceptance path for Level 8 model adaptation"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.uv]
+package = false

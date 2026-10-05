@@ -1,0 +1,6 @@
+{
+  "id": "lab-l12-03",
+  "title": "Retries, Idempotency, and Recovery",
+  "stage": "C",
+  "runtime": "local-python"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "lab-l04-14",
+  "title": "Run the Tokenizer Evaluation Workshop",
+  "stage": "B",
+  "runtime": "colab",
+  "notebook": "labs/notebooks/level-04/l04-14-tokenizer-evaluation.ipynb",
+  "url": "https://colab.research.google.com/github/yonpak/ai-from-zero-to-builder-materials/blob/main/labs/notebooks/level-04/l04-14-tokenizer-evaluation.ipynb",
+  "packages": [],
+  "python": ">=3.11",
+  "gpu": "optional",
+  "troubleshooting": "CPU is sufficient. If a hosted notebook cannot open the repository, clone or download the repository and run the committed notebook with Python 3.11+."
+}

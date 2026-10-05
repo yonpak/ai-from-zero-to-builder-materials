@@ -1,0 +1,6 @@
+{
+  "id": "lab-l10-01",
+  "title": "LLMs That Use Tools",
+  "stage": "C",
+  "runtime": "local-python"
+}

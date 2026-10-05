@@ -1,0 +1,6 @@
+{
+  "id": "lab-l14-09",
+  "title": "Containers and Reproducible Deployments",
+  "stage": "D",
+  "runtime": "docker"
+}

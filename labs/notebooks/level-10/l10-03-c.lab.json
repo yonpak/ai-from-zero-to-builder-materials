@@ -1,0 +1,6 @@
+{
+  "id": "lab-l10-03",
+  "title": "Validate Structured Tool Arguments",
+  "stage": "C",
+  "runtime": "local-python"
+}

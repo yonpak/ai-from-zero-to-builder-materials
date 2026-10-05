@@ -1,0 +1,27 @@
+#!/usr/bin/env python3
+principal_customer_id = "c-1"
+state = "ORDER_LOADED"
+
+requests = [
+    {"order_id": "4172", "customer_id": "c-1", "quantity": 2},
+    {"order_id": "4172", "customer_id": "c-2", "quantity": 2},
+    {"order_id": "4172", "customer_id": "c-1", "quantity": 9},
+]
+
+def validate_request(request, stock=5):
+    if set(request) != {"order_id", "customer_id", "quantity"}:
+        return "schema"
+    if not isinstance(request["quantity"], int):
+        return "schema"
+    if not 1 <= request["quantity"] <= stock:
+        return "domain"
+    if request["customer_id"] != principal_customer_id:
+        return "permission"
+    if state != "ORDER_LOADED":
+        return "state"
+    return "ok"
+
+for request in requests:
+    print(request, "->", validate_request(request))
+
+assert [validate_request(r) for r in requests] == ["ok", "permission", "domain"]

@@ -1,0 +1,36 @@
+{
+  "run_id": "p06-reference-reduced",
+  "seed": 7,
+  "config": {
+    "vocab_size": 66,
+    "block_size": 12,
+    "n_embd": 48,
+    "n_head": 4,
+    "n_layer": 2
+  },
+  "tokenizer_fingerprint": "toy-char-v1:sha256:4a6f",
+  "checkpoint_tokenizer_fingerprint": "toy-char-v1:sha256:4a6f",
+  "checkpoint_fingerprint": "tiny-decoder-step60:sha256:9c21",
+  "validation_loss": 2.7,
+  "samples": [
+    {
+      "prompt": "the cat",
+      "text": "the cat learned a small pattern",
+      "decoding": {"temperature": 0.8, "top_k": 8, "top_p": 0.9, "seed": 7}
+    },
+    {
+      "prompt": "a tiny",
+      "text": "a tiny model follows the next token game",
+      "decoding": {"temperature": 0.8, "top_k": 8, "top_p": 0.9, "seed": 7}
+    }
+  ],
+  "environment": {"python": ">=3.11", "training_runtime": "validated Stage B tiny-llm teaching path", "reduced_validation": "stdlib-only"},
+  "debug_record": {
+    "failure": "a deliberately repetitive sample looped on one bigram",
+    "evidence": "repeated-bigram rate increased under an extreme decoding setting",
+    "hypothesis": "the restrictive decoding setting amplified one dominant local pattern",
+    "fix": "restore the baseline checkpoint/prompt/seed and change only the decoding setting",
+    "result": "the repeated-bigram indicator decreased while the run remained reproducible"
+  },
+  "limitations": "This reduced committed record demonstrates evaluation and packaging contracts, not large-model language quality. The teaching corpus and model are intentionally tiny."
+}

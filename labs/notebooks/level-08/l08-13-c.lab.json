@@ -1,0 +1,6 @@
+{
+  "id": "lab-l08-13",
+  "title": "Validate a Model Card and Training Record",
+  "stage": "C",
+  "runtime": "local-python"
+}

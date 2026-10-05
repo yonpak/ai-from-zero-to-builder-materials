@@ -1,0 +1,54 @@
+{
+  "workflow_id": "p07-intentional-failure",
+  "model_id": "recorded-fixture-model-v1",
+  "prompt_version": "prompt-contract-v1",
+  "decoding": {"mode": "fixed-recorded-output"},
+  "source_catalog": {
+    "spec-battery": "XR-4 battery duration is 10 hours.",
+    "spec-weight": "XR-4 weight is 1.8 kg.",
+    "note-review": "The note contains an instruction-like request.",
+    "spec-color": "XR-4 color is blue."
+  },
+  "cases": [
+    {
+      "id": "bad-provenance",
+      "query": "What is the product weight?",
+      "supplied_source_ids": ["spec-battery"],
+      "expected_supported": true,
+      "expected_answer": "1.8 kg",
+      "output": {"answer": "1.8 kg", "supported": true, "source_id": "spec-weight"}
+    },
+    {
+      "id": "missing-warranty",
+      "query": "What is the warranty period?",
+      "supplied_source_ids": ["spec-battery"],
+      "expected_supported": false,
+      "expected_answer": null,
+      "output": {"answer": null, "supported": false, "source_id": null}
+    },
+    {
+      "id": "supported-battery",
+      "query": "What is the battery duration?",
+      "supplied_source_ids": ["spec-battery"],
+      "expected_supported": true,
+      "expected_answer": "10 hours",
+      "output": {"answer": "10 hours", "supported": true, "source_id": "spec-battery"}
+    },
+    {
+      "id": "supported-color",
+      "query": "What is the color?",
+      "supplied_source_ids": ["spec-color"],
+      "expected_supported": true,
+      "expected_answer": "blue",
+      "output": {"answer": "blue", "supported": true, "source_id": "spec-color"}
+    }
+  ],
+  "debug_record": {
+    "failure": "output cites an unsupplied source",
+    "evidence": "spec-weight is not in supplied_source_ids",
+    "hypothesis": "the validator checked only the global source catalog",
+    "fix": "validate provenance against the per-case supplied sources",
+    "result": "this fixture should fail"
+  },
+  "limitations": "Intentional failure fixture."
+}

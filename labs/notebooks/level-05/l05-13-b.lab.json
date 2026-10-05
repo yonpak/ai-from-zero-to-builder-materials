@@ -1,0 +1,14 @@
+{
+  "id": "lab-l05-13",
+  "title": "Run the Transformer Block Assembly Lab",
+  "stage": "B",
+  "runtime": "colab",
+  "notebook": "labs/notebooks/level-05/l05-13-putting-pieces-together.ipynb",
+  "url": "https://colab.research.google.com/github/yonpak/ai-from-zero-to-builder-materials/blob/main/labs/notebooks/level-05/l05-13-putting-pieces-together.ipynb",
+  "packages": [
+    "torch>=2,<3"
+  ],
+  "python": ">=3.11",
+  "gpu": "optional",
+  "troubleshooting": "CPU is sufficient for the deterministic smoke path. If hosted notebook access fails, clone or download the repository and run the committed notebook with Python 3.11+ and PyTorch 2.x."
+}

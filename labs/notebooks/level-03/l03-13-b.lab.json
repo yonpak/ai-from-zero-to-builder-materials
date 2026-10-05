@@ -1,0 +1,12 @@
+{
+  "id": "lab-l03-13",
+  "title": "Failure Analysis Across Modalities",
+  "stage": "B",
+  "runtime": "colab",
+  "notebook": "labs/notebooks/level-03/l03-13-failure-analysis.ipynb",
+  "url": "https://colab.research.google.com/github/yonpak/ai-from-zero-to-builder-materials/blob/main/labs/notebooks/level-03/l03-13-failure-analysis.ipynb",
+  "packages": ["numpy>=1.26,<3", "scikit-learn>=1.5,<2", "torch>=2,<3"],
+  "python": ">=3.11",
+  "gpu": "optional",
+  "troubleshooting": "CPU is sufficient. Keep the clean validation examples, perturbation seed, and slice definition fixed when comparing stressed conditions."
+}

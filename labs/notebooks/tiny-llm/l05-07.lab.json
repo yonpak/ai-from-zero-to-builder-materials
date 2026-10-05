@@ -1,0 +1,12 @@
+{
+  "id": "lab-l05-07",
+  "title": "Run the Causal Self-Attention Notebook",
+  "stage": "B",
+  "runtime": "colab",
+  "notebook": "labs/notebooks/tiny-llm/l05-07-causal-self-attention.ipynb",
+  "url": "https://colab.research.google.com/github/yonpak/ai-from-zero-to-builder-materials/blob/main/labs/notebooks/tiny-llm/l05-07-causal-self-attention.ipynb",
+  "packages": ["torch>=2,<3"],
+  "python": ">=3.11",
+  "gpu": "optional",
+  "troubleshooting": "If the repository is private, Colab may ask you to authenticate with GitHub. CPU is sufficient; verify future attention mass is zero before moving on."
+}

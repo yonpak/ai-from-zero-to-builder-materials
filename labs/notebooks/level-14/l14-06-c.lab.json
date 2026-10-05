@@ -1,0 +1,6 @@
+{
+  "id": "lab-l14-06",
+  "title": "KV Cache and Generation Throughput",
+  "stage": "C",
+  "runtime": "local-python"
+}

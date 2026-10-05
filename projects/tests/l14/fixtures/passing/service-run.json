@@ -1,0 +1,131 @@
+{
+  "project_id": "p14-production-ai-service",
+  "deployments": [
+    {
+      "id": "prod-v1",
+      "image_digest": "sha256:aaa",
+      "service_version": "1.0.0",
+      "model_revision": "model-r7",
+      "runtime_version": "runtime-r3",
+      "config_hash": "cfg-a"
+    }
+  ],
+  "policy": {
+    "max_tokens": 512,
+    "reserve_gb": 2
+  },
+  "runs": [
+    {
+      "id": "a",
+      "deployment_id": "prod-v1",
+      "image_digest": "sha256:aaa",
+      "model_revision": "model-r7",
+      "runtime_version": "runtime-r3",
+      "request": {
+        "input": "Explain serving a",
+        "max_tokens": 128
+      },
+      "executed": true,
+      "admitted": true,
+      "estimated_memory_gb": 4,
+      "available_memory_gb": 8,
+      "critical_violation": false,
+      "ttft_ms": 180,
+      "expected_terminal": "success",
+      "observed_terminal": "success"
+    },
+    {
+      "id": "b",
+      "deployment_id": "prod-v1",
+      "image_digest": "sha256:aaa",
+      "model_revision": "model-r7",
+      "runtime_version": "runtime-r3",
+      "request": {
+        "input": "Explain serving b",
+        "max_tokens": 128
+      },
+      "executed": true,
+      "admitted": true,
+      "estimated_memory_gb": 4,
+      "available_memory_gb": 8,
+      "critical_violation": false,
+      "ttft_ms": 200,
+      "expected_terminal": "success",
+      "observed_terminal": "success"
+    },
+    {
+      "id": "c",
+      "deployment_id": "prod-v1",
+      "image_digest": "sha256:aaa",
+      "model_revision": "model-r7",
+      "runtime_version": "runtime-r3",
+      "request": {
+        "input": "Explain serving c",
+        "max_tokens": 128
+      },
+      "executed": true,
+      "admitted": true,
+      "estimated_memory_gb": 4,
+      "available_memory_gb": 8,
+      "critical_violation": false,
+      "ttft_ms": 220,
+      "expected_terminal": "success",
+      "observed_terminal": "success"
+    },
+    {
+      "id": "d",
+      "deployment_id": "prod-v1",
+      "image_digest": "sha256:aaa",
+      "model_revision": "model-r7",
+      "runtime_version": "runtime-r3",
+      "request": {
+        "input": "Explain serving d",
+        "max_tokens": 128
+      },
+      "executed": true,
+      "admitted": true,
+      "estimated_memory_gb": 4,
+      "available_memory_gb": 8,
+      "critical_violation": false,
+      "ttft_ms": 250,
+      "expected_terminal": "success",
+      "observed_terminal": "success"
+    },
+    {
+      "id": "e",
+      "deployment_id": "prod-v1",
+      "image_digest": "sha256:aaa",
+      "model_revision": "model-r7",
+      "runtime_version": "runtime-r3",
+      "request": {
+        "input": "Explain serving e",
+        "max_tokens": 128
+      },
+      "executed": true,
+      "admitted": true,
+      "estimated_memory_gb": 4,
+      "available_memory_gb": 8,
+      "critical_violation": false,
+      "ttft_ms": 300,
+      "expected_terminal": "success",
+      "observed_terminal": "success"
+    }
+  ],
+  "metrics": {
+    "task_success": 1,
+    "invalid_requests_executed": 0,
+    "memory_admission_violations": 0,
+    "deployment_identity_mismatches": 0,
+    "critical_violations": 0,
+    "p95_ttft_ms": 250
+  },
+  "release_rule": {
+    "min_task_success": 0.8,
+    "max_invalid_requests_executed": 0,
+    "max_memory_admission_violations": 0,
+    "max_deployment_identity_mismatches": 0,
+    "max_critical_violations": 0,
+    "max_p95_ttft_ms": 600
+  },
+  "release_passed": true
+}

@@ -1,0 +1,12 @@
+{
+  "id": "lab-l04-04",
+  "title": "Run the Simple Tokenizer Notebook",
+  "stage": "B",
+  "runtime": "colab",
+  "notebook": "labs/notebooks/tiny-llm/l04-04-tokenizer.ipynb",
+  "url": "https://colab.research.google.com/github/yonpak/ai-from-zero-to-builder-materials/blob/main/labs/notebooks/tiny-llm/l04-04-tokenizer.ipynb",
+  "packages": ["torch>=2,<3"],
+  "python": ">=3.11",
+  "gpu": "optional",
+  "troubleshooting": "If the repository is private, Colab may ask you to authenticate with GitHub before opening the notebook. CPU is sufficient for this activity."
+}

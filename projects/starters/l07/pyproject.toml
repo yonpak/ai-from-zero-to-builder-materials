@@ -1,0 +1,9 @@
+[project]
+name = "p07-reliable-llm-workflow-reduced-path"
+version = "0.1.0"
+description = "Deterministic reduced validation path for the Level 7 Reliable LLM Workflow project"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.uv]
+package = false

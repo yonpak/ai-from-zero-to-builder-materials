@@ -1,0 +1,9 @@
+[project]
+name = "p10-tool-using-assistant-reduced-path"
+version = "0.1.0"
+description = "Deterministic validation path for the Level 10 Multimodal Tool-Using Assistant project"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.uv]
+package = false

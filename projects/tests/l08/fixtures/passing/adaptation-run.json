@@ -1,0 +1,77 @@
+{
+  "project_id": "p08-reference-reduced",
+  "behavior_gap": "Base model misses the required diagnostic-label convention on held-out support cases.",
+  "base_model_id": "tiny-base-v1",
+  "dataset": {
+    "id": "support-adaptation-v3",
+    "split_id": "group-split-v1",
+    "template_version": "support-template-v2",
+    "train_groups": [
+      "case-a",
+      "case-b",
+      "case-c"
+    ],
+    "validation_groups": [
+      "case-d",
+      "case-e"
+    ]
+  },
+  "adaptation": {
+    "method": "lora",
+    "compatible_base_id": "tiny-base-v1",
+    "rank": 4,
+    "alpha": 8,
+    "target_modules": [
+      "q_proj",
+      "v_proj"
+    ]
+  },
+  "adapter_id": "support-lora-v1",
+  "metrics": {
+    "target": {
+      "id": "support-format-v3",
+      "base": 0.78,
+      "adapted": 0.91,
+      "min_gain": 0.08
+    },
+    "retention": {
+      "id": "retention-general-v2",
+      "base": 0.95,
+      "adapted": 0.94,
+      "max_drop": 0.02
+    },
+    "critical_regressions": 0
+  },
+  "release_passed": true,
+  "model_card": {
+    "intended_use": "English support-note diagnostic labeling under the documented schema.",
+    "limitations": [
+      "Not evaluated on Korean inputs.",
+      "Not evaluated on contexts longer than 4096 tokens.",
+      "Reduced path uses recorded evidence rather than a live GPU fine-tuning run."
+    ]
+  },
+  "debug_record": {
+    "failure": "An earlier split placed related turns from one support case in both training and validation.",
+    "evidence": "The same case_id appeared in both split manifests.",
+    "hypothesis": "Rows were split independently instead of grouping by case.",
+    "fix": "Assign complete case_id groups to one split.",
+    "result": "Train and validation group IDs are now disjoint."
+  },
+  "preference_context": {
+    "selected_route": "not-used",
+    "route_contract": {
+      "rlhf_style": "reward-model-plus-policy-optimization",
+      "dpo_style": "direct-preference-objective"
+    },
+    "optimization_route": "not-used",
+    "proxy_metric_id": null,
+    "independent_evaluation_ids": [
+      "support-format-v3",
+      "retention-general-v2"
+    ],
+    "rlhf_vs_dpo": "RLHF-style optimization uses a learned preference/reward signal followed by policy optimization; DPO uses preference pairs in a direct objective relative to a reference policy.",
+    "measured_signal": "This reduced LoRA/SFT path does not claim a preference-objective score. If preference or reward scores are added, they measure fit to that proxy rather than truth or broad quality.",
+    "independent_evaluation": "Held-out target and retention suites remain the evidence for the release decision; an RLHF or DPO metric would not replace them."
+  }
+}

@@ -1,0 +1,9 @@
+[project]
+name = "p06-tiny-llm-reduced-path"
+version = "0.1.0"
+description = "Deterministic reduced validation path for the Level 6 Tiny LLM project"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.uv]
+package = false

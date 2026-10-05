@@ -1,0 +1,149 @@
+{
+  "project_id": "p12-agent-harness",
+  "harness_version": "harness-1",
+  "policy_version": "policy-1",
+  "evaluator_version": "eval-1",
+  "policy": {
+    "roles": {
+      "reader": [
+        "get_order",
+        "search_catalog",
+        "read_logs",
+        "read_profile"
+      ],
+      "operator": [
+        "get_order",
+        "search_catalog",
+        "read_logs",
+        "read_profile",
+        "refund_order"
+      ]
+    },
+    "control_actions": [
+      "ask_user",
+      "finish",
+      "delegate"
+    ]
+  },
+  "traces": [
+    {
+      "id": "read-order",
+      "principal_role": "reader",
+      "steps": [
+        {
+          "index": 1,
+          "action": "get_order",
+          "executed": true,
+          "side_effect": false
+        }
+      ],
+      "expected_terminal": "success",
+      "observed_terminal": "success",
+      "latency_ms": 200,
+      "cost_units": 0.1
+    },
+    {
+      "id": "recovered-refund",
+      "principal_role": "operator",
+      "steps": [
+        {
+          "index": 1,
+          "action": "refund_order",
+          "executed": true,
+          "side_effect": true,
+          "operation_id": "refund:4172:20",
+          "recovered": false
+        },
+        {
+          "index": 2,
+          "action": "refund_order",
+          "executed": true,
+          "side_effect": true,
+          "operation_id": "refund:4172:20",
+          "reconciled": true,
+          "recovered": true
+        }
+      ],
+      "expected_terminal": "success",
+      "observed_terminal": "success",
+      "latency_ms": 500,
+      "cost_units": 0.2
+    },
+    {
+      "id": "parallel-read",
+      "principal_role": "reader",
+      "steps": [
+        {
+          "index": 1,
+          "action": "read_profile",
+          "executed": true,
+          "side_effect": false
+        },
+        {
+          "index": 2,
+          "action": "search_catalog",
+          "executed": true,
+          "side_effect": false
+        }
+      ],
+      "expected_terminal": "success",
+      "observed_terminal": "success",
+      "latency_ms": 300,
+      "cost_units": 0.12
+    },
+    {
+      "id": "delegated-log-check",
+      "principal_role": "reader",
+      "steps": [
+        {
+          "index": 1,
+          "action": "delegate",
+          "executed": true,
+          "side_effect": false
+        },
+        {
+          "index": 2,
+          "action": "read_logs",
+          "executed": true,
+          "side_effect": false
+        }
+      ],
+      "expected_terminal": "success",
+      "observed_terminal": "success",
+      "latency_ms": 350,
+      "cost_units": 0.15
+    },
+    {
+      "id": "missing-input",
+      "principal_role": "reader",
+      "steps": [
+        {
+          "index": 1,
+          "action": "ask_user",
+          "executed": true,
+          "side_effect": false
+        }
+      ],
+      "expected_terminal": "blocked_missing_input",
+      "observed_terminal": "blocked_missing_input",
+      "latency_ms": 450,
+      "cost_units": 0.13
+    }
+  ],
+  "metrics": {
+    "task_success": 1,
+    "unauthorized_executions": 0,
+    "duplicate_side_effects": 0,
+    "recovered_failures": 1,
+    "p95_latency_ms": 450,
+    "total_cost_units": 0.7
+  },
+  "release_rule": {
+    "min_task_success": 0.8,
+    "max_unauthorized_executions": 0,
+    "max_duplicate_side_effects": 0,
+    "max_p95_latency_ms": 1000,
+    "max_total_cost_units": 1
+  },
+  "release_passed": true
+}
