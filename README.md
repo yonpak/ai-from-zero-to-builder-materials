@@ -10,9 +10,12 @@ This public repository contains learner-facing files for [AI From Zero to Builde
 
 Solutions are intentionally not included.
 
-Materials repository: https://github.com/yonpak/ai-from-zero-to-builder-materials
-
 ## License
 
-Code (`.py` files and notebook code cells) is released under the MIT License — see [`LICENSE`](LICENSE).
-All other content is released under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) — see [`LICENSE-CONTENT.md`](LICENSE-CONTENT.md).
+Code is licensed under the MIT License. All other content is licensed under Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0).
+
+Required attribution for non-code content: **"AI From Zero to Builder" by Ruzin Company — https://aizero.ruzincompany.com/**
+
+See `LICENSE` and `LICENSE-CONTENT.md` for details.
+
+Materials repository: https://github.com/yonpak/ai-from-zero-to-builder-materials
