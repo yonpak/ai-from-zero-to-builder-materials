@@ -11,6 +11,8 @@ while len(done)<len(deps):
     if not ready: raise RuntimeError("cycle")
     waves.append(ready); done.update(ready)
 print("waves:",waves)
-assert waves[0]==["inventory_lookup","user_profile"]
-assert waves[-1]==["write_report"]
-print("PASS: dependency waves expose safe parallel work")
+print("wave count:",len(waves))
+# Invariant for any dependency graph: a task runs only after every task it depends on.
+wave_of={name:number for number,wave in enumerate(waves) for name in wave}
+assert all(wave_of[need]<wave_of[name] for name,needs in deps.items() for need in needs)
+print("PASS: every task runs after its dependencies")

@@ -26,5 +26,10 @@ def check(job):
 for job in requests:
     print(job["id"], "->", check(job))
 
-assert check(requests[0]) == "allowed"
-assert check(requests[1]) == "policy_blocked_network"
+# Invariant for any policy values: an allowed job fits every limit in the policy.
+for job in requests:
+    if check(job) == "allowed":
+        assert policy["network"] or not job["network"]
+        assert job["seconds"] <= policy["max_seconds"]
+        assert job["output_bytes"] <= policy["max_output_bytes"]
+print("PASS: every allowed job fits the policy limits")

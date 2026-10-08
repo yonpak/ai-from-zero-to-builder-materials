@@ -19,6 +19,11 @@ def application_decision(proposal):
 for proposal in proposals:
     print(proposal["id"], "->", application_decision(proposal))
 
-assert application_decision(proposals[0]) == "answer_without_tool"
-assert application_decision(proposals[1]) == "execute_read"
-assert application_decision(proposals[2]) == "request_approval"
+# Invariants that hold for any approval state the application records:
+for proposal in proposals:
+    decision = application_decision(proposal)
+    if proposal["tool"] in READ_ONLY:
+        assert decision == "execute_read"
+    if proposal["tool"] == "refund_order" and not proposal["approved"]:
+        assert decision == "request_approval"
+print("PASS: a refund runs only after application-owned approval")

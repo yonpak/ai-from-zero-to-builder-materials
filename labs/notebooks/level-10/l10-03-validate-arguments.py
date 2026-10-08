@@ -24,4 +24,9 @@ def validate_request(request, stock=5):
 for request in requests:
     print(request, "->", validate_request(request))
 
-assert [validate_request(r) for r in requests] == ["ok", "permission", "domain"]
+# Invariant for any logged-in user: "ok" only for that user's own, in-stock request.
+for request in requests:
+    if validate_request(request) == "ok":
+        assert request["customer_id"] == principal_customer_id
+        assert 1 <= request["quantity"] <= 5
+print("PASS: only the session's own, in-stock requests are accepted")

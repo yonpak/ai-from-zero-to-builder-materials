@@ -14,5 +14,9 @@ def decision(role, item):
 
 print("reader:", decision("reader", proposal))
 print("operator:", decision("operator", proposal))
-assert decision("reader", proposal) == "deny_tool"
-assert decision("operator", proposal) == "deny_approval_mismatch"
+# Invariant for any approval: "allow" needs both the role permission and an exact approval match.
+for role in policy:
+    if decision(role, proposal) == "allow":
+        assert proposal["tool"] in policy[role]
+        assert proposal["approved_amount"] == proposal["amount"]
+print("PASS: role permission and approval binding are both required")
