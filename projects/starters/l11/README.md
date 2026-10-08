@@ -14,7 +14,9 @@ From the repository root:
 
 ```bash
 python --version
-python projects/tests/l11/validate_submission.py   projects/starters/l11/agent.py   projects/tests/l11/fixtures/passing/agent-run.json
+python projects/tests/l11/validate_submission.py \
+  projects/starters/l11/agent.py \
+  projects/tests/l11/fixtures/passing/agent-run.json
 ```
 
 The starter initially fails because its TODO functions are not implemented. That failure is expected.
@@ -69,19 +71,15 @@ A blocked or safely denied case can count as a successful evaluation case when t
 Run:
 
 ```bash
-python projects/tests/l11/validate_submission.py   projects/starters/l11/agent.py   projects/tests/l11/fixtures/passing/agent-run.json
+python projects/tests/l11/validate_submission.py \
+  projects/starters/l11/agent.py \
+  projects/tests/l11/fixtures/passing/agent-run.json
 ```
 
 When your implementation satisfies the objective checks, the final line is:
 
 ```text
 PASS: p11-bounded-agent objective checks
-```
-
-Also run the Level Lab smoke suite:
-
-```bash
-python labs/notebooks/level-11/test_labs.py
 ```
 
 ## Project report

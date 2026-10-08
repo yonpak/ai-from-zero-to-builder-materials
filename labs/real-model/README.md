@@ -154,7 +154,7 @@ The required Level 15 capstone stays deterministic and offline. This optional ex
 First check the learner product contract without downloading model weights:
 
 ```bash
-python3 projects/tests/l15/validate_product.py \
+python projects/tests/l15/validate_product.py \
   projects/starters/l15/product.py
 ```
 

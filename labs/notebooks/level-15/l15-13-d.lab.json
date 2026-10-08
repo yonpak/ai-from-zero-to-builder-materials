@@ -2,5 +2,5 @@
   "id": "lab-l15-13",
   "title": "Capstone Integration: Ship, Evaluate, and Defend",
   "stage": "D",
-  "runtime": "docker"
+  "runtime": "local-python"
 }

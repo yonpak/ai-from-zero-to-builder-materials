@@ -2,5 +2,5 @@
   "id": "lab-l12-13",
   "title": "Agent Harness Integration Workshop",
   "stage": "D",
-  "runtime": "docker"
+  "runtime": "local-python"
 }

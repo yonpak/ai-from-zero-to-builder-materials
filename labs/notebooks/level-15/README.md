@@ -13,20 +13,9 @@ For each Docker-targeted Lab, use two steps:
 Example:
 
 ```bash
-python3 labs/notebooks/level-15/l15-09-red-team.py
+python labs/notebooks/level-15/l15-09-red-team.py
 bash labs/notebooks/run-docker-preflight.sh labs/notebooks/level-15/l15-09-red-team.py
 ```
 
-The required acceptance path remains standard-library Python so it needs no live model, API key, network service, GPU, cloud account, or external package. The Docker path exists to practice the real container boundary instead of treating `runtime: docker` as a label only.
+The required acceptance path remains standard-library Python so it needs no live model, API key, network service, GPU, cloud account, or external package. The optional Docker path runs the same script inside a real container so you can practice that boundary.
 
-Run the complete Level smoke suite:
-
-```bash
-python3 labs/notebooks/level-15/test_labs.py
-```
-
-Expected final marker:
-
-```text
-PASS: Level 15 local Lab smoke checks
-```

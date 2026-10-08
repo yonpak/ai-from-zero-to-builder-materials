@@ -2,5 +2,5 @@
   "id": "lab-l14-12",
   "title": "Capacity Planning and Failure Recovery",
   "stage": "D",
-  "runtime": "docker"
+  "runtime": "local-python"
 }

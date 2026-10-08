@@ -4,7 +4,7 @@
 Demonstrate that you can define a tiny prediction task, preserve fair evaluation evidence, compare a baseline, investigate a failure, and explain what the evidence does and does not support.
 
 ## Prerequisites
-Complete Level 0 through `l00-12-debug-and-improve-a-tiny-predictor`. You should be able to identify features and labels, explain a train/test split, count prediction mistakes, compare against a baseline, and change one thing at a time.
+Complete Level 0 through Lesson 0.12, [Debug and Improve a Tiny Predictor](https://aizero.ruzincompany.com/learn/00-level-0/l00-12-debug-and-improve-a-tiny-predictor). You should be able to identify features and labels, explain a train/test split, count prediction mistakes, compare against a baseline, and change one thing at a time.
 
 You have **two valid completion paths**. The Level 0 learning goal is experimental reasoning, so local Python is not required for Core completion.
 
@@ -12,20 +12,20 @@ You have **two valid completion paths**. The Level 0 learning goal is experiment
 
 Use this path if you have not learned repository, terminal, or Python implementation workflow yet.
 
-1. Open Lesson 0.12 and run `lab-l00-12` unchanged.
+1. Open Lesson 0.12, [Debug and Improve a Tiny Predictor](https://aizero.ruzincompany.com/learn/00-level-0/l00-12-debug-and-improve-a-tiny-predictor), and run its Lab unchanged.
 2. Record the starter `debug_record`, especially `before`, `after`, and `baseline`.
 3. Find `candidate_threshold = 3` in the Lab and change only `3` to `2`.
 4. Before running, predict what will happen to input `2`.
 5. Run again and record the new `before`, `after`, and `baseline` values.
-6. Complete `CORE_REPORT_TEMPLATE.md` from this folder, or copy the same prompts from the learner-facing **Project Workbench** page.
+6. Fill in the Core Evidence Report template, [CORE_REPORT_TEMPLATE.md](CORE_REPORT_TEMPLATE.md). To get it as a file, open the [Data Detective project page](https://aizero.ruzincompany.com/projects/p00-data-detective), choose **Download project files**, and unzip the download; the template is inside. You can also open the template link and copy its prompts into your own document.
 
-This path is complete when your evidence report demonstrates all five rubric areas. You do not need to implement Python functions or run a terminal validator for the Core path.
+This path is complete when your evidence report demonstrates all five rubric areas. There is no upload or grading service: you keep the report and score it yourself against the rubric on the project page. You do not need to implement Python functions or run a terminal validator for the Core path.
 
 ## Path B — Builder: local Python implementation
 
 Use this path when you want to practice turning the same reasoning into code.
 
-If repository/terminal workflow is new, read `projects/PROJECT_WORKBENCH.md` first. It defines repository root, terminal, validator, and the setup-debugging order.
+If repository/terminal workflow is new, read the [Project Workbench](https://aizero.ruzincompany.com/project-workbench) first. It explains the repository root, terminal, validator, and the setup-debugging order.
 
 ### Setup
 

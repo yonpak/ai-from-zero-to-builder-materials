@@ -2,5 +2,5 @@
   "id": "lab-l15-09",
   "title": "Red Teaming and Abuse Testing",
   "stage": "D",
-  "runtime": "docker"
+  "runtime": "local-python"
 }

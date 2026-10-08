@@ -22,19 +22,11 @@ The objective tests use recorded fixtures. They do not require a live LLM, netwo
 
 Use Python 3.11 or newer.
 
-    python3 projects/tests/l12/validate_submission.py \
+    python projects/tests/l12/validate_submission.py \
       projects/starters/l12/harness.py \
       projects/tests/l12/fixtures/passing/harness-run.json
 
 Your initial starter is expected to fail because the TODO functions are incomplete.
-
-To verify the known-good reference implementation:
-
-    python3 projects/tests/l12/test_reference.py
-
-To run the Level Labs:
-
-    python3 labs/notebooks/level-12/test_labs.py
 
 ## Docker bridge
 

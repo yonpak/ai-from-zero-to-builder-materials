@@ -22,21 +22,9 @@ The required acceptance path is deterministic and offline. It does not require a
 Run:
 
 ```bash
-python3 projects/tests/l15/validate_submission.py \
+python projects/tests/l15/validate_submission.py \
   projects/starters/l15/capstone.py \
   projects/tests/l15/fixtures/passing/capstone-run.json
-```
-
-Reference acceptance:
-
-```bash
-python3 projects/tests/l15/test_reference.py
-```
-
-Level Labs:
-
-```bash
-python3 labs/notebooks/level-15/test_labs.py
 ```
 
 ## Optional real-product extension
@@ -47,7 +35,7 @@ Complete `product.py`, then run the lightweight contract check before downloadin
 
 ```bash
 pip install -r labs/real-model/requirements.txt
-python3 projects/tests/l15/validate_product.py \
+python projects/tests/l15/validate_product.py \
   projects/starters/l15/product.py
 ```
 

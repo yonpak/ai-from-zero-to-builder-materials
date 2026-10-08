@@ -2,5 +2,5 @@
   "id": "lab-l14-08",
   "title": "GPU Scheduling Basics",
   "stage": "D",
-  "runtime": "docker"
+  "runtime": "local-python"
 }

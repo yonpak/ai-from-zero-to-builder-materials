@@ -12,12 +12,7 @@ Level 13 practices interoperability against version-pinned protocol boundaries w
 Example Stage D container run:
 
 ```bash
-python3 labs/notebooks/level-13/l13-09-coordination.py
+python labs/notebooks/level-13/l13-09-coordination.py
 bash labs/notebooks/run-docker-preflight.sh labs/notebooks/level-13/l13-09-coordination.py
 ```
 
-Run deterministic repository acceptance from the repository root:
-
-```bash
-python3 labs/notebooks/level-13/test_labs.py
-```

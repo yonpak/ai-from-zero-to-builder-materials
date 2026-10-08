@@ -2,5 +2,5 @@
   "id": "lab-l13-09",
   "title": "Multi-Agent Coordination Patterns",
   "stage": "D",
-  "runtime": "docker"
+  "runtime": "local-python"
 }

@@ -2,5 +2,5 @@
   "id": "lab-l14-13",
   "title": "Production AI Operations Workshop",
   "stage": "D",
-  "runtime": "docker"
+  "runtime": "local-python"
 }

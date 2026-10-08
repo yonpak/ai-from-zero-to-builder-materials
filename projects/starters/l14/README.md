@@ -19,17 +19,9 @@ The required acceptance path is deterministic and does not require a GPU, live m
 
 Run:
 
-    python3 projects/tests/l14/validate_submission.py \
+    python projects/tests/l14/validate_submission.py \
       projects/starters/l14/service.py \
       projects/tests/l14/fixtures/passing/service-run.json
-
-Reference acceptance:
-
-    python3 projects/tests/l14/test_reference.py
-
-Level Labs:
-
-    python3 labs/notebooks/level-14/test_labs.py
 
 ## Optional real-model serving extension
 

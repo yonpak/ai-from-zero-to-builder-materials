@@ -35,7 +35,7 @@ Your mini Transformer must:
 Run:
 
 ```bash
-python3 projects/tests/l05/validate_submission.py projects/starters/l05/mini_transformer.py
+python projects/tests/l05/validate_submission.py projects/starters/l05/mini_transformer.py
 ```
 
 Expected success evidence:

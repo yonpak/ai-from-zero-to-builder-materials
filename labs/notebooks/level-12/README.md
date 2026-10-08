@@ -12,16 +12,9 @@ L12.9–L12.13 target the Stage D Docker environment. Each has two deliberately 
 Example:
 
 ```bash
-python3 labs/notebooks/level-12/l12-09-test-fixtures.py
+python labs/notebooks/level-12/l12-09-test-fixtures.py
 bash labs/notebooks/run-docker-preflight.sh labs/notebooks/level-12/l12-09-test-fixtures.py
 ```
 
 The Docker command actually launches the Lab in `python:3.11-slim`; it is not required by repository smoke tests.
 
-Run all deterministic checks from the repository root:
-
-```bash
-python3 labs/notebooks/level-12/test_labs.py
-```
-
-The final integration Lab validates both a passing project fixture and an intentional failure fixture. No repository smoke test requires a secret or network call.

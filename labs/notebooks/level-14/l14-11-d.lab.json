@@ -2,5 +2,5 @@
   "id": "lab-l14-11",
   "title": "Rollouts, Canaries, and Rollbacks",
   "stage": "D",
-  "runtime": "docker"
+  "runtime": "local-python"
 }

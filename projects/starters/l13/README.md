@@ -22,19 +22,11 @@ Complete the TODO functions in `system.py`:
 
 Run:
 
-    python3 projects/tests/l13/validate_submission.py \
+    python projects/tests/l13/validate_submission.py \
       projects/starters/l13/system.py \
       projects/tests/l13/fixtures/passing/system-run.json
 
 The starter is expected to fail until the TODO functions are implemented.
-
-Reference acceptance:
-
-    python3 projects/tests/l13/test_reference.py
-
-Level Labs:
-
-    python3 labs/notebooks/level-13/test_labs.py
 
 ## Docker bridge
 

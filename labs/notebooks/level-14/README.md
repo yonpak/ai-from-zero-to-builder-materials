@@ -10,14 +10,9 @@ These Labs practice production-serving control without requiring a GPU, cloud ac
 Example:
 
 ```bash
-python3 labs/notebooks/level-14/l14-09-deployment-identity.py
+python labs/notebooks/level-14/l14-09-deployment-identity.py
 bash labs/notebooks/run-docker-preflight.sh labs/notebooks/level-14/l14-09-deployment-identity.py
 ```
 
 The second command launches `python:3.11-slim` with the repository mounted into the container; the script itself remains deterministic and offline.
 
-Run all repository checks from the root:
-
-```bash
-python3 labs/notebooks/level-14/test_labs.py
-```

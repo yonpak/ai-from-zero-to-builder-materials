@@ -2,5 +2,5 @@
   "id": "lab-l15-12",
   "title": "Research Reading and Reproduction",
   "stage": "D",
-  "runtime": "docker"
+  "runtime": "local-python"
 }

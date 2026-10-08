@@ -1,13 +1,13 @@
 # p00-data-detective rubric — 100 points
 
-This rubric maps directly to the Level 0 exit skills. **Core and Builder are two evidence paths to the same learning outcome.** A learner must not lose Level 0 credit merely because local Python or terminal workflow has not been learned yet.
+This rubric maps directly to the Level 0 exit skills. **Core and Builder are two evidence paths to the same learning outcome.** You can earn full Level 0 credit on either path. Not having learned local Python or terminal workflow yet does not cost you points. Use this rubric to score your own work.
 
 Accepted evidence paths:
 
 - **Core browser path:** canonical Lesson 0.12 Lab evidence + completed Core Evidence Report;
 - **Builder local path:** completed `data_detective.py` + validator evidence + debug/explanation deliverables.
 
-Judge the reasoning and reproducibility appropriate to the chosen path. Do not award extra conceptual credit merely for using more code.
+Your work is scored on the reasoning and reproducibility that fit the path you chose. Writing more code does not earn extra conceptual credit.
 
 ## 1. Features and labels — 20 points
 - **18–20:** Correctly identifies the numeric input as the feature and the Boolean target as the label; explanation clearly distinguishes prediction from label.
@@ -39,7 +39,7 @@ Judge the reasoning and reproducibility appropriate to the chosen path. Do not a
 - **18–20 Builder:** Provides validation command/output and enough settings/evidence to reproduce the local run; distinguishes observation from conclusion and states one limitation.
 - **12–17:** Mostly reproducible evidence with an incomplete record or limitation statement.
 - **1–11:** Result depends on undocumented changes or explanation makes claims broader than the evidence.
-- **0:** Submission cannot be reproduced or explained.
+- **0:** The work cannot be reproduced or explained.
 
 ## Performance bands
 - **90–100:** Ready to advance; all Level 0 exit skills demonstrated.

@@ -2,5 +2,5 @@
   "id": "lab-l14-10",
   "title": "Observability for AI Systems",
   "stage": "D",
-  "runtime": "docker"
+  "runtime": "local-python"
 }

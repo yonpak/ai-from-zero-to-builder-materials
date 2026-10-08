@@ -23,7 +23,7 @@ You should be able to use:
 - gradient boosting as sequential error correction;
 - reproducible experiment records.
 
-This is a local Python Builder project. If repository roots, virtual environments, or package installation are new, read `projects/PROJECT_WORKBENCH.md` before continuing.
+This is a local Python Builder project. If repository roots, virtual environments, or package installation are new, read the [Project Workbench](https://aizero.ruzincompany.com/project-workbench) before continuing.
 
 ## Data and provenance
 
@@ -142,12 +142,11 @@ Run:
 
 ```bash
 python projects/tests/l01/test_project.py
-python projects/tests/l01/test_reference.py
 ```
 
 Then run your own project script from a clean shell and save the evidence used in your review.
 
-The starter structural test intentionally expects an **unfinished Builder starter**: one worked logistic candidate, safe preprocessing, no automatic model selection, and no learned-model final-test result. The reference test checks the complete four-family workflow. Neither test decides which family your own review should prefer.
+The starter structural test intentionally expects an **unfinished Builder starter**: one worked logistic candidate, safe preprocessing, no automatic model selection, and no learned-model final-test result. The test does not decide which family your own review should prefer.
 
 ## Expected success evidence
 
