@@ -40,7 +40,7 @@ Columns:
 - `certificate_issued` — **forbidden leaky feature** created after the outcome.
 - `completed` — target.
 
-The fixture contains 80 rows with a 25% positive class. The imbalance is deliberate: a majority-only baseline can look respectable on accuracy while having zero recall for the positive class. Missing values and categories are also deliberate so the project must exercise the Level 1.18 tabular workflow rather than collapsing back to a clean numeric matrix.
+The fixture contains 80 rows with a 25% positive class. The imbalance is deliberate: a majority-only baseline can look respectable on accuracy while having zero recall for the positive class. Missing values and categories are also deliberate so the project must exercise the L1.18 tabular workflow rather than collapsing back to a clean numeric matrix.
 
 ## Setup
 
