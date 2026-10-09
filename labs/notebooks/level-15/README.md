@@ -2,8 +2,8 @@
 
 Level 15 uses deterministic Python exercises to practice evaluation, safety, security, governance, red teaming, frontier evidence review, and capstone release validation.
 
-- L15.01–L15.08 use the local Python environment.
-- L15.09–L15.13 target the Docker environment.
+- L15.1–L15.8 use the local Python environment.
+- L15.9–L15.13 target the Docker environment.
 
 For each Docker-targeted Lab, use two steps:
 

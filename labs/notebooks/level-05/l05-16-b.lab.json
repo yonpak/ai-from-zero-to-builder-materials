@@ -1,6 +1,6 @@
 {
   "id": "lab-l05-16",
-  "title": "Run the Build a Mini Transformer Lab",
+  "title": "Run the Mini Transformer Integration Workshop Lab",
   "stage": "B",
   "runtime": "colab",
   "notebook": "labs/notebooks/level-05/l05-16-mini-transformer.ipynb",

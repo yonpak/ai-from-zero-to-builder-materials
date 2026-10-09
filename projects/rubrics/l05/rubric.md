@@ -1,7 +1,7 @@
 # p05-mini-transformer Rubric
 
 Project ID: `p05-mini-transformer`  
-Launch: after `l05-16-build-a-mini-transformer`  
+Launch: after `l05-16-mini-transformer-integration-workshop`  
 Canonical dependency: `p04-tokenizer-workbench`
 
 Score each criterion 0–4. A strong submission earns at least 16/20 and has no zero in Causality or Reproducibility.

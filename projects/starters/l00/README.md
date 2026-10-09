@@ -4,7 +4,7 @@
 Demonstrate that you can define a tiny prediction task, preserve fair evaluation evidence, compare a baseline, investigate a failure, and explain what the evidence does and does not support.
 
 ## Prerequisites
-Complete Level 0 through Lesson 0.12, [Debug and Improve a Tiny Predictor](https://aizero.ruzincompany.com/learn/00-level-0/l00-12-debug-and-improve-a-tiny-predictor). You should be able to identify features and labels, explain a train/test split, count prediction mistakes, compare against a baseline, and change one thing at a time.
+Complete Level 0 through L0.12, [Debug and Improve a Tiny Predictor](https://aizero.ruzincompany.com/learn/00-level-0/l00-12-debug-and-improve-a-tiny-predictor). You should be able to identify features and labels, explain a train/test split, count prediction mistakes, compare against a baseline, and change one thing at a time.
 
 You have **two valid completion paths**. The Level 0 learning goal is experimental reasoning, so local Python is not required for Core completion.
 
@@ -12,7 +12,7 @@ You have **two valid completion paths**. The Level 0 learning goal is experiment
 
 Use this path if you have not learned repository, terminal, or Python implementation workflow yet.
 
-1. Open Lesson 0.12, [Debug and Improve a Tiny Predictor](https://aizero.ruzincompany.com/learn/00-level-0/l00-12-debug-and-improve-a-tiny-predictor), and run its Lab unchanged.
+1. Open L0.12, [Debug and Improve a Tiny Predictor](https://aizero.ruzincompany.com/learn/00-level-0/l00-12-debug-and-improve-a-tiny-predictor), and run its Lab unchanged.
 2. Record the starter `debug_record`, especially `before`, `after`, and `baseline`.
 3. Find `candidate_threshold = 3` in the Lab and change only `3` to `2`.
 4. Before running, predict what will happen to input `2`.
@@ -66,7 +66,7 @@ The checks are behavioral. Your printed wording does not need to match a referen
 
 Both completion paths must include a failure investigation.
 
-- Core path: change the Lesson 0.12 candidate threshold from `3` to `2` and explain why input `2` becomes a mistake.
+- Core path: change the L0.12 candidate threshold from `3` to `2` and explain why input `2` becomes a mistake.
 - Builder path: after the clean evaluation passes, evaluate `NOISY_TEST_EXAMPLES`, identify the conflicting example, state one hypothesis, run one focused check/change, and record what the evidence supports.
 
 Do not immediately change several things. A failed hypothesis is still useful evidence when it is recorded.
@@ -74,4 +74,4 @@ Do not immediately change several things. A failed hypothesis is still useful ev
 ## Reproducibility and provenance
 The project uses deterministic, synthetic teaching data. No external dataset, model, network access, credentials, or secrets are required.
 
-The browser Core path is reproducible from the canonical Lesson 0.12 starter and recorded edit. The Builder validation path uses only Python's standard library.
+The browser Core path is reproducible from the canonical L0.12 starter and recorded edit. The Builder validation path uses only Python's standard library.

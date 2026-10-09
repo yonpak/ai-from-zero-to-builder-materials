@@ -7,7 +7,7 @@ Level 13 practices interoperability against version-pinned protocol boundaries w
 - MCP fixtures are pinned to `2026-07-28`.
 - A2A fixtures are pinned to `1.0.0`.
 - Required fixtures exercise compatibility, local authorization, task/artifact provenance, coordination, shared-state conflicts, and system evaluation. They do not define an alternate wire protocol.
-- L13.04 also has an optional official-SDK MCP server/client extension under `labs/real-model/`.
+- L13.4 also has an optional official-SDK MCP server/client extension under `labs/real-model/`.
 
 Example Stage D container run:
 

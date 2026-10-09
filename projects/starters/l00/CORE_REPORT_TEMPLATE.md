@@ -1,6 +1,6 @@
 # Data Detective — Core Evidence Report
 
-Use this template with the canonical browser Lab in Lesson 0.12. Short, specific answers are better than long general statements.
+Use this template with the canonical browser Lab in L0.12. Short, specific answers are better than long general statements.
 
 ## 1. Prediction task
 

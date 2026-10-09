@@ -4,7 +4,7 @@
 Build a deterministic decoder-style mini Transformer from understandable pieces and prove the invariants that make it causal and composable.
 
 ## Prerequisites
-Complete Level 5 through **L5.16 — Build a Mini Transformer**. You should be able to explain Q/K/V roles, dot-product scaling, softmax attention weights, causal masks, multiple heads, residual connections, LayerNorm, feed-forward networks, and stacked Transformer blocks.
+Complete Level 5 through **L5.16 — Mini Transformer Integration Workshop**. You should be able to explain Q/K/V roles, dot-product scaling, softmax attention weights, causal masks, multiple heads, residual connections, LayerNorm, feed-forward networks, and stacked Transformer blocks.
 
 The canonical cumulative dependency is the Level 4 project **Tokenizer Workbench**. This Level 5 package accepts integer token IDs directly so it remains independently reproducible.
 

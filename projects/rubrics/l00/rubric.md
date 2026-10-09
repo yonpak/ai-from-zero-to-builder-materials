@@ -4,7 +4,7 @@ This rubric maps directly to the Level 0 exit skills. **Core and Builder are two
 
 Accepted evidence paths:
 
-- **Core browser path:** canonical Lesson 0.12 Lab evidence + completed Core Evidence Report;
+- **Core browser path:** canonical L0.12 Lab evidence + completed Core Evidence Report;
 - **Builder local path:** completed `data_detective.py` + validator evidence + debug/explanation deliverables.
 
 Your work is scored on the reasoning and reproducibility that fit the path you chose. Writing more code does not earn extra conceptual credit.
