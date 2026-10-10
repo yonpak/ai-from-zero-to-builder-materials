@@ -12,7 +12,7 @@ Solutions are intentionally not included.
 
 ## License
 
-Code is licensed under the MIT License. All other content is licensed under Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0).
+Code is licensed under the MIT License. All other content is licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0).
 
 Required attribution for non-code content: **"AI From Zero to Builder" by Ruzin Company — https://aizero.ruzincompany.com/**
 
