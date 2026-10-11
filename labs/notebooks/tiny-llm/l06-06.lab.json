@@ -3,6 +3,7 @@
   "title": "Train and Sample the Tiny Language Model",
   "stage": "B",
   "runtime": "colab",
+  "activity": "modify",
   "notebook": "labs/notebooks/tiny-llm/l06-06-train-and-sample.ipynb",
   "url": "https://colab.research.google.com/github/yonpak/ai-from-zero-to-builder-materials/blob/main/labs/notebooks/tiny-llm/l06-06-train-and-sample.ipynb",
   "packages": ["torch>=2,<3"],

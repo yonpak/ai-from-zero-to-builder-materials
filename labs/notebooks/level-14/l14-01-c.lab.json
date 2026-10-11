@@ -2,5 +2,6 @@
   "id": "lab-l14-01",
   "title": "From Notebook to Service",
   "stage": "C",
-  "runtime": "local-python"
+  "runtime": "local-python",
+  "activity": "modify"
 }

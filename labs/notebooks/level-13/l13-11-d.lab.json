@@ -2,5 +2,6 @@
   "id": "lab-l13-11",
   "title": "Multi-Agent Evaluation",
   "stage": "D",
-  "runtime": "local-python"
+  "runtime": "local-python",
+  "activity": "modify"
 }

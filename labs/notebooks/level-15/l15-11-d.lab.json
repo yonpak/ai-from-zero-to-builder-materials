@@ -2,5 +2,6 @@
   "id": "lab-l15-11",
   "title": "Emerging Agent Protocols and Ecosystems",
   "stage": "D",
-  "runtime": "local-python"
+  "runtime": "local-python",
+  "activity": "modify"
 }

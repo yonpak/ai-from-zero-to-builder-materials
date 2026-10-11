@@ -3,6 +3,7 @@
   "title": "Run the Mini Transformer Integration Workshop Lab",
   "stage": "B",
   "runtime": "colab",
+  "activity": "modify",
   "notebook": "labs/notebooks/level-05/l05-16-mini-transformer.ipynb",
   "url": "https://colab.research.google.com/github/yonpak/ai-from-zero-to-builder-materials/blob/main/labs/notebooks/level-05/l05-16-mini-transformer.ipynb",
   "packages": [

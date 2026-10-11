@@ -2,5 +2,6 @@
   "id": "lab-l12-09",
   "title": "Agent Test Fixtures",
   "stage": "D",
-  "runtime": "local-python"
+  "runtime": "local-python",
+  "activity": "modify"
 }

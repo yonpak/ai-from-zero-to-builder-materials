@@ -2,5 +2,6 @@
   "id": "lab-l10-06",
   "title": "State Machines for Tool Workflows",
   "stage": "C",
-  "runtime": "local-python"
+  "runtime": "local-python",
+  "activity": "implement"
 }

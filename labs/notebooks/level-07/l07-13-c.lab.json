@@ -2,5 +2,6 @@
   "id": "lab-l07-13",
   "title": "Review a Reliable LLM Workflow",
   "stage": "C",
-  "runtime": "local-python"
+  "runtime": "local-python",
+  "activity": "observe"
 }

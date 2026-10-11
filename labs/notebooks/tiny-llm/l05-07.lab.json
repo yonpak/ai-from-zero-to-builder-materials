@@ -3,6 +3,7 @@
   "title": "Run the Causal Self-Attention Notebook",
   "stage": "B",
   "runtime": "colab",
+  "activity": "observe",
   "notebook": "labs/notebooks/tiny-llm/l05-07-causal-self-attention.ipynb",
   "url": "https://colab.research.google.com/github/yonpak/ai-from-zero-to-builder-materials/blob/main/labs/notebooks/tiny-llm/l05-07-causal-self-attention.ipynb",
   "packages": ["torch>=2,<3"],

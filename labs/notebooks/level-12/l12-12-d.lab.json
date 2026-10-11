@@ -2,5 +2,6 @@
   "id": "lab-l12-12",
   "title": "Operating an Agent in Production",
   "stage": "D",
-  "runtime": "local-python"
+  "runtime": "local-python",
+  "activity": "modify"
 }

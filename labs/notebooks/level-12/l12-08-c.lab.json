@@ -2,5 +2,6 @@
   "id": "lab-l12-08",
   "title": "Delegation and Subagents",
   "stage": "C",
-  "runtime": "local-python"
+  "runtime": "local-python",
+  "activity": "modify"
 }

@@ -3,6 +3,7 @@
   "title": "Run the Transformer Block Assembly Lab",
   "stage": "B",
   "runtime": "colab",
+  "activity": "modify",
   "notebook": "labs/notebooks/level-05/l05-13-putting-pieces-together.ipynb",
   "url": "https://colab.research.google.com/github/yonpak/ai-from-zero-to-builder-materials/blob/main/labs/notebooks/level-05/l05-13-putting-pieces-together.ipynb",
   "packages": [

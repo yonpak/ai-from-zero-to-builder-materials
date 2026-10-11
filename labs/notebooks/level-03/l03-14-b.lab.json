@@ -3,6 +3,7 @@
   "title": "Adaptation Strategy Review",
   "stage": "B",
   "runtime": "colab",
+  "activity": "modify",
   "notebook": "labs/notebooks/level-03/l03-14-adaptation-review.ipynb",
   "url": "https://colab.research.google.com/github/yonpak/ai-from-zero-to-builder-materials/blob/main/labs/notebooks/level-03/l03-14-adaptation-review.ipynb",
   "packages": ["numpy>=1.26,<3", "scikit-learn>=1.5,<2", "torch>=2,<3"],

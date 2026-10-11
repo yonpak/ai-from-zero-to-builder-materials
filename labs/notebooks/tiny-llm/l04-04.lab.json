@@ -3,6 +3,7 @@
   "title": "Run the Simple Tokenizer Notebook",
   "stage": "B",
   "runtime": "colab",
+  "activity": "modify",
   "notebook": "labs/notebooks/tiny-llm/l04-04-tokenizer.ipynb",
   "url": "https://colab.research.google.com/github/yonpak/ai-from-zero-to-builder-materials/blob/main/labs/notebooks/tiny-llm/l04-04-tokenizer.ipynb",
   "packages": ["torch>=2,<3"],

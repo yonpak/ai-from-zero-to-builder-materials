@@ -3,6 +3,7 @@
   "title": "Run the Tokenizer Evaluation Workshop",
   "stage": "B",
   "runtime": "colab",
+  "activity": "modify",
   "notebook": "labs/notebooks/level-04/l04-14-tokenizer-evaluation.ipynb",
   "url": "https://colab.research.google.com/github/yonpak/ai-from-zero-to-builder-materials/blob/main/labs/notebooks/level-04/l04-14-tokenizer-evaluation.ipynb",
   "packages": [],

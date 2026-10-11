@@ -2,5 +2,6 @@
   "id": "lab-l06-14",
   "title": "Run the Tiny LLM Integration Workshop",
   "stage": "C",
-  "runtime": "local-python"
+  "runtime": "local-python",
+  "activity": "observe"
 }

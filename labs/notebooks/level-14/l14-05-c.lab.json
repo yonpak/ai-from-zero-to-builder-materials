@@ -2,5 +2,6 @@
   "id": "lab-l14-05",
   "title": "Quantization for Serving",
   "stage": "C",
-  "runtime": "local-python"
+  "runtime": "local-python",
+  "activity": "modify"
 }

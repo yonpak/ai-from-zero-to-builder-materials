@@ -2,5 +2,6 @@
   "id": "lab-l09-12",
   "title": "Trace Retrieval Failure Boundaries",
   "stage": "C",
-  "runtime": "local-python"
+  "runtime": "local-python",
+  "activity": "modify"
 }

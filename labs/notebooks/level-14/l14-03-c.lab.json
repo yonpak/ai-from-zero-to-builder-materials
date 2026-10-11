@@ -2,5 +2,6 @@
   "id": "lab-l14-03",
   "title": "Batching and Streaming",
   "stage": "C",
-  "runtime": "local-python"
+  "runtime": "local-python",
+  "activity": "implement"
 }
