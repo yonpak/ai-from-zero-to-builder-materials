@@ -13,3 +13,10 @@ Score each criterion from **0–4**. A submission should score at least **16/20*
 ## Objective checks
 
 The validator checks tool selection, schema/range rejection, result allowlisting, role permissions, approval binding, retry/idempotency decisions, state transitions, input-evidence identity, text/image/audio slice metrics, run metrics, release recomputation, and intentional unsafe-fixture rejection.
+
+## Self-check before you call it done
+
+- Can you show typed tool schemas, result allowlists, and the policy distinction between read and write actions?
+- Can you trace principal permissions, exact-action approvals, state transitions, and rejected unsafe requests?
+- Can you demonstrate bounded retries, idempotency decisions, and normalized results using failure records?
+- Can you reproduce text/image/audio evaluation metrics, the deliberate unsafe-fixture rejection, and versioned run settings?

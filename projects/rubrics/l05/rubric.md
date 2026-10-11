@@ -22,4 +22,11 @@ Score each criterion 0–4. A strong submission earns at least 16/20 and has no 
 - intentional failure/debug note;
 - short explanation of why attention mixes positions while the feed-forward network acts position-wise.
 
-Human review should reward reasoning and observable evidence, not byte-identical prose.
+Score reasoning and observable evidence, not matching wording: every shape, causality, and debugging claim should point to a focused test or result.
+
+## Self-check before you call it done
+
+- Can you show a passing objective validator and the shapes from embeddings through the Transformer stack to logits?
+- Can you point to prefix-invariance and zero-future-attention-mass measurements rather than only assert causality?
+- Can you demonstrate the divisibility and future-leakage failures, explain the focused fixes, and rerun the checks?
+- Can you explain from observable evidence how attention mixes positions while the feed-forward path acts position-wise?

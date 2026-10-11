@@ -22,3 +22,10 @@ The network mostly works but one exit skill is weak—for example, shapes are co
 
 ### Insufficient
 The submission relies on a high-level trainer/framework to hide the first-principles work, changes the canonical task, cannot reproduce its result, or presents only final predictions without explaining computation and debugging.
+
+## Self-check before you call it done
+
+- Can you reproduce the NumPy network's shapes, forward computations, XOR predictions, and decreasing loss?
+- Can you connect each gradient to its parameter shape and show a hand or finite-difference gradient check?
+- Can you state the batch size, learning rate, update rule, seed, and exact checker command/output?
+- Can you show an intentional failure, a focused hypothesis/fix, the verified result, and a generalization limitation?

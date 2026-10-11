@@ -19,8 +19,15 @@ Score each criterion from **0–4**. A submission should score at least **16/20*
 
 ## Objective checks
 
-The repository validator verifies the reduced-path functions, required run metadata, compatible tokenizer/checkpoint fingerprints, fixed sample records, valid configuration shapes, and intentional failure rejection. Human review scores whether the actual training/evaluation evidence and explanations are technically convincing.
+The repository validator verifies the reduced-path functions, required run metadata, compatible tokenizer/checkpoint fingerprints, fixed sample records, valid configuration shapes, and intentional failure rejection. Your own scoring decides whether the training/evaluation claims and explanations are convincing: each one should trace to a recorded run or artifact, so add any missing command, metric, or sample before scoring.
 
 ## Assessment guardrail
 
 Generated text does not need to match the reference sample. Tiny model quality is intentionally limited. The rubric rewards controlled evidence, correct contracts, debugging, and reproducibility rather than fluent prose alone.
+
+## Self-check before you call it done
+
+- Can you show the validator result, tokenizer/checkpoint fingerprints, decoder configuration, seed, environment, and replay commands?
+- Can you point to finite training and held-out-loss evidence plus fixed-prompt samples with decoding settings?
+- Can you show a one-factor sampling comparison and a failure → hypothesis → focused check → result trace?
+- Can you explain what the small model and packaged evidence establish, and what they do not establish?

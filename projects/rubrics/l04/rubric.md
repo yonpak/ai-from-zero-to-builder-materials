@@ -33,3 +33,10 @@ A submission cannot be considered Level 4 complete if any of these are true:
 - UTF-8 byte path cannot reproduce the supplied text;
 - objective validator cannot run from a clean Python 3.11+ environment;
 - the intentional failure/debug scenario is omitted rather than investigated.
+
+## Self-check before you call it done
+
+- Can you rerun the validator and demonstrate stable special IDs, deterministic vocabulary, and UTF-8 round trips?
+- Can you inspect an encoded sequence, BOS/EOS, unknown tokens, truncation, padding, its mask, and aligned embeddings?
+- Can you compare subword/byte token counts and context implications on the required fixed slices?
+- Can you reproduce an unfamiliar-input failure and document the focused check, decision, and remaining limitation?

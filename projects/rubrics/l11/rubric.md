@@ -15,3 +15,10 @@ Score each criterion from **0–4**. A submission should score at least **16/20*
 The validator checks active/pending subgoal choice, permission-filtered action selection, protected working-memory updates, memory-write policy, exact/expiring approval binding, stopping rules, explicit transitions, raw-trajectory metric recomputation, goal-drift detection, repeated-action bounds, prohibited memory-write rejection, unauthorized execution rejection, and release-rule recomputation.
 
 The intentional failure fixture keeps the task outcomes correct while inserting control failures. A passing implementation must reject it; final-answer success cannot compensate for authority, memory, or boundedness violations.
+
+## Self-check before you call it done
+
+- Can you trace the goal, revisable subgoals, permitted action selection, and protected working state?
+- Can you show scoped memory reads/writes, exact expiring approvals, and stopping/budget rules?
+- Can you reproduce failure trajectories, earliest-boundary diagnoses, and recomputed task/safety/drift metrics?
+- Can you show the intentional control-failure fixture is rejected even when task outcomes appear correct?

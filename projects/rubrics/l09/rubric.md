@@ -23,17 +23,24 @@ The reduced validator checks:
 - release-rule recomputation;
 - intentional cross-tenant failure rejection.
 
-## Human review
+## Judgment questions
 
-Human review should inspect whether:
+Ask yourself, and locate a trace or measurement for each answer:
 
-- chunking preserves the evidence needed for the task;
-- lexical/vector/hybrid choices match query types;
-- reranking improves the intended slices rather than only averages;
-- citations actually support claims;
-- freshness/deletion behavior is documented;
-- failures are diagnosed at the earliest broken boundary.
+- Do chunks preserve the evidence the task requires? If not, show the lost span and revise the chunking choice.
+- Do lexical, vector, or hybrid choices match the actual query types? If not, compare a failure slice.
+- Does reranking improve the intended slices, not just aggregate scores? If not, inspect per-slice metrics.
+- Does each citation substantiate its claim? If not, correct or abstain from the claim.
+- Are freshness and deletion behavior recorded? If not, document the update boundary.
+- Did you locate the earliest failed boundary? If not, trace authorization → retrieval → ranking → generation.
 
 ## Assessment guardrail
 
 A live vector database or model API is optional for repository acceptance. If provided, it extends the evidence but does not replace deterministic provenance, authorization, and evaluation checks.
+
+## Self-check before you call it done
+
+- Can you trace corpus versions, chunk/index IDs, retrieval/reranking settings, and freshness/deletion behavior?
+- Can you prove tenant/active filtering happened before ranking and that each cited claim uses an authorized, supplied source?
+- Can you reproduce recall@2, grounded-answer accuracy, abstention, unauthorized-exposure count, and the release decision?
+- Can you reproduce the cross-tenant failure and diagnose the earliest failed boundary with a focused remedy?

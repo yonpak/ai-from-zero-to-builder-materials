@@ -12,3 +12,10 @@ Total: 100 points.
 - **Reproducibility and communication — 5:** offline acceptance, synthetic fixtures, environment metadata, and reviewable evidence are documented.
 
 Full credit requires independent recomputation of critical metrics and release status. A high aggregate quality score cannot compensate for a zero-tolerance authorization, retention, or critical threat violation.
+
+## Self-check before you call it done
+
+- Can you recompute regression results and inspect individual human-rating scores and disagreement rather than only averages?
+- Can you show trusted-principal authorization, retention/hold decisions, and adversarial blocked/failing traces?
+- Can you cite dated, versioned frontier claims with local evidence and explicit limitations?
+- Can you reproduce independent release gates and explain why no aggregate score can override critical authorization, privacy, or threat failures?

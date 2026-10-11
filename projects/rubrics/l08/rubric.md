@@ -26,17 +26,24 @@ The reduced validator checks:
 - model-card limitations;
 - intentional failure rejection.
 
-## Human review
+## Judgment questions
 
-Human review should inspect whether:
+Ask yourself, and point to a record before answering yes:
 
-- fine-tuning was the right intervention for the declared gap;
-- target data actually represents desired behavior;
-- RLHF-style reward-model/policy optimization and DPO-style direct preference optimization are not presented as the same route;
-- preference, reward, or SFT evidence is not overclaimed as truth or broad quality;
-- target gains are worth any measured regressions;
-- limitations state where evidence does not apply.
+- Does the measured gap justify fine-tuning over prompting, retrieval, or application changes? If not, revisit the decision.
+- Does the target dataset represent the desired behavior? If not, document the mismatch.
+- Have you distinguished reward-model/policy optimization (RLHF-style) from direct preference optimization (DPO-style)? If not, correct the route description.
+- Have you avoided treating preference, reward, or SFT proxies as broad truth or quality? If not, narrow the claim.
+- Do measured target gains justify retention regressions under the stated release rule? If not, record a no-release decision.
+- Do the limitations mark the boundary of tested evidence? If not, add specific excluded cases.
 
 ## Assessment guardrail
 
 A live GPU fine-tune is optional for repository acceptance. If provided, it extends the evidence but does not replace the deterministic reduced path or the requirement for before/after retention evaluation.
+
+## Self-check before you call it done
+
+- Can you support the adaptation choice with a measured gap and alternatives to fine-tuning?
+- Can you trace data provenance, grouping/splits, LoRA configuration, and base-to-adapter lineage?
+- Can you point to paired target/retention metrics, independent evaluation IDs, critical regressions, and the release decision?
+- Can you distinguish preference/reward proxy evidence from independent quality and document a debug trace, model-card limits, and reproducibility?

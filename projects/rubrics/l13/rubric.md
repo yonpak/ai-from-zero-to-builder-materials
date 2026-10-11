@@ -10,3 +10,10 @@ Total: 100 points.
 - **Reproducibility and operational clarity — 10:** deterministic local tests and the Docker bridge clearly separate protocol/controller logic from environment setup.
 
 Full credit requires independent recomputation of critical facts. Remote or fixture booleans must not be trusted as the source of authorization, provenance, or release truth.
+
+## Self-check before you call it done
+
+- Can you show protocol versions, incompatible-version rejection, and locally enforced capability permissions?
+- Can you trace agent selection, child-task and artifact provenance, and rejection of untrusted remote authority?
+- Can you reproduce versioned shared-state conflicts and explain how they are detected and handled?
+- Can you recompute task, authorization, provenance, conflict, and release metrics from event records and rerun the local tests?

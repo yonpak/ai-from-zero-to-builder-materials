@@ -22,8 +22,15 @@ Score each criterion from **0–4**. A submission should score at least **16/20*
 
 The reduced validator checks retrieval behavior, structured-output provenance, abstention, fixed-case evaluation, run metadata, and the intentional unsupplied-source failure.
 
-Human review scores whether the actual prompt/context choices, trust boundaries, evaluation coverage, and conclusions are technically convincing.
+Your own scoring decides whether the prompt/context choices, trust boundaries, evaluation coverage, and conclusions are convincing: each should rest on request-level provenance, boundary checks, or fixed evaluation cases, so record any missing case or decision.
 
 ## Assessment guardrail
 
 A live provider model is optional for repository acceptance. If one is used, model output does not need to match the reference text. The project rewards explicit contracts and evidence rather than provider-specific prompt tricks.
+
+## Self-check before you call it done
+
+- Can you show the task/input/output/abstention contract and the exact prompt, context, and evaluator identities?
+- Can you trace each accepted claim to a source supplied for that request and show unsupported claims abstaining?
+- Can you identify separate parse, schema, provenance, and business-rule checks, including the failed unsupplied-source case?
+- Can you reproduce fixed-case metrics and a diagnosed failure with commands, limitations, and any optional live-run differences?

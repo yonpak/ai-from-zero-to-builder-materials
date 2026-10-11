@@ -23,3 +23,10 @@ The code mostly works but one exit skill is weak—for example, transfer is impl
 
 ### Insufficient
 The submission changes the canonical task, uses different validation data for each strategy, leaks validation labels into training, treats a pretrained label as proof of quality, cannot reproduce its result, or reports only one overall accuracy.
+
+## Self-check before you call it done
+
+- Can you show the source/target provenance, shared target split, metrics, seed, environment, and checker result?
+- Can you identify the frozen encoder, head training, and measured encoder movement when fine-tuning from the same checkpoint?
+- Can you compare scratch, frozen, and fine-tuned runs fairly and justify a strategy using three pieces of evidence?
+- Can you reproduce the noisy-image slice and aggressive fine-tuning failure, including the fix and its measured result?

@@ -48,3 +48,10 @@ Your work is scored on the reasoning and reproducibility that fit the path you c
 - **0–59:** Major Level 0 skills are missing; revise with rubric evidence.
 
 A passing local validator is required only for the **Builder local path**. It is not a prerequisite for full Level 0 conceptual mastery on the **Core browser path**.
+
+## Self-check before you call it done
+
+- Can you identify the feature, label, and exact rule and distinguish your prediction from the true label?
+- Can you name the training and held-out examples and explain why revisiting the held-out answers is not an independent final test?
+- Can you reproduce the Core Lab's before/after/baseline values and the `3 → 2` failure, **or** show the Builder validator result and fair baseline?
+- Can you point to a failure → hypothesis → one check → result → next-step record and a limitation in your own report?

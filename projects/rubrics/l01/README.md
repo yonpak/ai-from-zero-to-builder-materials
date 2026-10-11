@@ -38,6 +38,13 @@ The final comparison uses `certificate_issued`, repeatedly selects models on the
 
 The submission must intentionally demonstrate **one broken experiment** and then fix it. The recommended scenario is to add `certificate_issued` temporarily and observe the suspiciously strong result. Full credit requires explaining why that feature would not exist at prediction time and confirming it is absent from the final clean model.
 
-## Human-judgment guidance
+## Scoring guidance
 
-Do not require byte-identical metrics or a particular winning family. Grade the fairness of the boundary, the quality of the evidence, the model-family reasoning, debugging, and reproducibility.
+Do not demand byte-identical metrics or a particular winning family. Score the fairness of the information boundary, the recorded metrics, the model-family reasoning, the debugging, and the reproducibility of your evidence; if the evidence is thin, revise it before awarding full credit.
+
+## Self-check before you call it done
+
+- Can you identify the prediction moment, allowed features, and why `certificate_issued` is unavailable then?
+- Can you show one fixed test split, training-only CV for all four learned families, and preprocessing fitted inside each pipeline?
+- Can you point to baseline evidence, class balance, accuracy/precision/recall/F1, candidate settings, and a selection policy written before final testing?
+- Can you reproduce one isolated leaky experiment, its diagnosis and removal, the selected model's final result, and a bounded recommendation?
