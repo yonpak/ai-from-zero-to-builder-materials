@@ -6,9 +6,10 @@ This public repository contains learner-facing files for [AI From Zero to Builde
 - Validators and public fixtures: `projects/tests/`
 - Rubrics: `projects/rubrics/`
 - Notebooks: `labs/notebooks/`
+- Completed Level 10–15 exercises: `labs/answers/advanced/`
 - Optional real-model labs: `labs/real-model/`
 
-Solutions are intentionally not included.
+Level 10–15 exercise answers are in `labs/answers/advanced/`. Try the `*-exercise.py` starter first, then compare your implementation with its matching `*-answer.py`. Project solutions remain private.
 
 ## License
 
