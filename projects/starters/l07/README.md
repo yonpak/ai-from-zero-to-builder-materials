@@ -19,6 +19,11 @@ task contract
 
 ## Prerequisites
 
+Python help for this project:
+
+- [P3 — Writing Small Python Functions](https://aizero.ruzincompany.com/learn/01-level-1/writing-small-python-functions)
+- [P8 — Running Python Projects Locally](https://aizero.ruzincompany.com/learn/06-level-6/running-python-projects-locally)
+
 Complete Level 7 through **Reliable LLM Workflow Review**. The cumulative project dependency is **Train and Ship a Tiny LLM**.
 
 ## Reduced validation path
@@ -102,3 +107,13 @@ Add a short `PROJECT_REPORT.md` explaining:
 - limitations and next test.
 
 The project is successful when another person can explain why each accepted answer is grounded in supplied evidence and reproduce the evaluation result.
+
+## Compare with a reference (optional)
+
+Try the TODOs yourself and run the submission validator first. Then inspect the [published reference solution](../../reference/l07/reference_solution.py) and any example evaluations. To verify the published reference against its acceptance tests from the public materials repository root, run:
+
+```bash
+python projects/tests/l07/test_reference.py
+```
+
+This command tests the reference, **not your own solution**. Use the project rubric and submission checker to evaluate your implementation.

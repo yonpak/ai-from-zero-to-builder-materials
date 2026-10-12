@@ -6,6 +6,10 @@ The required project path is provider-neutral and uses only the Python standard 
 
 ## Prerequisites
 
+Python help for this project:
+
+- [P9 — Writing Reliable Python](https://aizero.ruzincompany.com/learn/10-level-10/writing-reliable-python)
+
 Complete Level 11 through **Bounded Agent Integration Workshop** and the Level 10 **Multimodal Tool-Using Assistant** project. You should already understand tool schemas, permissions, exact approval binding, explicit state transitions, retries, and recorded trace evaluation.
 
 ## Setup
@@ -98,3 +102,13 @@ Add `PROJECT_REPORT.md` to your submission and explain:
 ## Optional live model path
 
 You may replace fixture action proposals with a real model as extra evidence. Keep the same controller boundaries and deterministic validator. Do not commit credentials. Record the exact model/provider version and date if you add a live path.
+
+## Compare with a reference (optional)
+
+Try the TODOs yourself and run the submission validator first. Then inspect the [published reference solution](../../reference/l11/reference_solution.py) and any example evaluations. To verify the published reference against its acceptance tests from the public materials repository root, run:
+
+```bash
+python projects/tests/l11/test_reference.py
+```
+
+This command tests the reference, **not your own solution**. Use the project rubric and submission checker to evaluate your implementation.

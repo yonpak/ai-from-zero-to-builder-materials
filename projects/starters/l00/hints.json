@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "project": "p00",
+  "todos": [
+    {
+      "id": "predict",
+      "file": "data_detective.py",
+      "signature": "def predict(value, threshold):",
+      "source": "projects/reference/l00/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: implement a threshold prediction.. Validator focus: predict(4, 4) should be True."
+        },
+        {
+          "text": "Pseudocode: Return the comparison of the feature with the chosen threshold."
+        },
+        {
+          "text": "Reference implementation of predict. Read and compare only after trying the first two hints.",
+          "code": "def predict(value, threshold):\n    return value >= threshold"
+        }
+      ]
+    },
+    {
+      "id": "count_mistakes",
+      "file": "data_detective.py",
+      "signature": "def count_mistakes(rows, threshold):",
+      "source": "projects/reference/l00/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: compare every prediction with its label.. Validator focus: count_mistakes should compare predictions with labels."
+        },
+        {
+          "text": "Pseudocode: Sum a Boolean mismatch for each (value, label) pair. Useful Python operations: sum."
+        },
+        {
+          "text": "Reference implementation of count_mistakes. Read and compare only after trying the first two hints.",
+          "code": "def count_mistakes(rows, threshold):\n    return sum(predict(value, threshold) != label for value, label in rows)"
+        }
+      ]
+    },
+    {
+      "id": "choose_best_threshold",
+      "file": "data_detective.py",
+      "signature": "def choose_best_threshold(rows):",
+      "source": "projects/reference/l00/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: evaluate candidate thresholds from the training feature values.."
+        },
+        {
+          "text": "Pseudocode: Generate sorted training-feature candidates and choose the fewest training mistakes; resolve ties toward the smaller threshold. Useful Python operations: sorted, min."
+        },
+        {
+          "text": "Reference implementation of choose_best_threshold. Read and compare only after trying the first two hints.",
+          "code": "def choose_best_threshold(rows):\n    candidates = sorted({value for value, _ in rows})\n    return min(candidates, key=lambda threshold: (count_mistakes(rows, threshold), threshold))"
+        }
+      ]
+    },
+    {
+      "id": "build_report",
+      "file": "data_detective.py",
+      "signature": "def build_report():",
+      "source": "projects/reference/l00/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: choose a threshold from TRAIN_EXAMPLES and evaluate TEST_EXAMPLES.."
+        },
+        {
+          "text": "Pseudocode: Use TRAIN_EXAMPLES for selection and TEST_EXAMPLES only for final model/baseline evaluation."
+        },
+        {
+          "text": "Reference implementation of build_report. Read and compare only after trying the first two hints.",
+          "code": "def build_report():\n    threshold = choose_best_threshold(TRAIN_EXAMPLES)\n    model_mistakes = count_mistakes(TEST_EXAMPLES, threshold)\n    baseline = baseline_mistakes(TEST_EXAMPLES)\n    return {\n        \"threshold\": threshold,\n        \"model_mistakes\": model_mistakes,\n        \"baseline_mistakes\": baseline,\n        \"conclusion\": \"On this held-out set, the threshold predictor makes fewer mistakes than the training-majority baseline; this small test does not prove it will win on every future case.\",\n    }"
+        }
+      ]
+    }
+  ]
+}

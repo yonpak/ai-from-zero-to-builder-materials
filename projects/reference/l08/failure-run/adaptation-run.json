@@ -1,0 +1,72 @@
+{
+  "project_id": "p08-intentional-failure",
+  "behavior_gap": "Adapt support formatting.",
+  "base_model_id": "tiny-base-v1",
+  "dataset": {
+    "id": "support-adaptation-v3",
+    "split_id": "group-split-v1",
+    "template_version": "support-template-v2",
+    "train_groups": [
+      "case-a",
+      "case-b"
+    ],
+    "validation_groups": [
+      "case-c"
+    ]
+  },
+  "adaptation": {
+    "method": "lora",
+    "compatible_base_id": "tiny-base-v2",
+    "rank": 4,
+    "alpha": 8,
+    "target_modules": [
+      "q_proj"
+    ]
+  },
+  "adapter_id": "bad-lineage-adapter",
+  "metrics": {
+    "target": {
+      "id": "support-format-v3",
+      "base": 0.78,
+      "adapted": 0.92,
+      "min_gain": 0.08
+    },
+    "retention": {
+      "id": "retention-general-v2",
+      "base": 0.95,
+      "adapted": 0.8,
+      "max_drop": 0.02
+    },
+    "critical_regressions": 1
+  },
+  "release_passed": true,
+  "model_card": {
+    "intended_use": "Intentional failure fixture.",
+    "limitations": [
+      "This record must be rejected."
+    ]
+  },
+  "debug_record": {
+    "failure": "Adapter declares a different compatible base and retention regresses.",
+    "evidence": "compatible_base_id and base_model_id disagree; retention drop exceeds threshold.",
+    "hypothesis": "Artifact lineage and release decision were not validated.",
+    "fix": "Validate lineage and compute release decision from metrics.",
+    "result": "This fixture should fail."
+  },
+  "preference_context": {
+    "selected_route": "not-used",
+    "route_contract": {
+      "rlhf_style": "reward-model-plus-policy-optimization",
+      "dpo_style": "direct-preference-objective"
+    },
+    "optimization_route": "not-used",
+    "proxy_metric_id": null,
+    "independent_evaluation_ids": [
+      "support-format-v3",
+      "retention-general-v2"
+    ],
+    "rlhf_vs_dpo": "RLHF-style optimization uses a reward signal plus policy optimization; DPO uses a direct preference objective.",
+    "measured_signal": "Preference fit would be a proxy and would not establish independent quality.",
+    "independent_evaluation": "Target and retention evaluation are still required even when a preference or reward signal improves."
+  }
+}

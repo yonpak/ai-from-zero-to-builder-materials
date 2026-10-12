@@ -4,6 +4,10 @@
 Build a deterministic tokenizer workbench that compares simple word, subword-style, and byte representations; handles special tokens and masks; demonstrates embedding/position alignment; and diagnoses at least one realistic tokenizer failure.
 
 ## Prerequisites
+Python help for this project:
+
+- [P6 — Text Processing in Python](https://aizero.ruzincompany.com/learn/04-level-4/text-processing-in-python)
+
 Complete Level 4 through **L4.14 — Tokenizer Evaluation Workshop**. You should be able to reason about vocabularies, unknown tokens, UTF-8 bytes, subword pieces, special-token IDs, padding/masks, embeddings, positions, context windows, and tokenizer evaluation slices.
 
 The canonical cumulative project dependency is the Level 3 project **Transfer Learning Across a Real Dataset**, but this Level 4 project package is self-contained and does not require copying a Level 3 implementation.
@@ -58,3 +62,13 @@ A valid debug note should separate:
 
 ## Reproducibility and provenance
 All teaching text is deterministic and committed directly in the starter. There is no external dataset, model download, network call, secret, or credential. The validation path uses only Python's standard library.
+
+## Compare with a reference (optional)
+
+Try the TODOs yourself and run the submission validator first. Then inspect the [published reference solution](../../reference/l04/reference_solution.py) and any example evaluations. To verify the published reference against its acceptance tests from the public materials repository root, run:
+
+```bash
+python projects/tests/l04/test_reference.py
+```
+
+This command tests the reference, **not your own solution**. Use the project rubric and submission checker to evaluate your implementation.

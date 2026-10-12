@@ -1,6 +1,6 @@
 """Starter for p04-tokenizer-workbench.
 
-Complete the TODO functions without looking at the reference solution.
+Try each TODO first. If stuck, use the project-page hints; the full reference is in projects/reference/l04/.
 The fixtures are deterministic and use only Python's standard library.
 """
 

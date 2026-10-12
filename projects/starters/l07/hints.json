@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "project": "p07",
+  "todos": [
+    {
+      "id": "word_overlap",
+      "file": "workflow.py",
+      "signature": "def word_overlap(query: str, text: str) -> int:",
+      "source": "projects/reference/l07/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: normalize query/text and count shared words\") Validator checks: word_overlap should count shared normalized words."
+        },
+        {
+          "text": "Pseudocode: Normalize query and document into word sets; count their intersection. Relevant Python syntax: int, len."
+        },
+        {
+          "text": "Only word_overlap from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def word_overlap(query: str, text: str) -> int:\n    return len(_words(query) & _words(text))"
+        }
+      ],
+      "helpers": [
+        "_words"
+      ]
+    },
+    {
+      "id": "retrieve",
+      "file": "workflow.py",
+      "signature": "def retrieve(query: str, documents: dict[str, str], k: int = 1) -> list[str]:",
+      "source": "projects/reference/l07/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: rank supplied documents without inventing new IDs\") Validator checks: retrieve should rank the most overlapping document first."
+        },
+        {
+          "text": "Pseudocode: Score only supplied source documents by overlap, rank consistently, return at most k identifiers. Relevant Python syntax: int, isinstance, raise, ValueError, sorted."
+        },
+        {
+          "text": "Only retrieve from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def retrieve(query: str, documents: dict[str, str], k: int = 1) -> list[str]:\n    if not isinstance(documents, dict) or not documents:\n        raise ValueError(\"documents must be a non-empty dict\")\n    if not isinstance(k, int) or k < 1:\n        raise ValueError(\"k must be a positive integer\")\n    ranked = sorted(\n        documents,\n        key=lambda doc_id: (-word_overlap(query, documents[doc_id]), doc_id),\n    )\n    return ranked[: min(k, len(ranked))]"
+        }
+      ]
+    },
+    {
+      "id": "validate_model_output",
+      "file": "workflow.py",
+      "signature": "def validate_model_output(output: dict, supplied_source_ids: list[str]) -> None:",
+      "source": "projects/reference/l07/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: validate answer/supported/source_id invariants\") Validator checks: validate_model_output must reject an unsupplied source."
+        },
+        {
+          "text": "Pseudocode: Check supported/unsupported answer contract and confirm citations are among supplied source IDs. Relevant Python syntax: isinstance, raise, ValueError, set."
+        },
+        {
+          "text": "Only validate_model_output from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def validate_model_output(output: dict, supplied_source_ids: list[str]) -> None:\n    if not isinstance(output, dict):\n        raise ValueError(\"output must be a dict\")\n    if set(output) != {\"answer\", \"supported\", \"source_id\"}:\n        raise ValueError(\"output must contain exactly answer, supported, source_id\")\n    if type(output[\"supported\"]) is not bool:\n        raise ValueError(\"supported must be a bool\")\n    allowed = set(supplied_source_ids)\n    if output[\"supported\"]:\n        if not isinstance(output[\"answer\"], str) or not output[\"answer\"].strip():\n            raise ValueError(\"supported output needs a non-empty answer\")\n        if not isinstance(output[\"source_id\"], str) or output[\"source_id\"] not in allowed:\n            raise ValueError(\"supported output must cite a supplied source\")\n    else:\n        if output[\"answer\"] is not None or output[\"source_id\"] is not None:\n            raise ValueError(\"unsupported output must abstain with null answer/source\")"
+        }
+      ]
+    },
+    {
+      "id": "evaluate_cases",
+      "file": "workflow.py",
+      "signature": "def evaluate_cases(cases: list[dict]) -> tuple[int, list[str]]:",
+      "source": "projects/reference/l07/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: evaluate fixed cases and preserve failing IDs\")"
+        },
+        {
+          "text": "Pseudocode: Compare each case output with its expected support/provenance, count passes and failed case IDs. Relevant Python syntax: int, isinstance, raise, ValueError."
+        },
+        {
+          "text": "Only evaluate_cases from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def evaluate_cases(cases: list[dict]) -> tuple[int, list[str]]:\n    if not isinstance(cases, list) or not cases:\n        raise ValueError(\"cases must be a non-empty list\")\n    passed = 0\n    failed = []\n    for case in cases:\n        case_id = str(case.get(\"id\", \"\")).strip()\n        if not case_id:\n            raise ValueError(\"each case needs an id\")\n        output = case.get(\"output\")\n        supplied = case.get(\"supplied_source_ids\")\n        if not isinstance(supplied, list):\n            raise ValueError(\"each case needs supplied_source_ids\")\n        try:\n            validate_model_output(output, supplied)\n            correct = (\n                output[\"supported\"] is case.get(\"expected_supported\")\n                and output[\"answer\"] == case.get(\"expected_answer\")\n            )\n        except ValueError:\n            correct = False\n        if correct:\n            passed += 1\n        else:\n            failed.append(case_id)\n    return passed, failed"
+        }
+      ]
+    },
+    {
+      "id": "validate_run",
+      "file": "workflow.py",
+      "signature": "def validate_run(data: dict) -> None:",
+      "source": "projects/reference/l07/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: validate reproducibility, cases, provenance, and debug evidence\") Validator checks: validate_run must reject a missing required field."
+        },
+        {
+          "text": "Pseudocode: Recompute required invariants from run data, reject mismatched provenance, missing fields and false release evidence. Relevant Python syntax: isinstance, raise, ValueError, sorted, all."
+        },
+        {
+          "text": "Only validate_run from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def validate_run(data: dict) -> None:\n    if not isinstance(data, dict):\n        raise ValueError(\"run data must be a dict\")\n    missing = REQUIRED_RUN_FIELDS - data.keys()\n    if missing:\n        raise ValueError(\"missing: \" + \", \".join(sorted(missing)))\n    for key in (\"workflow_id\", \"model_id\", \"prompt_version\"):\n        if not str(data[key]).strip():\n            raise ValueError(f\"{key} must be non-empty\")\n    if not isinstance(data[\"decoding\"], dict) or not str(data[\"decoding\"].get(\"mode\", \"\")).strip():\n        raise ValueError(\"decoding needs a mode\")\n    catalog = data[\"source_catalog\"]\n    if not isinstance(catalog, dict) or not catalog:\n        raise ValueError(\"source_catalog must be a non-empty dict\")\n    if not all(isinstance(k, str) and k and isinstance(v, str) and v.strip() for k, v in catalog.items()):\n        raise ValueError(\"source_catalog entries must be non-empty text\")\n    cases = data[\"cases\"]\n    if not isinstance(cases, list) or len(cases) < 4:\n        raise ValueError(\"at least four evaluation cases are required\")\n    ids = []\n    for case in cases:\n        case_id = str(case.get(\"id\", \"\")).strip()\n        if not case_id:\n            raise ValueError(\"each case needs an id\")\n        ids.append(case_id)\n        if not str(case.get(\"query\", \"\")).strip():\n            raise ValueError(\"each case needs a query\")\n        supplied = case.get(\"supplied_source_ids\")\n        if not isinstance(supplied, list) or any(source_id not in catalog for source_id in supplied):\n            raise ValueError(\"case references an unknown supplied source\")\n        if type(case.get(\"expected_supported\")) is not bool:\n            raise ValueError(\"expected_supported must be bool\")\n        validate_model_output(case.get(\"output\"), supplied)\n    if len(set(ids)) != len(ids):\n        raise ValueError(\"case ids must be unique\")\n    debug = data[\"debug_record\"]\n    if not isinstance(debug, dict) or any(\n        not str(debug.get(k, \"\")).strip()\n        for k in [\"failure\", \"evidence\", \"hypothesis\", \"fix\", \"result\"]\n    ):\n        raise ValueError(\"debug_record needs failure/evidence/hypothesis/fix/result\")\n    if not str(data[\"limitations\"]).strip():\n        raise ValueError(\"limitations must be non-empty\")"
+        }
+      ]
+    }
+  ]
+}

@@ -4,6 +4,10 @@
 Build a deterministic decoder-style mini Transformer from understandable pieces and prove the invariants that make it causal and composable.
 
 ## Prerequisites
+Python help for this project:
+
+- [P7 — Tensor Shapes for Transformers](https://aizero.ruzincompany.com/learn/05-level-5/tensor-shapes-for-transformers)
+
 Complete Level 5 through **L5.16 — Mini Transformer Integration Workshop**. You should be able to explain Q/K/V roles, dot-product scaling, softmax attention weights, causal masks, multiple heads, residual connections, LayerNorm, feed-forward networks, and stacked Transformer blocks.
 
 The canonical cumulative dependency is the Level 4 project **Tokenizer Workbench**. This Level 5 package accepts integer token IDs directly so it remains independently reproducible.
@@ -51,3 +55,13 @@ A second failure check changes only future token IDs. If logits at earlier posit
 
 ## Reproducibility and provenance
 The model uses deterministic teaching embeddings and standard-library math. There is no external dataset, pretrained model, internet access, secret, or random initialization. Stage B PyTorch notebooks in `labs/notebooks/level-05/` provide the framework-backed bridge after these semantics are understood.
+
+## Compare with a reference (optional)
+
+Try the TODOs yourself and run the submission validator first. Then inspect the [published reference solution](../../reference/l05/reference_solution.py) and any example evaluations. To verify the published reference against its acceptance tests from the public materials repository root, run:
+
+```bash
+python projects/tests/l05/test_reference.py
+```
+
+This command tests the reference, **not your own solution**. Use the project rubric and submission checker to evaluate your implementation.

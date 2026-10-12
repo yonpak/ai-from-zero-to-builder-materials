@@ -2,6 +2,12 @@
 
 Build the required release-evidence controller, then optionally run a separate learner-built real RAG pipeline.
 
+## Prerequisites
+
+Python help for this project:
+
+- [P9 — Writing Reliable Python](https://aizero.ruzincompany.com/learn/10-level-10/writing-reliable-python)
+
 ## Implement
 
 Complete the required TODO functions in `capstone.py`:
@@ -78,3 +84,13 @@ The included Dockerfile provides a reproducible Python environment for the Docke
 ## Evidence boundary
 
 Use only synthetic fixtures in the required project path. Do not add real credentials, personal data, production secrets, or destructive actions. A passing release record means the candidate satisfies the declared tests and gates under the recorded evidence snapshot; it is not a claim of universal safety.
+
+## Compare with a reference (optional)
+
+Try the TODOs yourself and run the submission validator first. Then inspect the [published reference solution](../../reference/l15/reference_solution.py) and any example evaluations. To verify the published reference against its acceptance tests from the public materials repository root, run:
+
+```bash
+python projects/tests/l15/test_reference.py
+```
+
+This command tests the reference, **not your own solution**. Use the project rubric and submission checker to evaluate your implementation.

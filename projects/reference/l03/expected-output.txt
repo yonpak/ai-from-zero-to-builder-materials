@@ -1,0 +1,17 @@
+Reference run (seed 13, CPU-first; values may vary slightly across compatible library builds)
+
+source_accuracy≈0.882
+scratch_accuracy≈0.824
+frozen_accuracy≈0.847
+fine_accuracy≈0.853
+aggressive_accuracy≈0.787
+fine_movement≈0.196
+aggressive_movement≈8.987
+noisy_accuracy≈0.782
+
+Required qualitative invariants:
+- source_accuracy > 0.80
+- scratch/frozen/fine target accuracy > 0.75
+- frozen encoder remains unchanged
+- conservative fine-tuning moves the encoder
+- aggressive fine-tuning moves the encoder substantially more

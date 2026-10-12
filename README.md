@@ -2,14 +2,15 @@
 
 This public repository contains learner-facing files for [AI From Zero to Builder](https://aizero.ruzincompany.com/). It is produced from the private course repository by an explicit allowlist.
 
-- Project starters: `projects/starters/`
+- Project starters and TODO hints: `projects/starters/`
+- Reference solutions and example evaluations: `projects/reference/`
 - Validators and public fixtures: `projects/tests/`
 - Rubrics: `projects/rubrics/`
 - Notebooks: `labs/notebooks/`
 - Completed Level 10–15 exercises: `labs/answers/advanced/`
 - Optional real-model labs: `labs/real-model/`
 
-Level 10–15 exercise answers are in `labs/answers/advanced/`. Try the `*-exercise.py` starter first, then compare your implementation with its matching `*-answer.py`. Project solutions remain private.
+Level 10–15 exercise answers are in `labs/answers/advanced/`. Try the `*-exercise.py` starter first, then compare your implementation with its matching `*-answer.py`. Project reference solutions and example evaluations are in `projects/reference/`. Attempt each TODO before opening its reference implementation; compare your evidence with the example evaluations.
 
 ## License
 

@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "project": "p09",
+  "todos": [
+    {
+      "id": "token_overlap",
+      "file": "rag.py",
+      "signature": "def token_overlap(query: str, text: str) -> int:",
+      "source": "projects/reference/l09/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: normalize both strings and count shared words\") Validator focus: token_overlap should count normalized shared words."
+        },
+        {
+          "text": "Pseudocode: Tokenize each side into normalized sets and count their intersection. Useful Python operations: int, len."
+        },
+        {
+          "text": "Reference token_overlap function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def token_overlap(query: str, text: str) -> int:\n    return len(_words(query) & _words(text))"
+        }
+      ],
+      "helpers": [
+        "_words"
+      ]
+    },
+    {
+      "id": "eligible_source_ids",
+      "file": "rag.py",
+      "signature": "def eligible_source_ids(source_catalog: dict, tenant_id: str) -> list[str]:",
+      "source": "projects/reference/l09/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: filter by trusted tenant_id and active=True\")"
+        },
+        {
+          "text": "Pseudocode: Filter by both tenant identity and active status before ranking. Useful Python operations: isinstance, raise, ValueError, sorted."
+        },
+        {
+          "text": "Reference eligible_source_ids function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def eligible_source_ids(source_catalog: dict, tenant_id: str) -> list[str]:\n    if not isinstance(source_catalog, dict):\n        raise ValueError(\"source_catalog must be a dict\")\n    return sorted(\n        source_id\n        for source_id, record in source_catalog.items()\n        if isinstance(record, dict)\n        and record.get(\"tenant_id\") == tenant_id\n        and record.get(\"active\") is True\n    )"
+        }
+      ]
+    },
+    {
+      "id": "retrieve",
+      "file": "rag.py",
+      "signature": "def retrieve(query: str, source_catalog: dict, tenant_id: str, k: int = 2) -> list[str]:",
+      "source": "projects/reference/l09/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: filter first, rank second, then return top-k IDs\") Validator focus: retrieve must rank only eligible sources."
+        },
+        {
+          "text": "Pseudocode: Always filter source eligibility first; score and sort only eligible documents, then apply k. Useful Python operations: int, isinstance, raise, ValueError, sorted."
+        },
+        {
+          "text": "Reference retrieve function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def retrieve(query: str, source_catalog: dict, tenant_id: str, k: int = 2) -> list[str]:\n    if not isinstance(k, int) or k < 1:\n        raise ValueError(\"k must be a positive integer\")\n    eligible = eligible_source_ids(source_catalog, tenant_id)\n    ranked = sorted(\n        eligible,\n        key=lambda source_id: (\n            -token_overlap(query, source_catalog[source_id][\"text\"]),\n            source_id,\n        ),\n    )\n    return ranked[: min(k, len(ranked))]"
+        }
+      ]
+    },
+    {
+      "id": "validate_grounded_output",
+      "file": "rag.py",
+      "signature": "def validate_grounded_output(output: dict, supplied_source_ids: list[str]) -> None:",
+      "source": "projects/reference/l09/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: enforce supported/unsupported output contract\")"
+        },
+        {
+          "text": "Pseudocode: For supported answers, citations must be a subset of supplied evidence; unsupported answers must abstain. Useful Python operations: isinstance, raise, ValueError, set."
+        },
+        {
+          "text": "Reference validate_grounded_output function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def validate_grounded_output(output: dict, supplied_source_ids: list[str]) -> None:\n    if not isinstance(output, dict):\n        raise ValueError(\"output must be an object\")\n    if set(output) != {\"answer\", \"supported\", \"source_id\"}:\n        raise ValueError(\"output must contain exactly answer, supported, source_id\")\n    if type(output[\"supported\"]) is not bool:\n        raise ValueError(\"supported must be bool\")\n    supplied = set(supplied_source_ids)\n    if output[\"supported\"]:\n        if not isinstance(output[\"answer\"], str) or not output[\"answer\"].strip():\n            raise ValueError(\"supported output needs a non-empty answer\")\n        if not isinstance(output[\"source_id\"], str) or output[\"source_id\"] not in supplied:\n            raise ValueError(\"supported output must cite a supplied source\")\n    else:\n        if output[\"answer\"] is not None or output[\"source_id\"] is not None:\n            raise ValueError(\"unsupported output must abstain with null answer/source\")"
+        }
+      ]
+    },
+    {
+      "id": "validate_run",
+      "file": "rag.py",
+      "signature": "def validate_run(data: dict) -> None:",
+      "source": "projects/reference/l09/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: validate the complete evidence-backed RAG run\") Validator focus: validate_run must reject cross-tenant evidence exposure."
+        },
+        {
+          "text": "Pseudocode: Recompute metrics and release outcome independently from raw traces; reject missing records, policy violations and inconsistent declared summaries. Useful Python operations: isinstance, raise, ValueError, sorted, len."
+        },
+        {
+          "text": "Reference validate_run function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def validate_run(data: dict) -> None:\n    if not isinstance(data, dict):\n        raise ValueError(\"run must be an object\")\n    missing = REQUIRED_TOP_LEVEL - data.keys()\n    if missing:\n        raise ValueError(\"missing: \" + \", \".join(sorted(missing)))\n\n    for key in [\n        \"project_id\",\n        \"corpus_snapshot_id\",\n        \"chunker_version\",\n        \"retriever_version\",\n        \"prompt_version\",\n        \"generator_id\",\n        \"evaluator_version\",\n    ]:\n        if not str(data[key]).strip():\n            raise ValueError(f\"{key} must be non-empty\")\n\n    catalog = data[\"source_catalog\"]\n    if not isinstance(catalog, dict) or not catalog:\n        raise ValueError(\"source_catalog must be a non-empty object\")\n    for source_id, record in catalog.items():\n        if not str(source_id).strip() or not isinstance(record, dict):\n            raise ValueError(\"invalid source record\")\n        if not str(record.get(\"text\", \"\")).strip():\n            raise ValueError(f\"{source_id}: text must be non-empty\")\n        if not str(record.get(\"tenant_id\", \"\")).strip():\n            raise ValueError(f\"{source_id}: tenant_id must be non-empty\")\n        if type(record.get(\"active\")) is not bool:\n            raise ValueError(f\"{source_id}: active must be bool\")\n\n    cases = data[\"cases\"]\n    if not isinstance(cases, list) or len(cases) < 4:\n        raise ValueError(\"at least four fixed cases are required\")\n\n    recalls = []\n    grounded_passes = 0\n    unauthorized_exposures = 0\n    seen_ids = set()\n\n    for case in cases:\n        case_id = str(case.get(\"id\", \"\")).strip()\n        if not case_id or case_id in seen_ids:\n            raise ValueError(\"case IDs must be non-empty and unique\")\n        seen_ids.add(case_id)\n        tenant_id = str(case.get(\"tenant_id\", \"\")).strip()\n        query = str(case.get(\"query\", \"\")).strip()\n        if not tenant_id or not query:\n            raise ValueError(f\"{case_id}: tenant_id and query are required\")\n\n        relevant = case.get(\"relevant_source_ids\")\n        retrieved = case.get(\"retrieved_ids\")\n        supplied = case.get(\"supplied_source_ids\")\n        if not all(isinstance(x, list) for x in [relevant, retrieved, supplied]):\n            raise ValueError(f\"{case_id}: relevant/retrieved/supplied IDs must be lists\")\n        if any(source_id not in catalog for source_id in relevant + retrieved + supplied):\n            raise ValueError(f\"{case_id}: unknown source ID\")\n\n        eligible = set(eligible_source_ids(catalog, tenant_id))\n        if any(source_id not in eligible for source_id in relevant):\n            raise ValueError(f\"{case_id}: relevant labels must refer to eligible evidence\")\n        bad_retrieved = [source_id for source_id in retrieved if source_id not in eligible]\n        bad_supplied = [source_id for source_id in supplied if source_id not in eligible]\n        unauthorized_exposures += len(bad_retrieved) + len(bad_supplied)\n        if bad_retrieved or bad_supplied:\n            raise ValueError(\n                f\"{case_id}: unauthorized or inactive evidence crossed the retrieval boundary\"\n            )\n\n        if not set(supplied).issubset(set(retrieved)):\n            raise ValueError(f\"{case_id}: supplied sources must come from retrieved sources\")\n\n        validate_grounded_output(case.get(\"output\"), supplied)\n\n        if type(case.get(\"expected_supported\")) is not bool:\n            raise ValueError(f\"{case_id}: expected_supported must be bool\")\n\n        recalls.append(_recall_at_k(retrieved, relevant, 2))\n        grounded_passes += int(_grounded_case_pass(case))\n\n    computed_metrics = {\n        \"recall_at_2\": sum(recalls) / len(recalls),\n        \"grounded_accuracy\": grounded_passes / len(cases),\n        \"unauthorized_exposure_count\": unauthorized_exposures,\n    }\n    metrics = data[\"metrics\"]\n    for key, value in computed_metrics.items():\n        if metrics.get(key) != value:\n            raise ValueError(f\"metrics.{key} does not match recomputed value\")\n\n    rule = data[\"release_rule\"]\n    for key in [\"min_recall_at_2\", \"min_grounded_accuracy\"]:\n        value = rule.get(key)\n        if not isinstance(value, (int, float)) or not 0 <= value <= 1:\n            raise ValueError(f\"release_rule.{key} must be in [0,1]\")\n    if not isinstance(rule.get(\"max_unauthorized_exposure\"), int) or rule[\"max_unauthorized_exposure\"] < 0:\n        raise ValueError(\"max_unauthorized_exposure must be non-negative int\")\n\n    expected_release = _release(metrics, rule)\n    if data[\"release_passed\"] is not expected_release:\n        raise ValueError(\"release_passed does not match the declared rule\")\n\n    debug = data[\"debug_record\"]\n    for key in [\"failure\", \"evidence\", \"hypothesis\", \"fix\", \"result\"]:\n        if not str(debug.get(key, \"\")).strip():\n            raise ValueError(f\"debug_record.{key} must be non-empty\")\n    if not str(data[\"limitations\"]).strip():\n        raise ValueError(\"limitations must be non-empty\")"
+        }
+      ],
+      "helpers": [
+        "_recall_at_k",
+        "_grounded_case_pass",
+        "_release"
+      ]
+    }
+  ]
+}

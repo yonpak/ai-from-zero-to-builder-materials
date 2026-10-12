@@ -1,0 +1,4 @@
+Reference success evidence (values rounded; minor floating-point differences are acceptable):
+- end loss is below 0.20
+- accuracy is 1.0
+- predictions are [0, 1, 1, 0]

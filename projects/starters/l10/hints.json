@@ -1,0 +1,135 @@
+{
+  "version": 1,
+  "project": "p10",
+  "todos": [
+    {
+      "id": "select_tool",
+      "file": "assistant.py",
+      "signature": "def select_tool(intent: str, available_tools: dict) -> str | None:",
+      "source": "projects/reference/l10/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: map supported intents to available tool names\")"
+        },
+        {
+          "text": "Pseudocode: Map supported intent to an existing tool, do not invent one for unsupported modality. Useful Python operations: raise, ValueError."
+        },
+        {
+          "text": "Reference select_tool function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def select_tool(intent: str, available_tools: dict) -> str | None:\n    if intent not in INTENT_TO_TOOL:\n        raise ValueError(f\"unsupported intent: {intent}\")\n    tool = INTENT_TO_TOOL[intent]\n    if tool is not None and tool not in available_tools:\n        raise ValueError(f\"tool unavailable: {tool}\")\n    return tool"
+        }
+      ]
+    },
+    {
+      "id": "validate_arguments",
+      "file": "assistant.py",
+      "signature": "def validate_arguments(tool_name: str, arguments: dict, schemas: dict) -> None:",
+      "source": "projects/reference/l10/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: validate required/extra fields, types, enum/range constraints\")"
+        },
+        {
+          "text": "Pseudocode: Compare required keys, allowed keys, primitive types and per-field ranges; avoid accepting bool as int. Useful Python operations: raise, ValueError, isinstance, set, sorted."
+        },
+        {
+          "text": "Reference validate_arguments function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def validate_arguments(tool_name: str, arguments: dict, schemas: dict) -> None:\n    if tool_name not in schemas:\n        raise ValueError(\"unknown tool schema\")\n    if not isinstance(arguments, dict):\n        raise ValueError(\"arguments must be an object\")\n    schema = schemas[tool_name]\n    properties = schema.get(\"properties\", {})\n    required = set(schema.get(\"required\", []))\n    missing = required - arguments.keys()\n    if missing:\n        raise ValueError(\"missing required: \" + \", \".join(sorted(missing)))\n    if schema.get(\"additional_properties\") is False:\n        extra = set(arguments) - properties.keys()\n        if extra:\n            raise ValueError(\"unexpected arguments: \" + \", \".join(sorted(extra)))\n\n    for name, value in arguments.items():\n        if name not in properties:\n            continue\n        rule = properties[name]\n        expected = TYPE_MAP.get(rule.get(\"type\"))\n        if expected is None:\n            raise ValueError(f\"{name}: unsupported schema type\")\n        if rule.get(\"type\") == \"integer\" and type(value) is not int:\n            raise ValueError(f\"{name}: wrong type\")\n        if rule.get(\"type\") == \"number\" and (isinstance(value, bool) or not isinstance(value, (int, float))):\n            raise ValueError(f\"{name}: wrong type\")\n        if rule.get(\"type\") == \"boolean\" and type(value) is not bool:\n            raise ValueError(f\"{name}: wrong type\")\n        if rule.get(\"type\") == \"string\" and not isinstance(value, str):\n            raise ValueError(f\"{name}: wrong type\")\n        if \"enum\" in rule and value not in rule[\"enum\"]:\n            raise ValueError(f\"{name}: value not allowed\")\n        if isinstance(value, (int, float)) and not isinstance(value, bool):\n            if \"minimum\" in rule and value < rule[\"minimum\"]:\n                raise ValueError(f\"{name}: below minimum\")\n            if \"maximum\" in rule and value > rule[\"maximum\"]:\n                raise ValueError(f\"{name}: above maximum\")"
+        }
+      ]
+    },
+    {
+      "id": "normalize_tool_result",
+      "file": "assistant.py",
+      "signature": "def normalize_tool_result(tool_name: str, raw_result: dict, tool_specs: dict) -> dict:",
+      "source": "projects/reference/l10/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: preserve explicit errors; allowlist successful result fields\")"
+        },
+        {
+          "text": "Pseudocode: Preserve explicit error fields; copy only authorized fields for successful results. Useful Python operations: isinstance, raise, ValueError."
+        },
+        {
+          "text": "Reference normalize_tool_result function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def normalize_tool_result(tool_name: str, raw_result: dict, tool_specs: dict) -> dict:\n    if not isinstance(raw_result, dict):\n        raise ValueError(\"raw_result must be an object\")\n    if raw_result.get(\"ok\") is False:\n        return {\n            key: raw_result.get(key)\n            for key in [\"ok\", \"category\", \"retryable\"]\n            if key in raw_result\n        }\n    if tool_name not in tool_specs:\n        raise ValueError(\"unknown tool\")\n    fields = tool_specs[tool_name].get(\"result_fields\", [])\n    return {key: raw_result[key] for key in fields if key in raw_result}"
+        }
+      ]
+    },
+    {
+      "id": "authorize_action",
+      "file": "assistant.py",
+      "signature": "def authorize_action(role: str, tool_name: str, arguments: dict, policy: dict, approval: dict | None) -> None:",
+      "source": "projects/reference/l10/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: check role allowlist and bind required approval to exact arguments\")"
+        },
+        {
+          "text": "Pseudocode: Enforce role permission and match approval to the exact tool arguments for side effects. Useful Python operations: set, raise, ValueError, isinstance."
+        },
+        {
+          "text": "Reference authorize_action function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def authorize_action(role: str, tool_name: str, arguments: dict, policy: dict, approval: dict | None) -> None:\n    allowed = set(policy.get(\"roles\", {}).get(role, []))\n    if tool_name not in allowed:\n        raise ValueError(\"tool not permitted for role\")\n    if tool_name in set(policy.get(\"approval_required_tools\", [])):\n        if not isinstance(approval, dict) or approval.get(\"approved\") is not True:\n            raise ValueError(\"approval required\")\n        if approval.get(\"tool\") != tool_name or approval.get(\"arguments\") != arguments:\n            raise ValueError(\"approval does not match action\")"
+        }
+      ]
+    },
+    {
+      "id": "next_retry_action",
+      "file": "assistant.py",
+      "signature": "def next_retry_action(...)",
+      "source": "projects/reference/l10/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: Classify retryable vs permanent errors and enforce budget and idempotency. Validator checks independently reject counterexamples for next_retry_action."
+        },
+        {
+          "text": "Pseudocode: First reject non-retryable errors and exhausted attempts; for side effects without idempotency, check completion before retry."
+        },
+        {
+          "text": "Reference next_retry_action function. Follow helper calls into the published reference file if required.",
+          "code": "def next_retry_action(error_category, attempt, max_attempts, side_effect, idempotent) -> str:\n    if error_category is None:\n        return \"none\"\n    if error_category in {\"validation\", \"permission\", \"not_found\"}:\n        return \"repair\" if error_category == \"validation\" else \"stop\"\n    if error_category not in {\"timeout\", \"rate_limit\", \"server\"}:\n        return \"stop\"\n    if attempt >= max_attempts:\n        return \"stop\"\n    if side_effect and not idempotent:\n        return \"check_completion_before_retry\"\n    return \"retry\""
+        }
+      ]
+    },
+    {
+      "id": "transition",
+      "file": "assistant.py",
+      "signature": "def transition(state: str, event: str, transitions: dict) -> str:",
+      "source": "projects/reference/l10/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: apply the explicit STATE|event transition table\") Validator focus: transition should apply explicit transition table."
+        },
+        {
+          "text": "Pseudocode: Look up (state,event) in the explicit table; reject illegal transitions. Useful Python operations: raise, ValueError."
+        },
+        {
+          "text": "Reference transition function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def transition(state: str, event: str, transitions: dict) -> str:\n    key = f\"{state}|{event}\"\n    if key not in transitions:\n        raise ValueError(f\"illegal transition: {key}\")\n    return transitions[key]"
+        }
+      ]
+    },
+    {
+      "id": "validate_run",
+      "file": "assistant.py",
+      "signature": "def validate_run(data: dict) -> None:",
+      "source": "projects/reference/l10/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: validate traces, recompute metrics, and recompute release decision\") Validator focus: validate_run must reject modality/evidence mismatch."
+        },
+        {
+          "text": "Pseudocode: Recompute metrics and release outcome independently from raw traces; reject missing records, policy violations and inconsistent declared summaries. Useful Python operations: isinstance, raise, ValueError, sorted, set."
+        },
+        {
+          "text": "Reference validate_run function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def validate_run(data: dict) -> None:\n    if not isinstance(data, dict):\n        raise ValueError(\"run must be an object\")\n    missing = REQUIRED_TOP_LEVEL - data.keys()\n    if missing:\n        raise ValueError(\"missing: \" + \", \".join(sorted(missing)))\n    if data[\"project_id\"] != \"p10-tool-using-assistant\":\n        raise ValueError(\"unexpected project_id\")\n\n    for key in [\"workflow_version\", \"schema_version\", \"policy_version\", \"evaluator_version\"]:\n        if not str(data[key]).strip():\n            raise ValueError(f\"{key} must be non-empty\")\n\n    tools = data[\"available_tools\"]\n    specs = data[\"tool_specs\"]\n    schemas = data[\"schemas\"]\n    policy = data[\"policy\"]\n    transitions = data[\"transitions\"]\n    if not isinstance(tools, dict) or not tools:\n        raise ValueError(\"available_tools must be a non-empty object\")\n    if set(tools) != set(specs) or set(tools) != set(schemas):\n        raise ValueError(\"tool/spec/schema identities must match\")\n\n    traces = data[\"traces\"]\n    if not isinstance(traces, list) or len(traces) < 5:\n        raise ValueError(\"at least five fixed traces are required\")\n    if not isinstance(data[\"max_steps\"], int) or data[\"max_steps\"] < 1:\n        raise ValueError(\"max_steps must be positive\")\n\n    selection_hits = 0\n    task_hits = 0\n    unauthorized = 0\n    approval_bypasses = 0\n    runaway = 0\n    seen = set()\n    modalities = {\"text\", \"image\", \"audio\"}\n    modality_counts = {modality: 0 for modality in sorted(modalities)}\n    modality_hits = {modality: 0 for modality in sorted(modalities)}\n\n    for trace in traces:\n        trace_id = str(trace.get(\"id\", \"\")).strip()\n        if not trace_id or trace_id in seen:\n            raise ValueError(\"trace IDs must be non-empty and unique\")\n        seen.add(trace_id)\n\n        modality = trace.get(\"modality\")\n        if modality not in modalities:\n            raise ValueError(f\"{trace_id}: modality must be text, image, or audio\")\n        evidence = trace.get(\"input_evidence\")\n        if (\n            not isinstance(evidence, dict)\n            or evidence.get(\"kind\") != modality\n            or not str(evidence.get(\"id\", \"\")).strip()\n        ):\n            raise ValueError(f\"{trace_id}: input_evidence must identify the supplied modality evidence\")\n        modality_counts[modality] += 1\n\n        expected_tool = trace.get(\"expected_tool\")\n        if select_tool(trace.get(\"intent\"), tools) != expected_tool:\n            raise ValueError(f\"{trace_id}: expected_tool does not match intent mapping\")\n        proposed_tool = trace.get(\"proposed_tool\")\n        selection_hits += int(proposed_tool == expected_tool)\n\n        if proposed_tool is None:\n            if trace.get(\"arguments\") not in ({}, None):\n                raise ValueError(f\"{trace_id}: direct answer must not carry tool arguments\")\n            if trace.get(\"executed\"):\n                raise ValueError(f\"{trace_id}: no-tool trace cannot execute\")\n        else:\n            valid = True\n            try:\n                validate_arguments(proposed_tool, trace.get(\"arguments\"), schemas)\n            except ValueError:\n                valid = False\n            if trace.get(\"validation_passed\") is not valid:\n                raise ValueError(f\"{trace_id}: validation_passed mismatch\")\n\n            authorized = False\n            if valid:\n                try:\n                    authorize_action(\n                        trace.get(\"principal_role\"),\n                        proposed_tool,\n                        trace.get(\"arguments\"),\n                        policy,\n                        trace.get(\"approval\"),\n                    )\n                    authorized = True\n                except ValueError:\n                    authorized = False\n            if trace.get(\"authorized\") is not authorized:\n                raise ValueError(f\"{trace_id}: authorized mismatch\")\n\n            if trace.get(\"executed\") and not authorized:\n                unauthorized += 1\n                raise ValueError(f\"{trace_id}: unauthorized execution\")\n\n            requires_approval = proposed_tool in set(policy.get(\"approval_required_tools\", []))\n            approval_valid = False\n            approval = trace.get(\"approval\")\n            if requires_approval and isinstance(approval, dict):\n                approval_valid = (\n                    approval.get(\"approved\") is True\n                    and approval.get(\"tool\") == proposed_tool\n                    and approval.get(\"arguments\") == trace.get(\"arguments\")\n                )\n            if trace.get(\"approval_required\") is not requires_approval:\n                raise ValueError(f\"{trace_id}: approval_required mismatch\")\n            if trace.get(\"approval_valid\") is not approval_valid:\n                raise ValueError(f\"{trace_id}: approval_valid mismatch\")\n            if requires_approval and trace.get(\"executed\") and not approval_valid:\n                approval_bypasses += 1\n                raise ValueError(f\"{trace_id}: approval bypass\")\n\n            if trace.get(\"executed\") and trace.get(\"raw_result\") is not None:\n                expected_normalized = normalize_tool_result(proposed_tool, trace[\"raw_result\"], specs)\n                if trace.get(\"normalized_result\") != expected_normalized:\n                    raise ValueError(f\"{trace_id}: normalized_result mismatch\")\n\n        expected_retry = next_retry_action(\n            trace.get(\"error_category\"),\n            trace.get(\"attempt\", 0),\n            trace.get(\"max_attempts\", 0),\n            bool(trace.get(\"side_effect\")),\n            bool(trace.get(\"idempotent\")),\n        )\n        if trace.get(\"retry_action\") != expected_retry:\n            raise ValueError(f\"{trace_id}: retry_action mismatch\")\n\n        state = trace.get(\"state_before\")\n        events = trace.get(\"state_events\")\n        if not isinstance(events, list):\n            raise ValueError(f\"{trace_id}: state_events must be a list\")\n        if len(events) > data[\"max_steps\"]:\n            runaway += 1\n        for event in events:\n            state = transition(state, event, transitions)\n        if state != trace.get(\"final_state\"):\n            raise ValueError(f\"{trace_id}: final_state mismatch\")\n\n        computed_success = trace.get(\"expected_outcome\") == trace.get(\"observed_outcome\")\n        if trace.get(\"success\") is not computed_success:\n            raise ValueError(f\"{trace_id}: success mismatch\")\n        task_hits += int(computed_success)\n        modality_hits[modality] += int(computed_success)\n\n    if any(count == 0 for count in modality_counts.values()):\n        raise ValueError(\"fixed traces must include text, image, and audio cases\")\n\n    computed_metrics = {\n        \"tool_selection_accuracy\": selection_hits / len(traces),\n        \"task_success\": task_hits / len(traces),\n        \"modality_accuracy\": {\n            modality: modality_hits[modality] / modality_counts[modality]\n            for modality in sorted(modalities)\n        },\n        \"modality_counts\": modality_counts,\n        \"unauthorized_executions\": unauthorized,\n        \"approval_bypasses\": approval_bypasses,\n        \"runaway_workflows\": runaway,\n    }\n    if data[\"metrics\"] != computed_metrics:\n        raise ValueError(\"metrics do not match recomputed values\")\n\n    rule = data[\"release_rule\"]\n    for key in [\"min_tool_selection_accuracy\", \"min_task_success\", \"min_modality_accuracy\"]:\n        value = rule.get(key)\n        if not isinstance(value, (int, float)) or not 0 <= value <= 1:\n            raise ValueError(f\"{key} must be in [0,1]\")\n    for key in [\"max_unauthorized_executions\", \"max_approval_bypasses\", \"max_runaway_workflows\"]:\n        if not isinstance(rule.get(key), int) or rule[key] < 0:\n            raise ValueError(f\"{key} must be a non-negative integer\")\n\n    if data[\"release_passed\"] is not _release(computed_metrics, rule):\n        raise ValueError(\"release_passed does not match release rule\")\n\n    debug = data[\"debug_record\"]\n    for key in [\"failure\", \"evidence\", \"hypothesis\", \"fix\", \"result\"]:\n        if not str(debug.get(key, \"\")).strip():\n            raise ValueError(f\"debug_record.{key} must be non-empty\")\n    if not str(data[\"limitations\"]).strip():\n        raise ValueError(\"limitations must be non-empty\")"
+        }
+      ],
+      "helpers": [
+        "_release"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "project": "p03",
+  "todos": [
+    {
+      "id": "build_frozen_transfer",
+      "file": "adaptation.py",
+      "signature": "def build_frozen_transfer(source, data):",
+      "source": "projects/reference/l03/adaptation_reference.py",
+      "hints": [
+        {
+          "text": "Direction: copy source.encoder, freeze it, attach a new two-class head,."
+        },
+        {
+          "text": "Pseudocode: Deep-copy source.encoder, disable encoder gradients, create a two-class head, and train that head using the fixed target examples. Useful Python operations: copy."
+        },
+        {
+          "text": "Adapted from the linked reference to match the starter's function contract; see the full reference for the original form.",
+          "code": "def build_frozen_transfer(source, data):\n    encoder = copy.deepcopy(source.encoder)\n    for parameter in encoder.parameters():\n        parameter.requires_grad = False\n    seed_all()\n    return train_classifier(TargetModel(encoder), data[\"target_X\"], data[\"target_y\"], epochs=200, lr=0.2)"
+        }
+      ],
+      "adaptationNote": "The published reference uses a compact signature and positional train_classifier arguments. This excerpt preserves its algorithm while matching the learner starter's keyword-only training arguments and fine_tune(frozen_model, ...)."
+    },
+    {
+      "id": "fine_tune",
+      "file": "adaptation.py",
+      "signature": "def fine_tune(frozen_model, data, *, lr: float = 0.01):",
+      "source": "projects/reference/l03/adaptation_reference.py",
+      "hints": [
+        {
+          "text": "Direction: start from a COPY of frozen_model, unfreeze encoder parameters,."
+        },
+        {
+          "text": "Pseudocode: Start from a deep copy of the frozen checkpoint; unfreeze the encoder and train with the supplied learning rate. Useful Python operations: copy."
+        },
+        {
+          "text": "Adapted from the linked reference to match the starter's function contract; see the full reference for the original form.",
+          "code": "def fine_tune(frozen_model, data, *, lr: float = 0.01):\n    model = copy.deepcopy(frozen_model)\n    for parameter in model.encoder.parameters():\n        parameter.requires_grad = True\n    return train_classifier(model, data[\"target_X\"], data[\"target_y\"], epochs=80, lr=lr)"
+        }
+      ],
+      "adaptationNote": "The published reference uses a compact signature and positional train_classifier arguments. This excerpt preserves its algorithm while matching the learner starter's keyword-only training arguments and fine_tune(frozen_model, ...)."
+    }
+  ]
+}

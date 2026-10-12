@@ -2,6 +2,12 @@
 
 This project turns the bounded agent from Level 11 into a durable, observable controller.
 
+## Prerequisites
+
+Python help for this project:
+
+- [P9 — Writing Reliable Python](https://aizero.ruzincompany.com/learn/10-level-10/writing-reliable-python)
+
 ## What you implement
 
 Complete the TODO functions in harness.py:
@@ -41,3 +47,13 @@ Run the local test command by mounting the repository when you want the containe
 ## Evidence to inspect
 
 A passing run recomputes task success, unauthorized executions, duplicate side effects, recovered failures, p95 latency, and total cost from raw traces. Do not trust a fixture's derived authorization or release flags without recomputation.
+
+## Compare with a reference (optional)
+
+Try the TODOs yourself and run the submission validator first. Then inspect the [published reference solution](../../reference/l12/reference_solution.py) and any example evaluations. To verify the published reference against its acceptance tests from the public materials repository root, run:
+
+```bash
+python projects/tests/l12/test_reference.py
+```
+
+This command tests the reference, **not your own solution**. Use the project rubric and submission checker to evaluate your implementation.

@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "project": "p08",
+  "todos": [
+    {
+      "id": "lora_parameter_count",
+      "file": "adaptation.py",
+      "signature": "def lora_parameter_count(in_features: int, out_features: int, rank: int) -> int:",
+      "source": "projects/reference/l08/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: rank*in_features + out_features*rank\")"
+        },
+        {
+          "text": "Pseudocode: Count the low-rank A and B matrix weights, not a full dense weight matrix. Useful Python operations: int, min, raise, ValueError."
+        },
+        {
+          "text": "Reference lora_parameter_count function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def lora_parameter_count(in_features: int, out_features: int, rank: int) -> int:\n    if min(in_features, out_features, rank) <= 0:\n        raise ValueError(\"dimensions and rank must be positive\")\n    return rank * in_features + out_features * rank"
+        }
+      ]
+    },
+    {
+      "id": "group_split",
+      "file": "adaptation.py",
+      "signature": "def group_split(records: list[dict], validation_groups: set[str]) -> tuple[list[dict], list[dict]]:",
+      "source": "projects/reference/l08/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: keep every group entirely in one split\") Validator focus: group_split leaked a group across splits."
+        },
+        {
+          "text": "Pseudocode: Assign each group to one split first, then distribute rows by group membership. Useful Python operations: set, raise, ValueError."
+        },
+        {
+          "text": "Reference group_split function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def group_split(records: list[dict], validation_groups: set[str]) -> tuple[list[dict], list[dict]]:\n    train, validation = [], []\n    for row in records:\n        group_id = str(row.get(\"group_id\", \"\")).strip()\n        if not group_id:\n            raise ValueError(\"every record needs group_id\")\n        (validation if group_id in validation_groups else train).append(row)\n    return train, validation"
+        }
+      ]
+    },
+    {
+      "id": "release_decision",
+      "file": "adaptation.py",
+      "signature": "def release_decision(...)",
+      "source": "projects/reference/l08/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: Enforce separate target gain, retention-drop, and critical-regression gates. Validator checks independently reject counterexamples for release_decision."
+        },
+        {
+          "text": "Pseudocode: Use explicit comparisons, then return False as soon as any release threshold or critical rule fails."
+        },
+        {
+          "text": "Reference release_decision function. Follow helper calls into the published reference file if required.",
+          "code": "def release_decision(\n    target_base: float,\n    target_adapted: float,\n    retention_base: float,\n    retention_adapted: float,\n    min_target_gain: float,\n    max_retention_drop: float,\n    critical_regressions: int,\n) -> bool:\n    target_gain = target_adapted - target_base\n    retention_drop = retention_base - retention_adapted\n    return (\n        target_gain >= min_target_gain\n        and retention_drop <= max_retention_drop\n        and critical_regressions == 0\n    )"
+        }
+      ]
+    },
+    {
+      "id": "validate_run",
+      "file": "adaptation.py",
+      "signature": "def validate_run(data: dict) -> None:",
+      "source": "projects/reference/l08/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: validate data, adapter lineage, preference route, metrics, release rule, and documentation\")"
+        },
+        {
+          "text": "Pseudocode: Recompute metrics and release outcome independently from raw traces; reject missing records, policy violations and inconsistent declared summaries. Useful Python operations: isinstance, raise, ValueError, sorted, set."
+        },
+        {
+          "text": "Reference validate_run function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def validate_run(data: dict) -> None:\n    if not isinstance(data, dict):\n        raise ValueError(\"run must be an object\")\n    missing = REQUIRED_TOP_LEVEL - data.keys()\n    if missing:\n        raise ValueError(\"missing: \" + \", \".join(sorted(missing)))\n    if not str(data[\"behavior_gap\"]).strip():\n        raise ValueError(\"behavior_gap must be non-empty\")\n    base_id = str(data[\"base_model_id\"]).strip()\n    if not base_id:\n        raise ValueError(\"base_model_id must be non-empty\")\n\n    ds = data[\"dataset\"]\n    for key in [\"id\", \"split_id\", \"template_version\"]:\n        if not str(ds.get(key, \"\")).strip():\n            raise ValueError(f\"dataset.{key} must be non-empty\")\n    train_groups = set(ds.get(\"train_groups\", []))\n    validation_groups = set(ds.get(\"validation_groups\", []))\n    if not train_groups or not validation_groups:\n        raise ValueError(\"train_groups and validation_groups must both be recorded\")\n    if train_groups & validation_groups:\n        raise ValueError(\"dataset group leakage detected\")\n\n    adapt = data[\"adaptation\"]\n    if adapt.get(\"method\") not in {\"lora\", \"qlora\"}:\n        raise ValueError(\"adaptation.method must be lora or qlora\")\n    if adapt.get(\"compatible_base_id\") != base_id:\n        raise ValueError(\"adapter/base lineage mismatch\")\n    rank = adapt.get(\"rank\")\n    alpha = adapt.get(\"alpha\")\n    if not isinstance(rank, int) or rank <= 0:\n        raise ValueError(\"adaptation.rank must be positive int\")\n    if not isinstance(alpha, (int, float)) or alpha <= 0:\n        raise ValueError(\"adaptation.alpha must be positive\")\n    if not isinstance(adapt.get(\"target_modules\"), list) or not adapt[\"target_modules\"]:\n        raise ValueError(\"adaptation.target_modules must be non-empty\")\n    if not str(data[\"adapter_id\"]).strip():\n        raise ValueError(\"adapter_id must be non-empty\")\n\n    metrics = data[\"metrics\"]\n    target = metrics.get(\"target\", {})\n    retention = metrics.get(\"retention\", {})\n    for section_name, section in [(\"target\", target), (\"retention\", retention)]:\n        if not str(section.get(\"id\", \"\")).strip():\n            raise ValueError(f\"metrics.{section_name}.id must be non-empty\")\n        _score(section.get(\"base\"), f\"{section_name}.base\")\n        _score(section.get(\"adapted\"), f\"{section_name}.adapted\")\n    if not isinstance(target.get(\"min_gain\"), (int, float)) or target[\"min_gain\"] < 0:\n        raise ValueError(\"target.min_gain must be non-negative\")\n    if not isinstance(retention.get(\"max_drop\"), (int, float)) or retention[\"max_drop\"] < 0:\n        raise ValueError(\"retention.max_drop must be non-negative\")\n    critical = metrics.get(\"critical_regressions\")\n    if not isinstance(critical, int) or critical < 0:\n        raise ValueError(\"critical_regressions must be non-negative int\")\n\n    _validate_preference_context(\n        data[\"preference_context\"],\n        str(target[\"id\"]).strip(),\n        str(retention[\"id\"]).strip(),\n    )\n\n    expected = release_decision(\n        target[\"base\"], target[\"adapted\"],\n        retention[\"base\"], retention[\"adapted\"],\n        target[\"min_gain\"], retention[\"max_drop\"], critical,\n    )\n    if data[\"release_passed\"] is not expected:\n        raise ValueError(\"release_passed does not match declared metric rule\")\n\n    card = data[\"model_card\"]\n    if not str(card.get(\"intended_use\", \"\")).strip():\n        raise ValueError(\"model_card.intended_use must be non-empty\")\n    limitations = card.get(\"limitations\")\n    if not isinstance(limitations, list) or not any(str(x).strip() for x in limitations):\n        raise ValueError(\"model_card.limitations must contain at least one limitation\")\n\n    debug = data[\"debug_record\"]\n    for key in [\"failure\", \"evidence\", \"hypothesis\", \"fix\", \"result\"]:\n        if not str(debug.get(key, \"\")).strip():\n            raise ValueError(f\"debug_record.{key} must be non-empty\")"
+        }
+      ],
+      "helpers": [
+        "_score",
+        "_validate_preference_context"
+      ]
+    }
+  ]
+}

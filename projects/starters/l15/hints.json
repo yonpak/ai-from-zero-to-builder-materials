@@ -1,0 +1,280 @@
+{
+  "version": 1,
+  "project": "p15",
+  "todos": [
+    {
+      "id": "regression_summary",
+      "file": "capstone.py",
+      "signature": "def regression_summary(cases: list[dict]) -> dict:",
+      "source": "projects/reference/l15/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: summarize success and critical regressions from raw cases."
+        },
+        {
+          "text": "Pseudocode: Compute success fraction and count critical regressions from raw test cases. Useful Python operations: raise, ValueError, sum, round, len."
+        },
+        {
+          "text": "Reference regression_summary function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def regression_summary(cases: list[dict]) -> dict:\n    if not cases:\n        raise ValueError(\"regression cases required\")\n    passed = sum(bool(row[\"passed\"]) for row in cases)\n    critical = sum(bool(row.get(\"critical\")) and not bool(row[\"passed\"]) for row in cases)\n    return {\n        \"regression_success\": round(passed / len(cases), 4),\n        \"critical_regressions\": critical,\n    }"
+        }
+      ]
+    },
+    {
+      "id": "human_review_summary",
+      "file": "capstone.py",
+      "signature": "def human_review_summary(ratings: list[dict]) -> dict:",
+      "source": "projects/reference/l15/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: compute mean score and count cases with high reviewer disagreement."
+        },
+        {
+          "text": "Pseudocode: Average recorded reviewer scores and count cases exceeding disagreement tolerance. Useful Python operations: raise, ValueError, int, any, sum."
+        },
+        {
+          "text": "Reference human_review_summary function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def human_review_summary(ratings: list[dict]) -> dict:\n    if not ratings:\n        raise ValueError(\"human ratings required\")\n    values = [int(row[\"score\"]) for row in ratings]\n    if any(score < 1 or score > 5 for score in values):\n        raise ValueError(\"human scores must be 1..5\")\n    by_case: dict[str, list[int]] = {}\n    for row in ratings:\n        by_case.setdefault(str(row[\"case_id\"]), []).append(int(row[\"score\"]))\n    disagreement = sum(\n        len(scores) > 1 and max(scores) - min(scores) >= 3\n        for scores in by_case.values()\n    )\n    return {\n        \"human_mean_score\": round(statistics.fmean(values), 3),\n        \"high_disagreement_cases\": disagreement,\n    }"
+        }
+      ]
+    },
+    {
+      "id": "authorize_action",
+      "file": "capstone.py",
+      "signature": "def authorize_action(principal: dict, proposal: dict, policy: dict) -> bool:",
+      "source": "projects/reference/l15/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: authorize from trusted principal state; ignore generated identity claims."
+        },
+        {
+          "text": "Pseudocode: Trust principal identity/role, not user-generated claims; check proposed action against policy. Useful Python operations: set."
+        },
+        {
+          "text": "Reference authorize_action function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def authorize_action(principal: dict, proposal: dict, policy: dict) -> bool:\n    role = str(principal.get(\"role\", \"\"))\n    action = str(proposal.get(\"action\", \"\"))\n    return action in set(policy.get(role, []))"
+        }
+      ]
+    },
+    {
+      "id": "deletion_eligible",
+      "file": "capstone.py",
+      "signature": "def deletion_eligible(record: dict, current_day: int) -> bool:",
+      "source": "projects/reference/l15/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: apply age, retention period, and legal-hold rules."
+        },
+        {
+          "text": "Pseudocode: Require minimum age/retention and reject legal holds. Useful Python operations: int, raise, ValueError."
+        },
+        {
+          "text": "Reference deletion_eligible function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def deletion_eligible(record: dict, current_day: int) -> bool:\n    created = int(record[\"created_day\"])\n    retention = int(record[\"retention_days\"])\n    if current_day < created or retention < 0:\n        raise ValueError(\"invalid retention timeline\")\n    if bool(record.get(\"legal_hold\")):\n        return False\n    return current_day - created >= retention"
+        }
+      ]
+    },
+    {
+      "id": "threat_summary",
+      "file": "capstone.py",
+      "signature": "def threat_summary(cases: list[dict]) -> dict:",
+      "source": "projects/reference/l15/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: require threat categories, then count mismatches and critical failures."
+        },
+        {
+          "text": "Pseudocode: Track threat categories and count critical failed tests. Useful Python operations: raise, ValueError, any, sum, len."
+        },
+        {
+          "text": "Reference threat_summary function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def threat_summary(cases: list[dict]) -> dict:\n    if not cases:\n        raise ValueError(\"threat tests required\")\n    if any(not str(row.get(\"category\", \"\")).strip() for row in cases):\n        raise ValueError(\"threat category required\")\n    mismatches = [row for row in cases if row[\"observed\"] != row[\"expected\"]]\n    critical = sum(row.get(\"severity\") == \"critical\" for row in mismatches)\n    return {\n        \"threat_test_mismatches\": len(mismatches),\n        \"critical_threat_failures\": critical,\n    }"
+        }
+      ]
+    },
+    {
+      "id": "frontier_claim_valid",
+      "file": "capstone.py",
+      "signature": "def frontier_claim_valid(claim: dict, reviewed_through: str) -> bool:",
+      "source": "projects/reference/l15/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: require scoped, ISO-dated, versioned evidence within the reviewed snapshot."
+        },
+        {
+          "text": "Pseudocode: Parse ISO dates, ensure claim's reviewed snapshot and scoped version are valid. Useful Python operations: any."
+        },
+        {
+          "text": "Reference frontier_claim_valid function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def frontier_claim_valid(claim: dict, reviewed_through: str) -> bool:\n    required = (\n        \"claim\",\n        \"evidence_source\",\n        \"system_version\",\n        \"snapshot_date\",\n        \"scope\",\n        \"local_test\",\n    )\n    if any(not str(claim.get(key, \"\")).strip() for key in required):\n        return False\n    snapshot = _parse_iso_date(claim.get(\"snapshot_date\"))\n    reviewed = _parse_iso_date(reviewed_through)\n    return snapshot is not None and reviewed is not None and snapshot <= reviewed"
+        }
+      ],
+      "helpers": [
+        "_parse_iso_date"
+      ]
+    },
+    {
+      "id": "reproduction_record_valid",
+      "file": "capstone.py",
+      "signature": "def reproduction_record_valid(record: dict) -> bool:",
+      "source": "projects/reference/l15/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: validate setup, expected comparison direction, numeric evidence, and conclusion."
+        },
+        {
+          "text": "Pseudocode: Compare numeric baseline/candidate evidence with stated expected relation and conclusion. Useful Python operations: any, isinstance."
+        },
+        {
+          "text": "Reference reproduction_record_valid function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def reproduction_record_valid(record: dict) -> bool:\n    required = (\n        \"claim\",\n        \"environment\",\n        \"seed_policy\",\n        \"baseline\",\n        \"candidate\",\n        \"expected_relation\",\n        \"conclusion\",\n    )\n    if any(key not in record or record[key] in (\"\", None) for key in required):\n        return False\n    if record[\"conclusion\"] not in VALID_REPRODUCTION_CONCLUSIONS:\n        return False\n    relation = str(record[\"expected_relation\"])\n    if relation not in VALID_EXPECTED_RELATIONS:\n        return False\n    if not isinstance(record[\"environment\"], dict) or not str(\n        record[\"environment\"].get(\"python\", \"\")\n    ).strip():\n        return False\n    if not _is_finite_number(record[\"baseline\"]) or not _is_finite_number(\n        record[\"candidate\"]\n    ):\n        return False\n\n    supports_claim = _relation_holds(\n        relation,\n        record[\"baseline\"],\n        record[\"candidate\"],\n    )\n    conclusion = record[\"conclusion\"]\n    if conclusion in {\"confirmed_in_scope\", \"partially_reproduced\"}:\n        return supports_claim\n    if conclusion == \"not_reproduced\":\n        return not supports_claim\n    return True"
+        }
+      ],
+      "helpers": [
+        "_is_finite_number",
+        "_relation_holds"
+      ]
+    },
+    {
+      "id": "evidence_summary",
+      "file": "capstone.py",
+      "signature": "def evidence_summary(...)",
+      "source": "projects/reference/l15/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: Count missing, duplicate, invalid artifact and governance evidence from the complete required inventories. Validator checks independently reject counterexamples for evidence_summary."
+        },
+        {
+          "text": "Pseudocode: Build sets of required IDs, validate license/provenance and review dates, and count absent entries; never trust reported counts."
+        },
+        {
+          "text": "Reference evidence_summary function. Follow helper calls into the published reference file if required.",
+          "code": "def evidence_summary(\n    artifacts: list[dict],\n    obligations: list[dict],\n    required_artifacts: list[str],\n    required_obligations: list[str],\n) -> dict:\n    artifact_required_fields = (\n        \"artifact_id\",\n        \"artifact\",\n        \"revision\",\n        \"source\",\n        \"license_or_terms\",\n        \"review_evidence\",\n    )\n    obligation_required_fields = (\n        \"requirement_id\",\n        \"requirement\",\n        \"owner\",\n        \"evidence\",\n        \"reviewed_date\",\n    )\n\n    required_artifact_ids, artifact_policy_violations = _required_ids(required_artifacts)\n    required_obligation_ids, obligation_policy_violations = _required_ids(required_obligations)\n\n    artifact_rows = artifacts if isinstance(artifacts, list) else []\n    artifact_ids = [\n        str(row.get(\"artifact_id\", \"\")).strip()\n        for row in artifact_rows\n        if isinstance(row, dict)\n    ]\n    observed_artifact_ids = {value for value in artifact_ids if value}\n    artifact_invalid_rows = sum(\n        not (\n            isinstance(row, dict)\n            and all(str(row.get(key, \"\")).strip() for key in artifact_required_fields)\n            and row.get(\"terms_reviewed\") is True\n        )\n        for row in artifact_rows\n    )\n    artifact_duplicates = len([value for value in artifact_ids if value]) - len(\n        observed_artifact_ids\n    )\n    artifact_missing = len(required_artifact_ids - observed_artifact_ids)\n    artifact_violations = (\n        artifact_policy_violations\n        + artifact_invalid_rows\n        + artifact_duplicates\n        + artifact_missing\n    )\n    if not isinstance(artifacts, list):\n        artifact_violations += 1\n\n    obligation_rows = obligations if isinstance(obligations, list) else []\n    obligation_ids = [\n        str(row.get(\"requirement_id\", \"\")).strip()\n        for row in obligation_rows\n        if isinstance(row, dict)\n    ]\n    observed_obligation_ids = {value for value in obligation_ids if value}\n    obligation_invalid_rows = sum(\n        not (\n            isinstance(row, dict)\n            and isinstance(row.get(\"applicable\"), bool)\n            and all(str(row.get(key, \"\")).strip() for key in obligation_required_fields)\n            and _parse_iso_date(row.get(\"reviewed_date\")) is not None\n        )\n        for row in obligation_rows\n    )\n    obligation_duplicates = len([value for value in obligation_ids if value]) - len(\n        observed_obligation_ids\n    )\n    obligation_missing = len(required_obligation_ids - observed_obligation_ids)\n    governance_violations = (\n        obligation_policy_violations\n        + obligation_invalid_rows\n        + obligation_duplicates\n        + obligation_missing\n    )\n    if not isinstance(obligations, list):\n        governance_violations += 1\n\n    return {\n        \"artifact_evidence_violations\": int(artifact_violations),\n        \"governance_evidence_violations\": int(governance_violations),\n    }"
+        }
+      ],
+      "helpers": [
+        "_required_ids",
+        "_parse_iso_date"
+      ]
+    },
+    {
+      "id": "release_allowed",
+      "file": "capstone.py",
+      "signature": "def release_allowed(metrics: dict, rule: dict) -> bool:",
+      "source": "projects/reference/l15/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: apply every quality threshold and zero-tolerance evidence/control gate."
+        },
+        {
+          "text": "Pseudocode: Reject any quality threshold failure and all zero-tolerance control/evidence violations."
+        },
+        {
+          "text": "Reference release_allowed function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def release_allowed(metrics: dict, rule: dict) -> bool:\n    return not _release_failures(metrics, rule)"
+        }
+      ],
+      "helpers": [
+        "_release_failures"
+      ]
+    },
+    {
+      "id": "validate_run",
+      "file": "capstone.py",
+      "signature": "def validate_run(data: dict) -> None:",
+      "source": "projects/reference/l15/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: recompute all metrics from raw evidence and verify the release decision. Validator focus: critical regression tamper must reject."
+        },
+        {
+          "text": "Pseudocode: Recompute metrics and release outcome independently from raw evidence; reject missing records or contradictions. Useful Python operations: raise, ValueError, sorted."
+        },
+        {
+          "text": "Reference validate_run function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def validate_run(data: dict) -> None:\n    required = {\n        \"project_id\",\n        \"policy\",\n        \"regression_cases\",\n        \"human_ratings\",\n        \"actions\",\n        \"records\",\n        \"threat_tests\",\n        \"frontier_claims\",\n        \"reproductions\",\n        \"artifact_evidence\",\n        \"governance_obligations\",\n        \"metrics\",\n        \"release_rule\",\n        \"release_passed\",\n    }\n    missing = required - data.keys()\n    if missing:\n        raise ValueError(\"missing: \" + \", \".join(sorted(missing)))\n    if data[\"project_id\"] != \"p15-ai-product-capstone\":\n        raise ValueError(\"unexpected project_id\")\n\n    policy_required = {\n        \"authorization\",\n        \"current_day\",\n        \"frontier_reviewed_through\",\n        \"required_artifacts\",\n        \"required_governance_requirements\",\n    }\n    policy_missing = policy_required - data[\"policy\"].keys()\n    if policy_missing:\n        raise ValueError(\"policy missing: \" + \", \".join(sorted(policy_missing)))\n    if _parse_iso_date(data[\"policy\"][\"frontier_reviewed_through\"]) is None:\n        raise ValueError(\"frontier_reviewed_through must be ISO YYYY-MM-DD\")\n\n    got = _recompute_raw(data)\n    if got != data[\"metrics\"]:\n        raise ValueError(f\"metrics mismatch: expected {got!r}\")\n\n    failures = _release_failures(got, data[\"release_rule\"])\n    release = not failures\n    if data[\"release_passed\"] is not release:\n        raise ValueError(\"release_passed mismatch\")\n    if failures:\n        raise ValueError(\"release rule failed: \" + \", \".join(failures))"
+        }
+      ],
+      "helpers": [
+        "_parse_iso_date",
+        "_recompute_raw",
+        "_release_failures"
+      ]
+    },
+    {
+      "id": "retrieve",
+      "file": "product.py",
+      "signature": "def retrieve(embedder, corpus: list[dict], query: str, top_k: int):",
+      "source": "projects/tests/l15/product_contract_fixture.py",
+      "hints": [
+        {
+          "text": "Direction: Normalize corpus/query embeddings, compute similarities only for supplied rows, then take exactly top_k entries. The optional product validator requires the documented return types."
+        },
+        {
+          "text": "Pseudocode: Call embedder.encode(texts, normalize_embeddings=True), dot product with zip/sum, sort descending by score, slice to k. The fixture also defines helper _dot and imports json; include required helpers/imports if copying its function."
+        },
+        {
+          "text": "Function excerpt from the public optional-product contract fixture. It may use the helper _dot() or json import defined in that file.",
+          "code": "def retrieve(embedder, corpus: list[dict], query: str, top_k: int):\n    document_embeddings = embedder.encode(\n        [row[\"text\"] for row in corpus],\n        normalize_embeddings=True,\n    )\n    query_embedding = embedder.encode([query], normalize_embeddings=True)[0]\n    scored = [\n        (row, _dot(vector, query_embedding))\n        for row, vector in zip(corpus, document_embeddings)\n    ]\n    scored.sort(key=lambda pair: pair[1], reverse=True)\n    return [(row, float(score)) for row, score in scored[:top_k]]"
+        }
+      ],
+      "helpers": [
+        "_dot"
+      ]
+    },
+    {
+      "id": "build_grounded_messages",
+      "file": "product.py",
+      "signature": "def build_grounded_messages(...)",
+      "source": "projects/tests/l15/product_contract_fixture.py",
+      "hints": [
+        {
+          "text": "Direction: Include every retrieved ID and text in the chat messages and explicitly demand structured claim/source_ids. The optional product validator requires the documented return types."
+        },
+        {
+          "text": "Pseudocode: Format evidence lines as [ID] text, then combine a system JSON-only instruction with the user question and evidence. The fixture also defines helper _dot and imports json; include required helpers/imports if copying its function."
+        },
+        {
+          "text": "Function excerpt from the public optional-product contract fixture. It may use the helper _dot() or json import defined in that file.",
+          "code": "def build_grounded_messages(query: str, hits: list[tuple[dict, float]]) -> list[dict]:\n    evidence = \"\\n\".join(f\"[{row['id']}] {row['text']}\" for row, _ in hits)\n    return [\n        {\n            \"role\": \"system\",\n            \"content\": (\n                \"Use only supplied evidence. Return exactly one JSON object with keys \"\n                \"claim and source_ids. Do not return a free-text answer. The claim is \"\n                \"machine-checkable. For the reset procedure use claim fields action, \"\n                \"control, and seconds.\"\n            ),\n        },\n        {\n            \"role\": \"user\",\n            \"content\": f\"Question: {query}\\nEvidence:\\n{evidence}\",\n        },\n    ]"
+        }
+      ]
+    },
+    {
+      "id": "generate_grounded_claim",
+      "file": "product.py",
+      "signature": "def generate_grounded_claim(...)",
+      "source": "projects/tests/l15/product_contract_fixture.py",
+      "hints": [
+        {
+          "text": "Direction: Only parse tokens newly generated after the prompt; reject non-object JSON. The optional product validator requires the documented return types."
+        },
+        {
+          "text": "Pseudocode: Use apply_chat_template and model.generate; slice after input length, decode, json.loads and check isinstance(result, dict). Remember to import json. The fixture also defines helper _dot and imports json; include required helpers/imports if copying its function."
+        },
+        {
+          "text": "Function excerpt from the public optional-product contract fixture. It may use the helper _dot() or json import defined in that file.",
+          "code": "def generate_grounded_claim(\n    tokenizer,\n    model,\n    device: str,\n    messages: list[dict],\n    max_new_tokens: int,\n) -> dict:\n    batch = tokenizer.apply_chat_template(\n        messages,\n        add_generation_prompt=True,\n        tokenize=True,\n        return_dict=True,\n        return_tensors=\"pt\",\n    )\n    batch = {key: value.to(device) for key, value in batch.items()}\n    output_ids = model.generate(\n        **batch,\n        do_sample=False,\n        max_new_tokens=max_new_tokens,\n        pad_token_id=tokenizer.eos_token_id,\n    )\n    new_ids = output_ids[0, batch[\"input_ids\"].shape[1] :]\n    text = tokenizer.decode(new_ids, skip_special_tokens=True).strip()\n    result = json.loads(text)\n    if not isinstance(result, dict):\n        raise ValueError(\"model output must decode to one JSON object\")\n    return result"
+        }
+      ]
+    },
+    {
+      "id": "answer_question",
+      "file": "product.py",
+      "signature": "def answer_question(...)",
+      "source": "projects/tests/l15/product_contract_fixture.py",
+      "hints": [
+        {
+          "text": "Direction: Keep the observable stage order and retain provenance and retrieval hits; do not invent answer prose. The optional product validator requires the documented return types."
+        },
+        {
+          "text": "Pseudocode: Call retrieve -> build_grounded_messages -> generate_grounded_claim with unchanged arguments; merge its claim/source_ids with hits. The fixture also defines helper _dot and imports json; include required helpers/imports if copying its function."
+        },
+        {
+          "text": "Function excerpt from the public optional-product contract fixture. It may use the helper _dot() or json import defined in that file.",
+          "code": "def answer_question(\n    query: str,\n    corpus: list[dict],\n    embedder,\n    tokenizer,\n    model,\n    device: str,\n    top_k: int,\n    max_new_tokens: int,\n) -> dict:\n    hits = retrieve(embedder, corpus, query, top_k)\n    messages = build_grounded_messages(query, hits)\n    result = generate_grounded_claim(\n        tokenizer,\n        model,\n        device,\n        messages,\n        max_new_tokens,\n    )\n    return {**result, \"hits\": hits}"
+        }
+      ]
+    }
+  ]
+}

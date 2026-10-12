@@ -1,0 +1,16 @@
+{
+  "run_id": "p06-intentional-failure",
+  "seed": 7,
+  "config": {"vocab_size": 66, "block_size": 12, "n_embd": 48, "n_head": 4, "n_layer": 2},
+  "tokenizer_fingerprint": "toy-char-v2:sha256:ffff",
+  "checkpoint_tokenizer_fingerprint": "toy-char-v1:sha256:4a6f",
+  "checkpoint_fingerprint": "tiny-decoder-step60:sha256:9c21",
+  "validation_loss": 2.7,
+  "samples": [
+    {"prompt": "the cat", "text": "garbled ids after mismatch", "decoding": {"temperature": 0.8, "top_k": 8, "top_p": 0.9, "seed": 7}},
+    {"prompt": "a tiny", "text": "more inconsistent symbols", "decoding": {"temperature": 0.8, "top_k": 8, "top_p": 0.9, "seed": 7}}
+  ],
+  "environment": {"python": ">=3.11"},
+  "debug_record": {"failure": "tokenizer/checkpoint mismatch", "evidence": "fingerprints differ", "hypothesis": "wrong tokenizer artifact paired with checkpoint", "fix": "pair the checkpoint with its original tokenizer", "result": "integration should pass after identities match"},
+  "limitations": "Intentional failure fixture."
+}

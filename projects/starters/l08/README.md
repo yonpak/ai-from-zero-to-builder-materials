@@ -21,6 +21,11 @@ Why adapt?
 
 ## Prerequisites
 
+Python help for this project:
+
+- [P3 — Writing Small Python Functions](https://aizero.ruzincompany.com/learn/01-level-1/writing-small-python-functions)
+- [P8 — Running Python Projects Locally](https://aizero.ruzincompany.com/learn/06-level-6/running-python-projects-locally)
+
 Complete Level 8 through **Fine-Tuning Integration Workshop**. The cumulative project dependency is **Reliable LLM Workflow**.
 
 ## Canonical reduced path
@@ -105,3 +110,13 @@ Add `PROJECT_REPORT.md` explaining:
 The project is complete when another person can reproduce the declared decision and identify exactly which base, data, adapter, and evaluations support it.
 
 A full PPO implementation is **not** required for this project. The requirement is to explain the optimization routes correctly and encode enough structure for the validator to distinguish them: the selected route must map to the correct optimization path, and any preference/reward proxy ID must remain distinct from the recorded target and retention evaluation IDs.
+
+## Compare with a reference (optional)
+
+Try the TODOs yourself and run the submission validator first. Then inspect the [published reference solution](../../reference/l08/reference_solution.py) and any example evaluations. To verify the published reference against its acceptance tests from the public materials repository root, run:
+
+```bash
+python projects/tests/l08/test_reference.py
+```
+
+This command tests the reference, **not your own solution**. Use the project rubric and submission checker to evaluate your implementation.

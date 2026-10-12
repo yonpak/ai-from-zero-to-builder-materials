@@ -1,0 +1,153 @@
+{
+  "version": 1,
+  "project": "p05",
+  "todos": [
+    {
+      "id": "softmax",
+      "file": "mini_transformer.py",
+      "signature": "def softmax(scores):",
+      "source": "projects/reference/l05/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: stable softmax (subtract max before exp)."
+        },
+        {
+          "text": "Pseudocode: Subtract the maximum logit before exponentiation; normalize by the sum. Relevant Python syntax: raise, ValueError, max, math, sum."
+        },
+        {
+          "text": "Only softmax from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def softmax(scores):\n    if not scores:\n        raise ValueError(\"softmax needs at least one score\")\n    m = max(scores)\n    exp = [math.exp(v - m) for v in scores]\n    total = sum(exp)\n    return [v / total for v in exp]"
+        }
+      ]
+    },
+    {
+      "id": "layer_norm",
+      "file": "mini_transformer.py",
+      "signature": "def layer_norm(vector, eps=1e-5):",
+      "source": "projects/reference/l05/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: normalize features of one token vector."
+        },
+        {
+          "text": "Pseudocode: Compute mean and variance across features, then divide centered values by a stable standard deviation. Relevant Python syntax: raise, ValueError, sum, len, math."
+        },
+        {
+          "text": "Only layer_norm from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def layer_norm(vector, eps=1e-5):\n    if not vector:\n        raise ValueError(\"layer_norm needs features\")\n    mean = sum(vector) / len(vector)\n    variance = sum((x - mean) ** 2 for x in vector) / len(vector)\n    denom = math.sqrt(variance + eps)\n    return [(x - mean) / denom for x in vector]"
+        }
+      ]
+    },
+    {
+      "id": "feed_forward",
+      "file": "mini_transformer.py",
+      "signature": "def feed_forward(vector):",
+      "source": "projects/reference/l05/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: expand C -> 2C, apply a nonlinearity, then contract to C."
+        },
+        {
+          "text": "Pseudocode: Expand features, apply nonlinearity, project back to the original width. Relevant Python syntax: max, len."
+        },
+        {
+          "text": "Only feed_forward from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def feed_forward(vector):\n    # Expand C -> 2C, apply ReLU, then contract to C.\n    hidden = []\n    for value in vector:\n        hidden.extend([max(0.0, value), max(0.0, -value)])\n    return [hidden[2*i] - hidden[2*i + 1] for i in range(len(vector))]"
+        }
+      ]
+    },
+    {
+      "id": "causal_multi_head_attention",
+      "file": "mini_transformer.py",
+      "signature": "def causal_multi_head_attention(sequence, n_head):",
+      "source": "projects/reference/l05/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: split channels into heads, compute scaled causal attention,"
+        },
+        {
+          "text": "Pseudocode: Require C divisible by heads; compute scaled scores, mask future positions and normalize within each head. Relevant Python syntax: raise, ValueError, len, any, all."
+        },
+        {
+          "text": "Only causal_multi_head_attention from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def causal_multi_head_attention(sequence, n_head):\n    if not sequence:\n        raise ValueError(\"sequence cannot be empty\")\n    width = len(sequence[0])\n    if any(len(row) != width for row in sequence):\n        raise ValueError(\"all token vectors must have the same width\")\n    if n_head <= 0 or width % n_head != 0:\n        raise ValueError(\"embedding width must be divisible by n_head\")\n\n    split = [_split_vector(row, n_head) for row in sequence]\n    head_dim = width // n_head\n    scale = math.sqrt(head_dim)\n    all_head_outputs = [[None for _ in sequence] for _ in range(n_head)]\n    all_weights = [[[0.0 for _ in sequence] for _ in sequence] for _ in range(n_head)]\n\n    for h in range(n_head):\n        for q_index, token_heads in enumerate(split):\n            query = token_heads[h]\n            legal_keys = [split[k_index][h] for k_index in range(q_index + 1)]\n            scores = [dot(query, key) / scale for key in legal_keys]\n            weights = softmax(scores)\n            for k_index, weight in enumerate(weights):\n                all_weights[h][q_index][k_index] = weight\n            out = []\n            for j in range(head_dim):\n                out.append(sum(weight * split[k][h][j] for k, weight in enumerate(weights)))\n            all_head_outputs[h][q_index] = out\n\n    merged = []\n    for t in range(len(sequence)):\n        row = []\n        for h in range(n_head):\n            row.extend(all_head_outputs[h][t])\n        merged.append(row)\n    return merged, all_weights"
+        }
+      ],
+      "helpers": [
+        "_split_vector"
+      ]
+    },
+    {
+      "id": "residual_add",
+      "file": "mini_transformer.py",
+      "signature": "def residual_add(sequence, update):",
+      "source": "projects/reference/l05/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: elementwise addition with explicit shape checks."
+        },
+        {
+          "text": "Pseudocode: Reject unequal shape before elementwise addition. Relevant Python syntax: len, raise, ValueError, zip."
+        },
+        {
+          "text": "Only residual_add from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def residual_add(sequence, update):\n    if len(sequence) != len(update):\n        raise ValueError(\"residual sequence lengths must match\")\n    out = []\n    for left, right in zip(sequence, update):\n        if len(left) != len(right):\n            raise ValueError(\"residual feature widths must match\")\n        out.append([a + b for a, b in zip(left, right)])\n    return out"
+        }
+      ]
+    },
+    {
+      "id": "transformer_block",
+      "file": "mini_transformer.py",
+      "signature": "def transformer_block(sequence, n_head):",
+      "source": "projects/reference/l05/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: pre-norm attention residual, then pre-norm feed-forward residual."
+        },
+        {
+          "text": "Pseudocode: Follow pre-norm -> attention -> residual, then pre-norm -> feed forward -> residual."
+        },
+        {
+          "text": "Only transformer_block from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def transformer_block(sequence, n_head):\n    norm1 = [layer_norm(row) for row in sequence]\n    attn, weights = causal_multi_head_attention(norm1, n_head)\n    x1 = residual_add(sequence, attn)\n    norm2 = [layer_norm(row) for row in x1]\n    ff = [feed_forward(row) for row in norm2]\n    return residual_add(x1, ff), weights"
+        }
+      ]
+    },
+    {
+      "id": "stack_blocks",
+      "file": "mini_transformer.py",
+      "signature": "def stack_blocks(sequence, n_head, depth):",
+      "source": "projects/reference/l05/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: repeat the block while preserving sequence/feature shape."
+        },
+        {
+          "text": "Pseudocode: Repeatedly apply the block with the configured layer count; shape must remain (T,C). Relevant Python syntax: raise, ValueError."
+        },
+        {
+          "text": "Only stack_blocks from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def stack_blocks(sequence, n_head, depth):\n    if depth <= 0:\n        raise ValueError(\"depth must be positive\")\n    x = [list(row) for row in sequence]\n    weights = []\n    for _ in range(depth):\n        x, block_weights = transformer_block(x, n_head)\n        weights.append(block_weights)\n    return x, weights"
+        }
+      ]
+    },
+    {
+      "id": "mini_transformer",
+      "file": "mini_transformer.py",
+      "signature": "def mini_transformer(token_ids, vocab_size=23, context=8, width=8, n_head=2, depth=2):",
+      "source": "projects/reference/l05/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: embeddings -> stacked blocks -> final norm -> vocabulary logits."
+        },
+        {
+          "text": "Pseudocode: Construct token/position representations, stack blocks and return per-token vocabulary logits. Relevant Python syntax: raise, ValueError, len, any, enumerate."
+        },
+        {
+          "text": "Only mini_transformer from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def mini_transformer(token_ids, vocab_size=23, context=8, width=8, n_head=2, depth=2):\n    if not token_ids:\n        raise ValueError(\"token_ids cannot be empty\")\n    if len(token_ids) > context:\n        raise ValueError(\"sequence exceeds context\")\n    if any(t < 0 or t >= vocab_size for t in token_ids):\n        raise ValueError(\"token id outside vocabulary\")\n    if width % n_head != 0:\n        raise ValueError(\"embedding width must be divisible by n_head\")\n\n    x = [embed_token(token_id, pos, width) for pos, token_id in enumerate(token_ids)]\n    x, weights = stack_blocks(x, n_head, depth)\n    x = [layer_norm(row) for row in x]\n\n    # Deterministic vocabulary projection: dot each state with a token-only basis.\n    basis = [embed_token(v, 0, width) for v in range(vocab_size)]\n    logits = [[dot(row, b) for b in basis] for row in x]\n    return logits, weights"
+        }
+      ]
+    }
+  ]
+}

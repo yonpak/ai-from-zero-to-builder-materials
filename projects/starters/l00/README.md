@@ -4,6 +4,10 @@
 Demonstrate that you can define a tiny prediction task, preserve fair evaluation evidence, compare a baseline, investigate a failure, and explain what the evidence does and does not support.
 
 ## Prerequisites
+Python help for this project (optional Builder path only):
+
+- [P1 — Python and NumPy Bridge](https://aizero.ruzincompany.com/learn/01-level-1/python-numpy-bridge)
+
 Complete Level 0 through L0.12, [Debug and Improve a Tiny Predictor](https://aizero.ruzincompany.com/learn/00-level-0/l00-12-debug-and-improve-a-tiny-predictor). You should be able to identify features and labels, explain a train/test split, count prediction mistakes, compare against a baseline, and change one thing at a time.
 
 You have **two valid completion paths**. The Level 0 learning goal is experimental reasoning, so local Python is not required for Core completion.
@@ -75,3 +79,12 @@ Do not immediately change several things. A failed hypothesis is still useful ev
 The project uses deterministic, synthetic teaching data. No external dataset, model, network access, credentials, or secrets are required.
 
 The browser Core path is reproducible from the canonical L0.12 starter and recorded edit. The Builder validation path uses only Python's standard library.
+## Compare with a reference (optional)
+
+Try the TODOs yourself and run the submission validator first. Then inspect the [published reference solution](../../reference/l00/reference_solution.py) and any example evaluations. To verify the published reference against its acceptance tests from the public materials repository root, run:
+
+```bash
+python projects/tests/l00/test_reference.py
+```
+
+This command tests the reference, **not your own solution**. Use the project rubric and submission checker to evaluate your implementation.

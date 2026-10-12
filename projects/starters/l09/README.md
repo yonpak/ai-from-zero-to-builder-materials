@@ -18,6 +18,11 @@ source snapshot
 
 ## Prerequisites
 
+Python help for this project:
+
+- [P3 — Writing Small Python Functions](https://aizero.ruzincompany.com/learn/01-level-1/writing-small-python-functions)
+- [P8 — Running Python Projects Locally](https://aizero.ruzincompany.com/learn/06-level-6/running-python-projects-locally)
+
 Complete Level 9 through **RAG System Integration Workshop**. The cumulative project dependency is **Adapt a Small LLM**.
 
 ## Canonical reduced path
@@ -107,3 +112,13 @@ Add `PROJECT_REPORT.md` explaining:
 - next experiment.
 
 The project is complete when another person can reproduce why each supplied source was eligible, why each supported answer cites supplied evidence, and how the release decision was computed.
+
+## Compare with a reference (optional)
+
+Try the TODOs yourself and run the submission validator first. Then inspect the [published reference solution](../../reference/l09/reference_solution.py) and any example evaluations. To verify the published reference against its acceptance tests from the public materials repository root, run:
+
+```bash
+python projects/tests/l09/test_reference.py
+```
+
+This command tests the reference, **not your own solution**. Use the project rubric and submission checker to evaluate your implementation.

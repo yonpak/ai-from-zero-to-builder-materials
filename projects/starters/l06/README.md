@@ -6,6 +6,10 @@ Train or reuse the validated Level 6 tiny decoder-only language-model path, eval
 
 ## Prerequisites
 
+Python help for this project:
+
+- [P8 — Running Python Projects Locally](https://aizero.ruzincompany.com/learn/06-level-6/running-python-projects-locally)
+
 Complete Level 6 through **L6.14 — Tiny LLM Integration Workshop**. The canonical cumulative project dependency is the Level 5 project **Build a Mini Transformer**.
 
 You should be able to:
@@ -103,3 +107,13 @@ The reduced path is CPU-only, deterministic, and uses no network. The optional f
 ## Provenance
 
 The reduced reference evidence is synthetic teaching data committed in this repository. The full training source is the repository's validated Tiny LLM teaching corpus/notebook package. No external dataset is required for the project acceptance path.
+
+## Compare with a reference (optional)
+
+Try the TODOs yourself and run the submission validator first. Then inspect the [published reference solution](../../reference/l06/reference_solution.py) and any example evaluations. To verify the published reference against its acceptance tests from the public materials repository root, run:
+
+```bash
+python projects/tests/l06/test_reference.py
+```
+
+This command tests the reference, **not your own solution**. Use the project rubric and submission checker to evaluate your implementation.

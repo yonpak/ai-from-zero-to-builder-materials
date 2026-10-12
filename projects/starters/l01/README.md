@@ -10,6 +10,12 @@ The goal is not to choose a model because one headline metric is largest. The go
 
 ## Prerequisites
 
+Python help for this project:
+
+- [P1 — Python and NumPy Bridge](https://aizero.ruzincompany.com/learn/01-level-1/python-numpy-bridge)
+- [P2 — NumPy Arrays and Shapes](https://aizero.ruzincompany.com/learn/01-level-1/numpy-arrays-and-shapes)
+- [P4 — Reading scikit-learn Code](https://aizero.ruzincompany.com/learn/01-level-1/reading-scikit-learn-code)
+
 Complete Level 1 through **L1.18 — Real-World Tabular ML: Pipelines and Model Review**.
 
 You should be able to use:
@@ -168,3 +174,13 @@ A complete submission shows:
 ## Resource expectations
 
 This project is CPU-only and small. No cloud account, token, secret, or external model asset is required.
+
+## Compare with a reference (optional)
+
+Try the TODOs yourself and run the submission validator first. Then inspect the [published reference solution](../../reference/l01/trustworthy_ml_reference.py) and any example evaluations. To verify the published reference against its acceptance tests from the public materials repository root, run:
+
+```bash
+python projects/tests/l01/test_reference.py
+```
+
+This command tests the reference, **not your own solution**. Use the project rubric and submission checker to evaluate your implementation.

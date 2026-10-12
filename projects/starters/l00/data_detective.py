@@ -1,6 +1,6 @@
 """Starter for p00-data-detective.
 
-Complete the TODO functions without looking at the reference solution.
+Try each TODO before opening hints; the published reference is in projects/reference/l00/.
 """
 
 TRAIN_EXAMPLES = [

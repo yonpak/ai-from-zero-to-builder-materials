@@ -1,0 +1,153 @@
+{
+  "version": 1,
+  "project": "p14",
+  "todos": [
+    {
+      "id": "validate_request",
+      "file": "service.py",
+      "signature": "def validate_request(request: dict, policy: dict) -> bool:",
+      "source": "projects/reference/l14/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: validate input text and bounded max_tokens. Validator focus: valid request rejected."
+        },
+        {
+          "text": "Pseudocode: Reject empty input, invalid sizes and max_tokens above the policy cap. Useful Python operations: isinstance, int."
+        },
+        {
+          "text": "Reference validate_request function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def validate_request(request: dict, policy: dict) -> bool:\n    return (\n        isinstance(request.get(\"input\"),str)\n        and bool(request[\"input\"].strip())\n        and isinstance(request.get(\"max_tokens\"),int)\n        and 1<=request[\"max_tokens\"]<=int(policy[\"max_tokens\"])\n    )"
+        }
+      ]
+    },
+    {
+      "id": "batch_requests",
+      "file": "service.py",
+      "signature": "def batch_requests(requests: list[dict], max_batch: int, wait_ms: int) -> list[list[str]]:",
+      "source": "projects/reference/l14/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: group arrival-ordered requests using size and oldest-request wait bounds. Validator focus: batching contract failed."
+        },
+        {
+          "text": "Pseudocode: Keep arrival order; flush on size limit or oldest waiting-time limit. Useful Python operations: int, raise, ValueError, sorted, len."
+        },
+        {
+          "text": "Reference batch_requests function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def batch_requests(requests: list[dict], max_batch: int, wait_ms: int) -> list[list[str]]:\n    if max_batch<1 or wait_ms<0:\n        raise ValueError(\"invalid batching limits\")\n    ordered=sorted(requests,key=lambda r:(r[\"arrival_ms\"],r[\"id\"]))\n    result=[]; i=0\n    while i<len(ordered):\n        start=ordered[i][\"arrival_ms\"]; batch=[ordered[i][\"id\"]]; i+=1\n        while i<len(ordered) and len(batch)<max_batch and ordered[i][\"arrival_ms\"]-start<=wait_ms:\n            batch.append(ordered[i][\"id\"]); i+=1\n        result.append(batch)\n    return result"
+        }
+      ]
+    },
+    {
+      "id": "memory_admit",
+      "file": "service.py",
+      "signature": "def memory_admit(estimated_memory_gb: float, available_memory_gb: float, reserve_gb: float) -> bool:",
+      "source": "projects/reference/l14/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: admit only when the request fits without consuming the reserve. Validator focus: safe memory rejected."
+        },
+        {
+          "text": "Pseudocode: Reject negative capacity inputs and preserve reserve headroom. Useful Python operations: float, min, raise, ValueError, max."
+        },
+        {
+          "text": "Reference memory_admit function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def memory_admit(estimated_memory_gb: float, available_memory_gb: float, reserve_gb: float) -> bool:\n    if min(estimated_memory_gb,available_memory_gb,reserve_gb)<0:\n        raise ValueError(\"memory values must be non-negative\")\n    return estimated_memory_gb<=max(0.0,available_memory_gb-reserve_gb)"
+        }
+      ]
+    },
+    {
+      "id": "deployment_identity",
+      "file": "service.py",
+      "signature": "def deployment_identity(deployment: dict) -> tuple:",
+      "source": "projects/reference/l14/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: return immutable/service/model/runtime/config identity fields."
+        },
+        {
+          "text": "Pseudocode: Return immutable image/model/runtime/config identity fields in the specified order. Useful Python operations: raise, ValueError."
+        },
+        {
+          "text": "Reference deployment_identity function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def deployment_identity(deployment: dict) -> tuple:\n    required=[\"image_digest\",\"service_version\",\"model_revision\",\"runtime_version\",\"config_hash\"]\n    values=[]\n    for key in required:\n        value=str(deployment.get(key,\"\")).strip()\n        if not value:\n            raise ValueError(\"missing deployment identity field: \"+key)\n        values.append(value)\n    return tuple(values)"
+        }
+      ]
+    },
+    {
+      "id": "aggregate_metrics",
+      "file": "service.py",
+      "signature": "def aggregate_metrics(runs: list[dict]) -> dict:",
+      "source": "projects/reference/l14/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: summarize success, p95 TTFT, and error/admission/deployment evidence."
+        },
+        {
+          "text": "Pseudocode: Aggregate successes, p95 first-token latency, error classes, admission and deployment mismatches. Useful Python operations: raise, ValueError, int, sorted, len."
+        },
+        {
+          "text": "Reference aggregate_metrics function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def aggregate_metrics(runs: list[dict]) -> dict:\n    if not runs:\n        raise ValueError(\"runs required\")\n    invalid=0; admission=0; deployment=0; critical=0; success=0; ttfts=[]\n    for run in runs:\n        success+=int(run[\"observed_terminal\"]==run[\"expected_terminal\"])\n        ttfts.append(run[\"ttft_ms\"])\n        invalid+=int(run.get(\"invalid_executed\",False))\n        admission+=int(run.get(\"admission_violation\",False))\n        deployment+=int(run.get(\"deployment_mismatch\",False))\n        critical+=int(run.get(\"critical_violation\",False))\n    ordered=sorted(ttfts)\n    return {\n      \"task_success\":success/len(runs),\n      \"invalid_requests_executed\":invalid,\n      \"memory_admission_violations\":admission,\n      \"deployment_identity_mismatches\":deployment,\n      \"critical_violations\":critical,\n      \"p95_ttft_ms\":ordered[max(0,int(.95*len(ordered))-1)],\n    }"
+        }
+      ]
+    },
+    {
+      "id": "rollout_allowed",
+      "file": "service.py",
+      "signature": "def rollout_allowed(metrics: dict, rule: dict) -> bool:",
+      "source": "projects/reference/l14/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: apply quality/performance thresholds and zero-tolerance controls. Validator focus: valid rollout rejected."
+        },
+        {
+          "text": "Pseudocode: Enforce quality and performance thresholds plus zero-tolerance counters."
+        },
+        {
+          "text": "Reference rollout_allowed function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def rollout_allowed(metrics: dict, rule: dict) -> bool:\n    return (\n      metrics[\"task_success\"]>=rule[\"min_task_success\"]\n      and metrics[\"invalid_requests_executed\"]<=rule[\"max_invalid_requests_executed\"]\n      and metrics[\"memory_admission_violations\"]<=rule[\"max_memory_admission_violations\"]\n      and metrics[\"deployment_identity_mismatches\"]<=rule[\"max_deployment_identity_mismatches\"]\n      and metrics[\"critical_violations\"]<=rule[\"max_critical_violations\"]\n      and metrics[\"p95_ttft_ms\"]<=rule[\"max_p95_ttft_ms\"]\n    )"
+        }
+      ]
+    },
+    {
+      "id": "required_replicas",
+      "file": "service.py",
+      "signature": "def required_replicas(arrival_rps: float, safe_rps_per_replica: float, target_utilization: float) -> int:",
+      "source": "projects/reference/l14/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: calculate safe replica count. Validator focus: capacity calculation failed."
+        },
+        {
+          "text": "Pseudocode: Divide arrival demand by safe per-replica capacity and round up. Useful Python operations: float, int, raise, ValueError, max."
+        },
+        {
+          "text": "Reference required_replicas function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def required_replicas(arrival_rps: float, safe_rps_per_replica: float, target_utilization: float) -> int:\n    if arrival_rps<0 or safe_rps_per_replica<=0 or not 0<target_utilization<=1:\n        raise ValueError(\"invalid capacity inputs\")\n    return max(1,math.ceil(arrival_rps/(safe_rps_per_replica*target_utilization)))"
+        }
+      ]
+    },
+    {
+      "id": "validate_run",
+      "file": "service.py",
+      "signature": "def validate_run(data: dict) -> None:",
+      "source": "projects/reference/l14/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: independently recompute metrics and release decision from raw evidence. Validator focus: invalid executed request must reject."
+        },
+        {
+          "text": "Pseudocode: Recompute metrics and release outcome independently from raw evidence; reject missing records or contradictions. Useful Python operations: raise, ValueError, sorted, isinstance, len."
+        },
+        {
+          "text": "Reference validate_run function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def validate_run(data: dict) -> None:\n    required={\"project_id\",\"deployments\",\"policy\",\"runs\",\"metrics\",\"release_rule\",\"release_passed\"}\n    missing=required-data.keys()\n    if missing: raise ValueError(\"missing: \"+\", \".join(sorted(missing)))\n    if data[\"project_id\"]!=\"p14-production-ai-service\":\n        raise ValueError(\"unexpected project_id\")\n    if not isinstance(data[\"runs\"],list) or len(data[\"runs\"])<5:\n        raise ValueError(\"at least five runs required\")\n    for d in data[\"deployments\"]:\n        deployment_identity(d)\n    got=_recompute_raw(data)\n    if got!=data[\"metrics\"]:\n        raise ValueError(f\"metrics mismatch: expected {got!r}\")\n    release=rollout_allowed(got,data[\"release_rule\"])\n    if data[\"release_passed\"] is not release:\n        raise ValueError(\"release_passed mismatch\")\n    if not release:\n        raise ValueError(\"release rule failed\")"
+        }
+      ],
+      "helpers": [
+        "_recompute_raw"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "version": 1,
+  "project": "p11",
+  "todos": [
+    {
+      "id": "choose_subgoal",
+      "file": "agent.py",
+      "signature": "def choose_subgoal(plan: list[dict]) -> str | None:",
+      "source": "projects/reference/l11/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: choose active/pending work without reviving completed or blocked subgoals\") Validator focus: choose_subgoal should prefer the active subgoal."
+        },
+        {
+          "text": "Pseudocode: Prefer exactly one active subgoal; otherwise the first pending one; never revive completed or blocked work. Useful Python operations: isinstance, raise, ValueError, len."
+        },
+        {
+          "text": "Reference choose_subgoal function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def choose_subgoal(plan: list[dict]) -> str | None:\n    if not isinstance(plan, list):\n        raise ValueError(\"plan must be a list\")\n    active = [item for item in plan if item.get(\"status\") == \"active\"]\n    if len(active) > 1:\n        raise ValueError(\"plan has multiple active subgoals\")\n    if active:\n        return str(active[0].get(\"name\", \"\")).strip() or None\n    for item in plan:\n        if item.get(\"status\") == \"pending\":\n            return str(item.get(\"name\", \"\")).strip() or None\n    return None"
+        }
+      ]
+    },
+    {
+      "id": "select_action",
+      "file": "agent.py",
+      "signature": "def select_action(subgoal: str, available_actions: dict) -> str | None:",
+      "source": "projects/reference/l11/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: filter by supported subgoal and permission, then prefer the narrow read-only action\") Validator focus: select_action should filter denied actions and prefer a permitted read-only action."
+        },
+        {
+          "text": "Pseudocode: Filter by supported target and tool permission; choose the narrowest read-only option. Useful Python operations: set, int."
+        },
+        {
+          "text": "Reference select_action function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def select_action(subgoal: str, available_actions: dict) -> str | None:\n    candidates = []\n    for name, spec in available_actions.items():\n        if not spec.get(\"permitted\", False):\n            continue\n        if subgoal not in set(spec.get(\"supports_subgoals\", [])):\n            continue\n        candidates.append(\n            (\n                bool(spec.get(\"side_effect\", False)),\n                int(spec.get(\"priority\", 100)),\n                name,\n            )\n        )\n    if not candidates:\n        return None\n    candidates.sort()\n    return candidates[0][2]"
+        }
+      ]
+    },
+    {
+      "id": "update_working_memory",
+      "file": "agent.py",
+      "signature": "def update_working_memory(state: dict, observation: dict, max_recent: int = 3) -> dict:",
+      "source": "projects/reference/l11/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: preserve explicit control fields, merge trusted fields, and bound recent events\")"
+        },
+        {
+          "text": "Pseudocode: Preserve controller-owned keys, merge trusted observation fields, and cap recent history. Useful Python operations: int, isinstance, raise, ValueError."
+        },
+        {
+          "text": "Reference update_working_memory function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def update_working_memory(state: dict, observation: dict, max_recent: int = 3) -> dict:\n    if not isinstance(state, dict) or not isinstance(observation, dict):\n        raise ValueError(\"state and observation must be objects\")\n    if not isinstance(max_recent, int) or max_recent < 1:\n        raise ValueError(\"max_recent must be positive\")\n    updated = dict(state)\n    recent = list(state.get(\"recent\", []))\n    event = {\n        \"source\": observation.get(\"source\"),\n        \"trusted\": bool(observation.get(\"trusted\", False)),\n        \"fields\": dict(observation.get(\"fields\", {})),\n    }\n    recent.append(event)\n    updated[\"recent\"] = recent[-max_recent:]\n    if observation.get(\"trusted\") is True:\n        fields = observation.get(\"fields\", {})\n        if not isinstance(fields, dict):\n            raise ValueError(\"observation fields must be an object\")\n        for key, value in fields.items():\n            if key not in CONTROL_FIELDS:\n                updated[key] = value\n                updated[f\"{key}_source\"] = observation.get(\"source\")\n    return updated"
+        }
+      ]
+    },
+    {
+      "id": "memory_write_allowed",
+      "file": "agent.py",
+      "signature": "def memory_write_allowed(candidate: dict, policy: dict) -> bool:",
+      "source": "projects/reference/l11/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: enforce memory category, source, sensitive-data, and age rules\")"
+        },
+        {
+          "text": "Pseudocode: Check category, provenance, sensitive-data policy and freshness before storing. Useful Python operations: isinstance, set, int."
+        },
+        {
+          "text": "Reference memory_write_allowed function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def memory_write_allowed(candidate: dict, policy: dict) -> bool:\n    if not isinstance(candidate, dict) or not isinstance(policy, dict):\n        return False\n    if candidate.get(\"category\") not in set(policy.get(\"allowed_categories\", [])):\n        return False\n    if candidate.get(\"source\") not in set(policy.get(\"trusted_sources\", [])):\n        return False\n    if candidate.get(\"sensitive\") and not policy.get(\"allow_sensitive\", False):\n        return False\n    age_days = candidate.get(\"age_days\")\n    if not isinstance(age_days, int) or age_days < 0:\n        return False\n    return age_days <= int(policy.get(\"max_age_days\", -1))"
+        }
+      ]
+    },
+    {
+      "id": "approval_valid",
+      "file": "agent.py",
+      "signature": "def approval_valid(proposal: dict, approval: dict | None, now_iso: str) -> bool:",
+      "source": "projects/reference/l11/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: bind approval to the exact side effect and reject expired/denied records\")"
+        },
+        {
+          "text": "Pseudocode: Compare exact action/arguments, approved status and expiry time. Useful Python operations: isinstance, ValueError."
+        },
+        {
+          "text": "Reference approval_valid function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def approval_valid(proposal: dict, approval: dict | None, now_iso: str) -> bool:\n    if not isinstance(proposal, dict) or not isinstance(approval, dict):\n        return False\n    if approval.get(\"approved\") is not True:\n        return False\n    if approval.get(\"action\") != proposal.get(\"action\"):\n        return False\n    if approval.get(\"arguments\") != proposal.get(\"arguments\"):\n        return False\n    try:\n        return _parse_iso(now_iso) < _parse_iso(approval.get(\"expires_at\"))\n    except (TypeError, ValueError):\n        return False"
+        }
+      ],
+      "helpers": [
+        "_parse_iso"
+      ]
+    },
+    {
+      "id": "stop_reason",
+      "file": "agent.py",
+      "signature": "def stop_reason(state: dict, max_steps: int, repeat_limit: int) -> str | None:",
+      "source": "projects/reference/l11/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: apply stop conditions in a deterministic priority order\")"
+        },
+        {
+          "text": "Pseudocode: Apply hard-stop conditions in priority order rather than trusting the proposed stop label. Useful Python operations: int."
+        },
+        {
+          "text": "Reference stop_reason function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def stop_reason(state: dict, max_steps: int, repeat_limit: int) -> str | None:\n    if state.get(\"success\"):\n        return \"success\"\n    if state.get(\"permission_denied\"):\n        return \"denied\"\n    if state.get(\"missing_input\"):\n        return \"blocked_missing_input\"\n    if int(state.get(\"repeat_count\", 0)) >= repeat_limit:\n        return \"repeated_action\"\n    if int(state.get(\"step_count\", 0)) >= max_steps:\n        return \"max_steps\"\n    return None"
+        }
+      ]
+    },
+    {
+      "id": "transition",
+      "file": "agent.py",
+      "signature": "def transition(state: str, event: str, transitions: dict) -> str:",
+      "source": "projects/reference/l11/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: apply the explicit STATE|event transition table\") Validator focus: transition should use the explicit transition table."
+        },
+        {
+          "text": "Pseudocode: Look up (state,event) in the explicit table; reject illegal transitions. Useful Python operations: raise, ValueError."
+        },
+        {
+          "text": "Reference transition function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def transition(state: str, event: str, transitions: dict) -> str:\n    key = f\"{state}|{event}\"\n    if key not in transitions:\n        raise ValueError(f\"illegal transition: {key}\")\n    return transitions[key]"
+        }
+      ]
+    },
+    {
+      "id": "validate_run",
+      "file": "agent.py",
+      "signature": "def validate_run(data: dict) -> None:",
+      "source": "projects/reference/l11/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: validate trajectories and recompute all metrics and the release decision\")"
+        },
+        {
+          "text": "Pseudocode: Recompute metrics and release outcome independently from raw traces; reject missing records, policy violations and inconsistent declared summaries. Useful Python operations: isinstance, raise, ValueError, sorted, int."
+        },
+        {
+          "text": "Reference validate_run function only. Some reference helpers may also need to be copied or reimplemented; inspect the linked file.",
+          "code": "def validate_run(data: dict) -> None:\n    if not isinstance(data, dict):\n        raise ValueError(\"run must be an object\")\n    missing = REQUIRED_TOP_LEVEL - data.keys()\n    if missing:\n        raise ValueError(\"missing: \" + \", \".join(sorted(missing)))\n    if data[\"project_id\"] != \"p11-bounded-agent\":\n        raise ValueError(\"unexpected project_id\")\n    for key in [\"agent_version\", \"policy_version\", \"memory_policy_version\", \"evaluator_version\"]:\n        if not str(data[key]).strip():\n            raise ValueError(f\"{key} must be non-empty\")\n    _parse_iso(data[\"evaluation_time\"])\n\n    max_steps = data[\"max_steps\"]\n    repeat_limit = data[\"repeat_limit\"]\n    if not isinstance(max_steps, int) or max_steps < 1:\n        raise ValueError(\"max_steps must be a positive integer\")\n    if not isinstance(repeat_limit, int) or repeat_limit < 2:\n        raise ValueError(\"repeat_limit must be at least 2\")\n\n    policy = data[\"policy\"]\n    memory_policy = data[\"memory_policy\"]\n    transitions = data[\"transitions\"]\n    if not isinstance(policy, dict) or not isinstance(policy.get(\"roles\"), dict):\n        raise ValueError(\"policy roles must be an object\")\n    if not isinstance(transitions, dict) or not transitions:\n        raise ValueError(\"transitions must be a non-empty object\")\n\n    traces = data[\"traces\"]\n    if not isinstance(traces, list) or len(traces) < 5:\n        raise ValueError(\"at least five fixed traces are required\")\n\n    seen = set()\n    task_hits = 0\n    selection_hits = 0\n    total_steps = 0\n    unauthorized = 0\n    approval_bypasses = 0\n    runaway = 0\n    memory_violations = 0\n    goal_drift = 0\n    success_step_total = 0\n    success_count = 0\n\n    approval_required = set(policy.get(\"approval_required_actions\", []))\n\n    for trace in traces:\n        trace_id = str(trace.get(\"id\", \"\")).strip()\n        if not trace_id or trace_id in seen:\n            raise ValueError(\"trace IDs must be non-empty and unique\")\n        seen.add(trace_id)\n        role = trace.get(\"principal_role\")\n        if role not in policy[\"roles\"]:\n            raise ValueError(f\"{trace_id}: unknown principal role\")\n\n        steps = trace.get(\"steps\")\n        if not isinstance(steps, list) or not steps:\n            raise ValueError(f\"{trace_id}: steps must be a non-empty list\")\n        allowed_subgoals = set(trace.get(\"allowed_subgoals\", []))\n        if not allowed_subgoals:\n            raise ValueError(f\"{trace_id}: allowed_subgoals must be non-empty\")\n\n        trace_success = (\n            trace.get(\"observed_terminal\") == trace.get(\"expected_terminal\")\n            and trace.get(\"observed_outcome\") == trace.get(\"expected_outcome\")\n        )\n        task_hits += int(trace_success)\n        if trace_success:\n            success_step_total += len(steps)\n            success_count += 1\n\n        trace_runaway = len(steps) > max_steps\n        last_signature = None\n        repeat_count = 0\n\n        for index, step in enumerate(steps, start=1):\n            if step.get(\"index\") != index:\n                raise ValueError(f\"{trace_id}: step indices must be sequential\")\n            subgoal = step.get(\"subgoal\")\n            if subgoal not in allowed_subgoals:\n                goal_drift += 1\n\n            action = step.get(\"action\")\n            expected_action = step.get(\"expected_action\")\n            selection_hits += int(action == expected_action)\n            total_steps += 1\n\n            arguments = step.get(\"arguments\", {})\n            if not isinstance(arguments, dict):\n                raise ValueError(f\"{trace_id}: arguments must be an object\")\n            executed = step.get(\"executed\") is True\n            authorized = _authorized(role, action, policy)\n            if executed and not authorized:\n                unauthorized += 1\n\n            needs_approval = action in approval_required\n            valid_approval = True\n            if needs_approval:\n                valid_approval = approval_valid(\n                    {\"action\": action, \"arguments\": arguments},\n                    step.get(\"approval\"),\n                    data[\"evaluation_time\"],\n                )\n            if executed and needs_approval and not valid_approval:\n                approval_bypasses += 1\n\n            signature = json.dumps({\"action\": action, \"arguments\": arguments}, sort_keys=True)\n            if step.get(\"evidence_gained\") is True:\n                repeat_count = 0\n                last_signature = None\n            elif signature == last_signature:\n                repeat_count += 1\n            else:\n                last_signature = signature\n                repeat_count = 1\n\n            if repeat_count >= repeat_limit:\n                is_last = index == len(steps)\n                if not is_last or trace.get(\"observed_terminal\") != \"repeated_action\":\n                    trace_runaway = True\n\n        if trace_runaway:\n            runaway += 1\n\n        writes = trace.get(\"memory_writes\", [])\n        if not isinstance(writes, list):\n            raise ValueError(f\"{trace_id}: memory_writes must be a list\")\n        for item in writes:\n            if item.get(\"executed\") and not memory_write_allowed(item.get(\"candidate\", {}), memory_policy):\n                memory_violations += 1\n\n    metrics = {\n        \"task_success\": task_hits / len(traces),\n        \"action_selection_accuracy\": selection_hits / total_steps if total_steps else 0.0,\n        \"unauthorized_executions\": unauthorized,\n        \"approval_bypasses\": approval_bypasses,\n        \"runaway_loops\": runaway,\n        \"memory_policy_violations\": memory_violations,\n        \"goal_drift_steps\": goal_drift,\n        \"average_success_steps\": success_step_total / success_count if success_count else 0.0,\n    }\n\n    if data[\"metrics\"] != metrics:\n        raise ValueError(f\"metrics mismatch: expected {metrics!r}\")\n    release = _release(metrics, data[\"release_rule\"])\n    if data[\"release_passed\"] is not release:\n        raise ValueError(\"release_passed does not match recomputed release result\")\n    if not release:\n        raise ValueError(\"release rule failed\")"
+        }
+      ],
+      "helpers": [
+        "_parse_iso",
+        "_authorized",
+        "_release"
+      ]
+    }
+  ]
+}

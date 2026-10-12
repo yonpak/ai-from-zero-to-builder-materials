@@ -4,6 +4,10 @@ Adapt a small pretrained encoder to a related target task on the scikit-learn ha
 
 ## Prerequisites
 
+Python help for this project:
+
+- [P5 — Reading PyTorch and Colab](https://aizero.ruzincompany.com/learn/03-level-3/reading-pytorch-and-colab)
+
 Complete Level 3 through **L3.14 — Adaptation Review: Choose, Fine-Tune, Explain**. The canonical project depends on `p02-neural-net-from-scratch`, so you should already be able to reason about tensor shapes, training curves, gradients, and reproducible comparisons.
 
 ## Dataset and task
@@ -70,3 +74,13 @@ Run fine-tuning again from the **same frozen checkpoint** with `lr=1.0`. Record 
 - No environment variables or credentials are required.
 - Keep the fixed train/validation split in the starter.
 - Record versions with `python --version` and `pip freeze | grep -E 'torch|scikit-learn|numpy'`.
+
+## Compare with a reference (optional)
+
+Try the TODOs yourself and run the submission validator first. Then inspect the [published reference solution](../../reference/l03/adaptation_reference.py) and any example evaluations. To verify the published reference against its acceptance tests from the public materials repository root, run:
+
+```bash
+python projects/tests/l03/test_reference.py
+```
+
+This command tests the reference, **not your own solution**. Use the project rubric and submission checker to evaluate your implementation.

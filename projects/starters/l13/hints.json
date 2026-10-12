@@ -1,0 +1,118 @@
+{
+  "version": 1,
+  "project": "p13",
+  "todos": [
+    {
+      "id": "protocol_compatible",
+      "file": "system.py",
+      "signature": "def protocol_compatible(kind: str, observed_version: str) -> bool:",
+      "source": "projects/reference/l13/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: require the pinned course version for MCP or A2A. Validator focus: pinned MCP should match."
+        },
+        {
+          "text": "Pseudocode: Check known protocol kind and its explicitly pinned version; reject unknown kinds. Useful Python operations: raise, ValueError."
+        },
+        {
+          "text": "Reference protocol_compatible function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def protocol_compatible(kind: str, observed_version: str) -> bool:\n    if kind==\"mcp\":\n        return observed_version==MCP_VERSION\n    if kind==\"a2a\":\n        return observed_version==A2A_VERSION\n    raise ValueError(\"unknown protocol kind\")"
+        }
+      ]
+    },
+    {
+      "id": "expose_mcp_capabilities",
+      "file": "system.py",
+      "signature": "def expose_mcp_capabilities(catalog: list[dict], role: str, policy: dict) -> list[str]:",
+      "source": "projects/reference/l13/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: keep only version-compatible capabilities permitted for the local role."
+        },
+        {
+          "text": "Pseudocode: Filter capabilities by protocol version and local role permissions. Useful Python operations: set, sorted."
+        },
+        {
+          "text": "Reference expose_mcp_capabilities function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def expose_mcp_capabilities(catalog: list[dict], role: str, policy: dict) -> list[str]:\n    allowed=set(policy.get(\"roles\",{}).get(role,[]))\n    result=[]\n    for item in catalog:\n        if item.get(\"protocol_version\")!=MCP_VERSION:\n            continue\n        name=item.get(\"name\")\n        if name in allowed:\n            result.append(name)\n    return sorted(set(result))"
+        }
+      ]
+    },
+    {
+      "id": "select_agent",
+      "file": "system.py",
+      "signature": "def select_agent(cards: list[dict], required_skill: str, required_interface: str) -> str | None:",
+      "source": "projects/reference/l13/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: select a version-compatible A2A agent that advertises both requirements. Validator focus: select_agent must filter version/capability and apply priority."
+        },
+        {
+          "text": "Pseudocode: Require compatible A2A version, skill and output format, then choose by priority. Useful Python operations: set, int."
+        },
+        {
+          "text": "Reference select_agent function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def select_agent(cards: list[dict], required_skill: str, required_interface: str) -> str | None:\n    matches=[\n        c for c in cards\n        if c.get(\"a2a_version\")==A2A_VERSION\n        and required_skill in set(c.get(\"skills\",[]))\n        and required_interface in set(c.get(\"interfaces\",[]))\n    ]\n    matches.sort(key=lambda c:(int(c.get(\"priority\",100)),str(c.get(\"name\",\"\"))))\n    return matches[0][\"name\"] if matches else None"
+        }
+      ]
+    },
+    {
+      "id": "artifact_allowed",
+      "file": "system.py",
+      "signature": "def artifact_allowed(artifact: dict, expected_task_id: str, expected_types: set[str]) -> bool:",
+      "source": "projects/reference/l13/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: validate task provenance and artifact type. Validator focus: valid artifact rejected."
+        },
+        {
+          "text": "Pseudocode: Verify task_id provenance and allowed artifact type. Useful Python operations: set."
+        },
+        {
+          "text": "Reference artifact_allowed function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def artifact_allowed(artifact: dict, expected_task_id: str, expected_types: set[str]) -> bool:\n    return (\n        artifact.get(\"task_id\")==expected_task_id\n        and artifact.get(\"type\") in expected_types\n        and bool(str(artifact.get(\"artifact_id\",\"\")).strip())\n    )"
+        }
+      ]
+    },
+    {
+      "id": "apply_versioned_update",
+      "file": "system.py",
+      "signature": "def apply_versioned_update(state: dict, expected_version: int, patch: dict) -> dict:",
+      "source": "projects/reference/l13/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: reject stale writes and increment version on success. Validator focus: stale write must reject."
+        },
+        {
+          "text": "Pseudocode: Require current expected version before applying patch and incrementing version. Useful Python operations: int, raise, ValueError."
+        },
+        {
+          "text": "Reference apply_versioned_update function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def apply_versioned_update(state: dict, expected_version: int, patch: dict) -> dict:\n    if int(state.get(\"version\",-1))!=expected_version:\n        raise ValueError(\"stale state version\")\n    row=deepcopy(state)\n    row.update(deepcopy(patch))\n    row[\"version\"]=expected_version+1\n    return row"
+        }
+      ]
+    },
+    {
+      "id": "validate_run",
+      "file": "system.py",
+      "signature": "def validate_run(data: dict) -> None:",
+      "source": "projects/reference/l13/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: recompute interoperability and coordination metrics from raw events. Validator focus: run-level protocol mismatch must reject."
+        },
+        {
+          "text": "Pseudocode: Recompute metrics and release outcome independently from raw evidence; reject missing records or contradictions. Useful Python operations: raise, ValueError, sorted, isinstance, len."
+        },
+        {
+          "text": "Reference validate_run function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def validate_run(data: dict) -> None:\n    required={\"project_id\",\"mcp_version\",\"a2a_version\",\"policy\",\"runs\",\"metrics\",\"release_rule\",\"release_passed\"}\n    missing=required-data.keys()\n    if missing:\n        raise ValueError(\"missing: \"+\", \".join(sorted(missing)))\n    if data[\"project_id\"]!=\"p13-interoperable-agent-system\":\n        raise ValueError(\"unexpected project_id\")\n    if data[\"mcp_version\"]!=MCP_VERSION or data[\"a2a_version\"]!=A2A_VERSION:\n        raise ValueError(\"top-level pinned protocol version mismatch\")\n    if not isinstance(data[\"runs\"],list) or len(data[\"runs\"])<5:\n        raise ValueError(\"at least five runs required\")\n    metrics=_metrics(data)\n    if data[\"metrics\"]!=metrics:\n        raise ValueError(f\"metrics mismatch: expected {metrics!r}\")\n    release=_release(metrics,data[\"release_rule\"])\n    if data[\"release_passed\"] is not release:\n        raise ValueError(\"release_passed mismatch\")\n    if not release:\n        raise ValueError(\"release rule failed\")"
+        }
+      ],
+      "helpers": [
+        "_metrics",
+        "_release"
+      ]
+    }
+  ]
+}

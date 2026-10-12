@@ -1,5 +1,11 @@
 # p10-tool-using-assistant — Multimodal Tool-Using Assistant
 
+## Prerequisites
+
+Python help for this project:
+
+- [P9 — Writing Reliable Python](https://aizero.ruzincompany.com/learn/10-level-10/writing-reliable-python)
+
 ## Goal
 
 Build a bounded tool workflow whose authority and evidence remain inspectable:
@@ -67,3 +73,13 @@ Add `PROJECT_REPORT.md` describing:
 - multimodal evidence limitations;
 - evaluation slices and release rule;
 - one earliest-boundary failure → hypothesis → focused fix → result trace.
+
+## Compare with a reference (optional)
+
+Try the TODOs yourself and run the submission validator first. Then inspect the [published reference solution](../../reference/l10/reference_solution.py) and any example evaluations. To verify the published reference against its acceptance tests from the public materials repository root, run:
+
+```bash
+python projects/tests/l10/test_reference.py
+```
+
+This command tests the reference, **not your own solution**. Use the project rubric and submission checker to evaluate your implementation.

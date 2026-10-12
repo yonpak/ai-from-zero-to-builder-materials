@@ -1,0 +1,207 @@
+{
+  "version": 1,
+  "project": "p04",
+  "todos": [
+    {
+      "id": "word_tokens",
+      "file": "tokenizer_workbench.py",
+      "signature": "def word_tokens(text: str) -> list[str]:",
+      "source": "projects/reference/l04/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: return deterministic word-like pieces. Validator checks: word_tokens should split words and punctuation deterministically."
+        },
+        {
+          "text": "Pseudocode: Use a Unicode-aware regex to emit lowercase words and individual punctuation marks. Relevant Python syntax: re."
+        },
+        {
+          "text": "Only word_tokens from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def word_tokens(text: str) -> list[str]:\n    return re.findall(r\"\\w+|[^\\w\\s]\", text.lower(), flags=re.UNICODE)"
+        }
+      ]
+    },
+    {
+      "id": "subword_tokens",
+      "file": "tokenizer_workbench.py",
+      "signature": "def subword_tokens(text: str) -> list[str]:",
+      "source": "projects/reference/l04/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: reuse suffixes such as ing/ers/er/ed/s when present. Validator checks: subword_tokens should reuse the fixture suffix pieces."
+        },
+        {
+          "text": "Pseudocode: Call word_tokens, then split reusable suffixes only from long alphabetic pieces."
+        },
+        {
+          "text": "Only subword_tokens from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def subword_tokens(text: str) -> list[str]:\n    out = []\n    for piece in word_tokens(text):\n        out.extend(_split_suffix(piece))\n    return out"
+        }
+      ],
+      "helpers": [
+        "_split_suffix"
+      ]
+    },
+    {
+      "id": "build_vocab",
+      "file": "tokenizer_workbench.py",
+      "signature": "def build_vocab(texts=TRAIN_TEXT) -> list[str]:",
+      "source": "projects/reference/l04/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: preserve the special-token IDs exactly. Validator checks: vocabulary construction must be deterministic."
+        },
+        {
+          "text": "Pseudocode: Build a set of observed word pieces, sort it, and prefix SPECIAL_TOKENS in their fixed order. Relevant Python syntax: sorted."
+        },
+        {
+          "text": "Only build_vocab from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def build_vocab(texts=TRAIN_TEXT) -> list[str]:\n    ordinary = sorted({piece for text in texts for piece in word_tokens(text)})\n    return [*SPECIAL_TOKENS, *ordinary]"
+        }
+      ]
+    },
+    {
+      "id": "encode",
+      "file": "tokenizer_workbench.py",
+      "signature": "def encode(text: str, vocab: list[str], max_length: int = 8):",
+      "source": "projects/reference/l04/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: use <unk> for missing pieces, keep BOS/EOS, and pad with <pad>. Validator checks: encode should return fixed-length ids and mask."
+        },
+        {
+          "text": "Pseudocode: Reserve one slot for BOS and EOS, truncate the middle, then pad IDs with 0 and mask positions with 0. Relevant Python syntax: int, raise, ValueError, enumerate, len."
+        },
+        {
+          "text": "Only encode from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def encode(text: str, vocab: list[str], max_length: int = 8):\n    if max_length < 2:\n        raise ValueError(\"max_length must leave room for BOS and EOS\")\n    stoi = {token: index for index, token in enumerate(vocab)}\n    body = [stoi.get(piece, stoi[\"<unk>\"]) for piece in word_tokens(text)]\n    body = body[: max_length - 2]\n    ids = [stoi[\"<bos>\"], *body, stoi[\"<eos>\"]]\n    mask = [1] * len(ids)\n    pad_count = max_length - len(ids)\n    ids.extend([stoi[\"<pad>\"]] * pad_count)\n    mask.extend([0] * pad_count)\n    return ids, mask"
+        }
+      ]
+    },
+    {
+      "id": "byte_tokens",
+      "file": "tokenizer_workbench.py",
+      "signature": "def byte_tokens(text: str) -> list[int]:",
+      "source": "projects/reference/l04/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: Implement byte_tokens using the supplied inputs and output contract. Validator checks: byte_tokens should return byte integers."
+        },
+        {
+          "text": "Pseudocode: Encode the string as UTF-8 bytes and convert each byte to an integer. Relevant Python syntax: int."
+        },
+        {
+          "text": "Only byte_tokens from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def byte_tokens(text: str) -> list[int]:\n    return list(text.encode(\"utf-8\"))"
+        }
+      ]
+    },
+    {
+      "id": "byte_decode",
+      "file": "tokenizer_workbench.py",
+      "signature": "def byte_decode(values: list[int]) -> str:",
+      "source": "projects/reference/l04/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: Implement byte_decode using the supplied inputs and output contract. Validator checks: byte representation should round-trip UTF-8 text."
+        },
+        {
+          "text": "Pseudocode: Rebuild bytes from the integer list, then decode as UTF-8. Relevant Python syntax: int."
+        },
+        {
+          "text": "Only byte_decode from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def byte_decode(values: list[int]) -> str:\n    return bytes(values).decode(\"utf-8\")"
+        }
+      ]
+    },
+    {
+      "id": "lookup_embeddings",
+      "file": "tokenizer_workbench.py",
+      "signature": "def lookup_embeddings(ids: list[int], table=EMBEDDING_TABLE) -> list[list[float]]:",
+      "source": "projects/reference/l04/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: Implement lookup_embeddings using the supplied inputs and output contract."
+        },
+        {
+          "text": "Pseudocode: For each ID, check table bounds and copy the matching embedding vector. Relevant Python syntax: int, float, len, raise, IndexError."
+        },
+        {
+          "text": "Only lookup_embeddings from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def lookup_embeddings(ids: list[int], table=EMBEDDING_TABLE) -> list[list[float]]:\n    vectors = []\n    for token_id in ids:\n        if token_id < 0 or token_id >= len(table):\n            raise IndexError(\"token id is outside the embedding table\")\n        vectors.append(list(table[token_id]))\n    return vectors"
+        }
+      ]
+    },
+    {
+      "id": "attach_positions",
+      "file": "tokenizer_workbench.py",
+      "signature": "def attach_positions(ids: list[int], mask: list[int]) -> list[tuple[int, int]]:",
+      "source": "projects/reference/l04/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: Implement attach_positions using the supplied inputs and output contract."
+        },
+        {
+          "text": "Pseudocode: Reject length mismatches; enumerate paired IDs/masks and keep only mask=1. Relevant Python syntax: int, len, raise, ValueError, enumerate."
+        },
+        {
+          "text": "Only attach_positions from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def attach_positions(ids: list[int], mask: list[int]) -> list[tuple[int, int]]:\n    if len(ids) != len(mask):\n        raise ValueError(\"ids and mask must have the same length\")\n    return [(token_id, position) for position, (token_id, valid) in enumerate(zip(ids, mask)) if valid == 1]"
+        }
+      ]
+    },
+    {
+      "id": "unknown_rate",
+      "file": "tokenizer_workbench.py",
+      "signature": "def unknown_rate(text: str, vocab: list[str]) -> float:",
+      "source": "projects/reference/l04/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: Implement unknown_rate using the supplied inputs and output contract. Validator checks: familiar fixture should have zero unknown rate."
+        },
+        {
+          "text": "Pseudocode: Divide missing word pieces by total pieces; define the empty-text case. Relevant Python syntax: float, set, sum, len."
+        },
+        {
+          "text": "Only unknown_rate from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def unknown_rate(text: str, vocab: list[str]) -> float:\n    pieces = word_tokens(text)\n    known = set(vocab)\n    if not pieces:\n        return 0.0\n    return sum(piece not in known for piece in pieces) / len(pieces)"
+        }
+      ]
+    },
+    {
+      "id": "evaluate_cases",
+      "file": "tokenizer_workbench.py",
+      "signature": "def evaluate_cases(vocab: list[str]) -> dict[str, dict[str, float | int]]:",
+      "source": "projects/reference/l04/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: Implement evaluate_cases using the supplied inputs and output contract. Validator checks: evaluate_cases should return every fixed evaluation slice."
+        },
+        {
+          "text": "Pseudocode: Compare each case output with its expected support/provenance, count passes and failed case IDs. Relevant Python syntax: float, int, len, round."
+        },
+        {
+          "text": "Only evaluate_cases from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def evaluate_cases(vocab: list[str]) -> dict[str, dict[str, float | int]]:\n    results = {}\n    for name, text in EVAL_CASES.items():\n        results[name] = {\n            \"word_tokens\": len(word_tokens(text)),\n            \"subword_tokens\": len(subword_tokens(text)),\n            \"byte_tokens\": len(byte_tokens(text)),\n            \"unknown_rate\": round(unknown_rate(text, vocab), 3),\n        }\n    return results"
+        }
+      ]
+    },
+    {
+      "id": "build_report",
+      "file": "tokenizer_workbench.py",
+      "signature": "def build_report() -> dict:",
+      "source": "projects/reference/l04/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: Implement build_report using the supplied inputs and output contract."
+        },
+        {
+          "text": "Pseudocode: Assemble fixed special IDs, per-slice metrics, worst unseen-piece rate, and an evidence-based conclusion. Relevant Python syntax: enumerate, max, len."
+        },
+        {
+          "text": "Only build_report from the public reference implementation is shown here. Check helper dependencies in the linked reference file when necessary.",
+          "code": "def build_report() -> dict:\n    vocab = build_vocab()\n    stoi = {token: index for index, token in enumerate(vocab)}\n    cases = evaluate_cases(vocab)\n    worst = max(cases, key=lambda name: (cases[name][\"unknown_rate\"], name))\n    return {\n        \"vocab_size\": len(vocab),\n        \"special_ids\": {token: stoi[token] for token in SPECIAL_TOKENS},\n        \"cases\": cases,\n        \"worst_unknown_slice\": worst,\n        \"conclusion\": (\n            \"The tiny word vocabulary is compact on familiar training-like text but loses unseen pieces. \"\n            \"UTF-8 bytes preserve every evaluation string, while subword pieces demonstrate how reusable fragments can reduce whole-word dependence.\"\n        ),\n    }"
+        }
+      ]
+    }
+  ]
+}

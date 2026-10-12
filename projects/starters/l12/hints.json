@@ -1,0 +1,172 @@
+{
+  "version": 1,
+  "project": "p12",
+  "todos": [
+    {
+      "id": "claim_task",
+      "file": "harness.py",
+      "signature": "def claim_task(task: dict, worker: str, now_step: int, lease_steps: int) -> dict:",
+      "source": "projects/reference/l12/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: claim unowned or expired work without changing task identity. Validator focus: claim_task contract failed."
+        },
+        {
+          "text": "Pseudocode: Reject active competing leases; for expired/unowned work create a running claim without changing task_id. Useful Python operations: int, isinstance, raise, ValueError."
+        },
+        {
+          "text": "Reference claim_task function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def claim_task(task: dict, worker: str, now_step: int, lease_steps: int) -> dict:\n    if not isinstance(lease_steps,int) or lease_steps<1:\n        raise ValueError(\"lease_steps must be positive\")\n    row=deepcopy(task)\n    owner=row.get(\"owner\")\n    lease_until=int(row.get(\"lease_until\",0))\n    if owner and now_step<lease_until:\n        raise ValueError(\"task already leased\")\n    row[\"owner\"]=worker\n    row[\"lease_until\"]=now_step+lease_steps\n    row[\"state\"]=\"RUNNING\"\n    return row"
+        }
+      ]
+    },
+    {
+      "id": "operation_key",
+      "file": "harness.py",
+      "signature": "def operation_key(task_id: str, action: str, arguments: dict) -> str:",
+      "source": "projects/reference/l12/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: return a deterministic identity for the same logical side effect. Validator focus: operation_key must be stable across argument ordering."
+        },
+        {
+          "text": "Pseudocode: Canonicalize argument ordering and combine it with task/action identity before hashing. Useful Python operations: json, hashlib."
+        },
+        {
+          "text": "Reference operation_key function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def operation_key(task_id: str, action: str, arguments: dict) -> str:\n    payload=json.dumps({\"task_id\":task_id,\"action\":action,\"arguments\":arguments},sort_keys=True,separators=(\",\",\":\"))\n    return hashlib.sha256(payload.encode()).hexdigest()[:24]"
+        }
+      ]
+    },
+    {
+      "id": "retry_decision",
+      "file": "harness.py",
+      "signature": "def retry_decision(error_type: str, attempt: int, max_retries: int) -> dict:",
+      "source": "projects/reference/l12/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: classify retryable failures and return retry + deterministic delay. Validator focus: timeout should retry within budget."
+        },
+        {
+          "text": "Pseudocode: Stop at budget or permanent failures; assign deterministic delay for retryable events. Useful Python operations: int, raise, ValueError."
+        },
+        {
+          "text": "Reference retry_decision function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def retry_decision(error_type: str, attempt: int, max_retries: int) -> dict:\n    if attempt<1 or max_retries<0:\n        raise ValueError(\"invalid retry counters\")\n    retry=error_type in TRANSIENT and attempt<=max_retries\n    return {\"retry\":retry,\"delay_steps\":2**(attempt-1) if retry else 0}"
+        }
+      ]
+    },
+    {
+      "id": "authorize",
+      "file": "harness.py",
+      "signature": "def authorize(role: str, action: str, policy: dict) -> bool:",
+      "source": "projects/reference/l12/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: recompute permission from role policy and control actions."
+        },
+        {
+          "text": "Pseudocode: Match role permission to named tools; permit specified control actions separately. Useful Python operations: set."
+        },
+        {
+          "text": "Reference authorize function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def authorize(role: str, action: str, policy: dict) -> bool:\n    if action in set(policy.get(\"control_actions\",[])):\n        return True\n    return action in set(policy.get(\"roles\",{}).get(role,[]))"
+        }
+      ]
+    },
+    {
+      "id": "sandbox_allows",
+      "file": "harness.py",
+      "signature": "def sandbox_allows(request: dict, profile: dict) -> bool:",
+      "source": "projects/reference/l12/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: check requested path, host, and memory against the isolation profile. Validator focus: valid sandbox request rejected."
+        },
+        {
+          "text": "Pseudocode: Require requested path/host/memory within the allowed sandbox profile. Useful Python operations: set, int."
+        },
+        {
+          "text": "Reference sandbox_allows function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def sandbox_allows(request: dict, profile: dict) -> bool:\n    root=PurePosixPath(profile[\"write_root\"])\n    path=PurePosixPath(request[\"path\"])\n    path_ok=path==root or root in path.parents\n    host_ok=request.get(\"host\") in set(profile.get(\"network_hosts\",[]))\n    memory_ok=int(request.get(\"memory_mb\",0))<=int(profile.get(\"max_memory_mb\",0))\n    return path_ok and host_ok and memory_ok"
+        }
+      ]
+    },
+    {
+      "id": "retrieve_memory",
+      "file": "harness.py",
+      "signature": "def retrieve_memory(items: list[dict], scope: str, policy: dict, max_items: int) -> list[dict]:",
+      "source": "projects/reference/l12/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: filter by scope, provenance, freshness, then rank and bound."
+        },
+        {
+          "text": "Pseudocode: Filter by scope, trusted origin and freshness before scoring and capping results. Useful Python operations: int, set, isinstance, float."
+        },
+        {
+          "text": "Reference retrieve_memory function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def retrieve_memory(items: list[dict], scope: str, policy: dict, max_items: int) -> list[dict]:\n    trusted=set(policy.get(\"trusted_sources\",[]))\n    max_age=int(policy.get(\"max_age_days\",0))\n    eligible=[\n        deepcopy(x) for x in items\n        if x.get(\"scope\")==scope\n        and x.get(\"source\") in trusted\n        and isinstance(x.get(\"age_days\"),int)\n        and 0<=x[\"age_days\"]<=max_age\n    ]\n    eligible.sort(key=lambda x:(-float(x.get(\"relevance\",0.0)),x[\"age_days\"],str(x.get(\"id\",\"\"))))\n    return eligible[:max_items]"
+        }
+      ]
+    },
+    {
+      "id": "schedule_waves",
+      "file": "harness.py",
+      "signature": "def schedule_waves(dependencies: dict[str, set[str]], max_parallel: int) -> list[list[str]]:",
+      "source": "projects/reference/l12/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: return dependency-respecting waves and reject cycles."
+        },
+        {
+          "text": "Pseudocode: Use dependency indegrees and topological waves; raise on cycles and enforce capacity. Useful Python operations: set, int, raise, ValueError, any."
+        },
+        {
+          "text": "Reference schedule_waves function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def schedule_waves(dependencies: dict[str,set[str]], max_parallel: int) -> list[list[str]]:\n    if max_parallel<1:\n        raise ValueError(\"max_parallel must be positive\")\n    deps={k:set(v) for k,v in dependencies.items()}\n    if any(x not in deps for needs in deps.values() for x in needs):\n        raise ValueError(\"unknown dependency\")\n    done=set(); waves=[]\n    while len(done)<len(deps):\n        ready=sorted(k for k,v in deps.items() if k not in done and v<=done)\n        if not ready:\n            raise ValueError(\"dependency cycle\")\n        for i in range(0,len(ready),max_parallel):\n            wave=ready[i:i+max_parallel]\n            waves.append(wave)\n            done.update(wave)\n    return waves"
+        }
+      ]
+    },
+    {
+      "id": "validate_delegation",
+      "file": "harness.py",
+      "signature": "def validate_delegation(envelope: dict, parent_tools: set[str], parent_budget: int) -> bool:",
+      "source": "projects/reference/l12/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: ensure child tools, budget, and required evidence stay inside parent bounds. Validator focus: valid delegation rejected."
+        },
+        {
+          "text": "Pseudocode: Require child tools, budget, and evidence obligations to be subsets of parent's bounds. Useful Python operations: set, int, isinstance."
+        },
+        {
+          "text": "Reference validate_delegation function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def validate_delegation(envelope: dict, parent_tools: set[str], parent_budget: int) -> bool:\n    tools=set(envelope.get(\"allowed_tools\",[]))\n    budget=envelope.get(\"step_budget\")\n    expected=set(envelope.get(\"expected_fields\",[]))\n    return (\n        bool(str(envelope.get(\"subgoal\",\"\")).strip())\n        and tools<=set(parent_tools)\n        and isinstance(budget,int) and 1<=budget<=parent_budget\n        and {\"evidence\"}<=expected\n    )"
+        }
+      ]
+    },
+    {
+      "id": "validate_run",
+      "file": "harness.py",
+      "signature": "def validate_run(data: dict) -> None:",
+      "source": "projects/reference/l12/reference_solution.py",
+      "hints": [
+        {
+          "text": "Direction: recompute metrics and release result from raw traces. Validator focus: unauthorized side effect must reject."
+        },
+        {
+          "text": "Pseudocode: Recompute metrics and release outcome independently from raw evidence; reject missing records or contradictions. Useful Python operations: raise, ValueError, sorted, isinstance, len."
+        },
+        {
+          "text": "Reference validate_run function only. Follow helper calls into the public reference file when necessary.",
+          "code": "def validate_run(data: dict) -> None:\n    required={\"project_id\",\"harness_version\",\"policy_version\",\"evaluator_version\",\"policy\",\"traces\",\"metrics\",\"release_rule\",\"release_passed\"}\n    missing=required-data.keys()\n    if missing:\n        raise ValueError(\"missing: \"+\", \".join(sorted(missing)))\n    if data[\"project_id\"]!=\"p12-agent-harness\":\n        raise ValueError(\"unexpected project_id\")\n    if not isinstance(data[\"traces\"],list) or len(data[\"traces\"])<5:\n        raise ValueError(\"at least five traces required\")\n    metrics=_metrics(data)\n    if data[\"metrics\"]!=metrics:\n        raise ValueError(f\"metrics mismatch: expected {metrics!r}\")\n    release=_release(metrics,data[\"release_rule\"])\n    if data[\"release_passed\"] is not release:\n        raise ValueError(\"release_passed mismatch\")\n    if not release:\n        raise ValueError(\"release rule failed\")"
+        }
+      ],
+      "helpers": [
+        "_metrics",
+        "_release"
+      ]
+    }
+  ]
+}
