@@ -1,0 +1,15 @@
+{
+  "id": "lab-supplement-pytorch-colab",
+  "title": "P5 — Read PyTorch in Colab (CPU)",
+  "stage": "B",
+  "runtime": "colab",
+  "activity": "modify",
+  "notebook": "labs/notebooks/supplements/p05-pytorch-reading.ipynb",
+  "url": "https://colab.research.google.com/github/yonpak/ai-from-zero-to-builder-materials/blob/main/labs/notebooks/supplements/p05-pytorch-reading.ipynb",
+  "packages": [
+    "torch>=2,<3"
+  ],
+  "python": ">=3.11",
+  "gpu": "optional",
+  "troubleshooting": "If the public-materials notebook is not published yet, download https://aizero.ruzincompany.com/labs/notebooks/supplements/p05-pytorch-reading.ipynb and select Colab File → Upload notebook. CPU is sufficient."
+}
