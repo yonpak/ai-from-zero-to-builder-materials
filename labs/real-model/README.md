@@ -6,20 +6,56 @@ They connect the course's inspectable toy workflows to real pretrained models, t
 
 ## Environment
 
-Use Python 3.10+ in a clean local virtual environment.
+Use Python 3.10+ in a clean local virtual environment. These are optional experiments: the regular Labs and projects remain offline and deterministic. For default model-backed scripts, allow roughly 1–2 GB for Qwen2.5-0.5B weights and 0.1–0.2 GB for MiniLM embeddings, plus dependencies and caches (plan for **8–12 GB free disk** overall; actual downloads vary by OS/package platform). Cached weights are reused. The MCP client/server exercise needs no model weights. For prerequisite code-reading skills, see [P10 — Python for Real AI Services](https://aizero.ruzincompany.com/learn/12-level-12/python-for-real-ai-services).
+
+### macOS / Linux
+
+From the public learner-materials repository root:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-pip install -r labs/real-model/requirements.txt
 ```
 
-The first model run downloads weights from Hugging Face, so network access and several hundred MB to a few GB of disk space may be required. The MCP in-process client/server exercise does not download model weights.
+### Windows PowerShell
+
+From the public learner-materials repository root, with Python 3.10+ installed:
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+```
+
+If your shell blocks the activation script, open a new PowerShell session and use `Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned` **only for that session**, then activate again. You can also skip activation and use `.\.venv\Scripts\python.exe -m pip ...` plus `.\.venv\Scripts\python.exe labs/real-model/l13_mcp_client.py` directly. Do not change machine-wide execution policy. Model-serving runtimes such as vLLM may require Linux/WSL2 even though the standard-library fallback/client works in PowerShell.
+
+### Choose dependencies for the exercise you actually run
+
+**MCP client/server only (Level 13; no model weights, small install):**
+
+```bash
+python -m pip install "mcp>=2,<3"
+python labs/real-model/l13_mcp_client.py
+```
+
+The MCP SDK is the only dependency from this folder required for that in-process exercise. It still installs its own transitive dependencies. This is the easiest real-protocol starting point.
+
+**HTTP benchmark client only (Level 14; no model libraries in the client):** No `pip install` command is required. Run `python labs/real-model/l14_real_model_serving.py --openai-base-url http://127.0.0.1:8000 --model Qwen/Qwen2.5-0.5B-Instruct --requests 12 --concurrency 4` **only after** you start a compatible server in a separate environment. The server, not the benchmark client, owns its model weights and packages.
+
+**Real-model generation, embeddings, LoRA, local fallback server, or the full integration smoke:** Install the complete requirements:
+
+```bash
+python -m pip install -r labs/real-model/requirements.txt
+```
+
+These model-backed exercises need download access the first time, and can require substantial RAM, disk and possibly GPU resources. You can start with MCP or the client-only benchmark and install model dependencies later. Windows PowerShell uses the **same** `python -m pip install` commands above after activation.
 
 ## Release smoke for the core real integrations
 
-After the clean install succeeds, run the core model/tool/protocol integrations in one command:
+In Windows PowerShell, use the **same single-line** `python labs/real-model/test_real_integrations.py` command shown below (no bash activation needed after the PowerShell setup).
+
+After installing the **full real-model requirements** (not the MCP-only package), run the core model/tool/protocol integrations in one command:
 
 ```bash
 python labs/real-model/test_real_integrations.py
@@ -41,6 +77,12 @@ from importlib.metadata import version
 for name in ["torch", "transformers", "peft", "sentence-transformers", "mcp"]:
     print(name, version(name))
 PY
+```
+
+PowerShell equivalent of the bash heredoc version check above:
+
+```powershell
+python -c "from importlib.metadata import version; [print(name, version(name)) for name in ('torch','transformers','peft','sentence-transformers','mcp')]"
 ```
 
 ## Level 7 — prompt a real LLM
@@ -188,6 +230,22 @@ A model-quality miss does not become a Level 15 release failure. It is evidence 
 
 The run writes `artifacts/real-model/l15-real-rag-run.json`. Treat that file as an experiment trace, not as a release record.
 
+
+## PowerShell commands for multi-line examples
+
+Bash uses `\` to continue a command; PowerShell uses a backtick, which can be easy to omit. These **one-line** equivalents avoid shell-specific continuations:
+
+```powershell
+python labs/real-model/l09_embedding_rag_real_model.py --generate
+python labs/real-model/l11_agent_loop_real_model.py --max-steps 3
+python labs/real-model/l14_real_model_serving.py --requests 6 --concurrency 2
+python labs/real-model/l14_real_model_serving.py --requests 2 --concurrency 1 --demo-readiness-failure
+python labs/real-model/l14_real_model_serving.py --openai-base-url http://127.0.0.1:8000 --model Qwen/Qwen2.5-0.5B-Instruct --requests 12 --concurrency 4
+python projects/tests/l15/validate_product.py projects/starters/l15/product.py
+python labs/real-model/l15_capstone_real_app.py --product projects/starters/l15/product.py
+```
+
+To try the SDK development tool on Windows after installing `uv`, use `uv run --with "mcp[cli]>=2,<3" mcp dev labs/real-model/l13_mcp_server.py`. For actual benchmarking, start the external serving runtime separately as documented above; the `--openai-base-url` command does not launch one.
 
 ## Model and library references
 
