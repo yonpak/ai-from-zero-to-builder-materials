@@ -3,5 +3,9 @@
   "title": "Batching and Streaming",
   "stage": "C",
   "runtime": "local-python",
-  "activity": "implement"
+  "activity": "implement",
+  "hintLink": {
+    "label": "Python syntax stuck? See P3 — loops and lists.",
+    "href": "/learn/01-level-1/writing-small-python-functions#for-loops-and-branches-this-pattern-returns-in-l811"
+  }
 }

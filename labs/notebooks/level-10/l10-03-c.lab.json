@@ -3,5 +3,9 @@
   "title": "Validate Structured Tool Arguments",
   "stage": "C",
   "runtime": "local-python",
-  "activity": "implement"
+  "activity": "implement",
+  "hintLink": {
+    "label": "Python syntax stuck? See P9 — argument validation.",
+    "href": "/learn/10-level-10/writing-reliable-python#2-check-a-dictionary-at-the-boundary-15-minutes"
+  }
 }

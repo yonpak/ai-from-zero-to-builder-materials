@@ -3,5 +3,9 @@
   "title": "Shared State and Conflict Resolution",
   "stage": "D",
   "runtime": "local-python",
-  "activity": "implement"
+  "activity": "implement",
+  "hintLink": {
+    "label": "Python syntax stuck? See P3 — dictionary updates and membership.",
+    "href": "/learn/01-level-1/writing-small-python-functions#tiny-python-operations-you-will-use-in-the-lab"
+  }
 }

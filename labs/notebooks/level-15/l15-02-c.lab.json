@@ -3,5 +3,9 @@
   "title": "Golden Sets and Regression Suites",
   "stage": "C",
   "runtime": "local-python",
-  "activity": "implement"
+  "activity": "implement",
+  "hintLink": {
+    "label": "Python syntax stuck? See P6 — sets and dictionary grouping.",
+    "href": "/learn/04-level-4/text-processing-in-python#dict-set-and-counter"
+  }
 }

@@ -3,5 +3,9 @@
   "title": "State Machines for Tool Workflows",
   "stage": "C",
   "runtime": "local-python",
-  "activity": "implement"
+  "activity": "implement",
+  "hintLink": {
+    "label": "Python syntax stuck? See P9 — state transitions.",
+    "href": "/learn/10-level-10/writing-reliable-python#4-a-state-machine-makes-illegal-shortcuts-visible-15-minutes"
+  }
 }

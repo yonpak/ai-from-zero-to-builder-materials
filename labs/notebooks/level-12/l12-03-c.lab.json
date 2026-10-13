@@ -3,5 +3,9 @@
   "title": "Retries, Idempotency, and Recovery",
   "stage": "C",
   "runtime": "local-python",
-  "activity": "implement"
+  "activity": "implement",
+  "hintLink": {
+    "label": "Python syntax stuck? See P9 — exceptions and recovery.",
+    "href": "/learn/10-level-10/writing-reliable-python#3-raise-at-the-boundary-catch-where-you-can-respond-10-minutes"
+  }
 }
