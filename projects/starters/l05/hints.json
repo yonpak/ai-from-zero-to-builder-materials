@@ -9,7 +9,7 @@
       "source": "projects/reference/l05/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: stable softmax (subtract max before exp)."
+          "text": "Check first: for the validator input [0.0, 2.0, 1.0], the result must sum to 1 and the largest probability must be where the largest score is. Think about what math.exp does with a very large score, and what an empty list should do."
         },
         {
           "text": "Pseudocode: Subtract the maximum logit before exponentiation; normalize by the sum. Relevant Python syntax: raise, ValueError, max, math, sum."
@@ -27,7 +27,7 @@
       "source": "projects/reference/l05/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: normalize features of one token vector."
+          "text": "Check first: layer_norm([101.0, 102.0, 103.0]) must return three values whose mean is about 0. Decide which statistics of the input you need before normalizing, and why eps is a parameter."
         },
         {
           "text": "Pseudocode: Compute mean and variance across features, then divide centered values by a stable standard deviation. Relevant Python syntax: raise, ValueError, sum, len, math."
@@ -45,7 +45,7 @@
       "source": "projects/reference/l05/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: expand C -> 2C, apply a nonlinearity, then contract to C."
+          "text": "Check first: the shape contract. One token vector of width C goes in, the hidden layer is 2C wide, and a vector of the same width C must come out. There are no weight arguments, so decide how the expansion and contraction stay deterministic."
         },
         {
           "text": "Pseudocode: Expand features, apply nonlinearity, project back to the original width. Relevant Python syntax: max, len."
@@ -63,7 +63,7 @@
       "source": "projects/reference/l05/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: split channels into heads, compute scaled causal attention,"
+          "text": "Check first: it returns (output, weights). With 4 tokens of width 8 and n_head=2, output must be 4 rows of width 8, and weights must be [head][query][key]: each row sums to 1 and every key after the query has weight exactly 0. Width 6 with 4 heads must raise ValueError."
         },
         {
           "text": "Pseudocode: Require C divisible by heads; compute scaled scores, mask future positions and normalize within each head. Relevant Python syntax: raise, ValueError, len, any, all."
@@ -84,7 +84,7 @@
       "source": "projects/reference/l05/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: elementwise addition with explicit shape checks."
+          "text": "Check first: both arguments are sequences of rows. Decide which two shape checks (number of rows, and the width of each row) must fail with an error before any addition happens."
         },
         {
           "text": "Pseudocode: Reject unequal shape before elementwise addition. Relevant Python syntax: len, raise, ValueError, zip."
@@ -102,7 +102,7 @@
       "source": "projects/reference/l05/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: pre-norm attention residual, then pre-norm feed-forward residual."
+          "text": "Check first: what it returns. The validator unpacks block, _ = transformer_block(seq, 2), so it returns (sequence, weights), and the sequence must keep the input's 4 x 8 shape. Note the order in the TODO: normalize before each sub-layer, then add the residual."
         },
         {
           "text": "Pseudocode: Follow pre-norm -> attention -> residual, then pre-norm -> feed forward -> residual."
@@ -120,7 +120,7 @@
       "source": "projects/reference/l05/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: repeat the block while preserving sequence/feature shape."
+          "text": "Check first: stack_blocks(seq, 2, 3) is also unpacked into two values, and the output must still be 4 x 8. Decide how you will collect each block's attention weights, because mini_transformer has to return them."
         },
         {
           "text": "Pseudocode: Repeatedly apply the block with the configured layer count; shape must remain (T,C). Relevant Python syntax: raise, ValueError."
@@ -138,7 +138,7 @@
       "source": "projects/reference/l05/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: embeddings -> stacked blocks -> final norm -> vocabulary logits."
+          "text": "Check first: the two validator properties. Logits must be one row of vocab_size values per token, and changing tokens 3 and 4 must not change the logits of tokens 0 to 2 at all. Also read embed_token (keep it unchanged) and the context argument."
         },
         {
           "text": "Pseudocode: Construct token/position representations, stack blocks and return per-token vocabulary logits. Relevant Python syntax: raise, ValueError, len, any, enumerate."

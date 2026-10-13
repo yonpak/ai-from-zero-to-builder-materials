@@ -9,7 +9,7 @@
       "source": "projects/reference/l15/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: summarize success and critical regressions from raw cases."
+          "text": "Check first: the validator's three raw cases. Two passed, and one failed and is critical. It expects regression_success 2/3 and critical_regressions 1. Decide what an empty case list should do before you divide."
         },
         {
           "text": "Pseudocode: Compute success fraction and count critical regressions from raw test cases. Useful Python operations: raise, ValueError, sum, round, len."
@@ -27,7 +27,7 @@
       "source": "projects/reference/l15/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: compute mean score and count cases with high reviewer disagreement."
+          "text": "Check first: ratings have one row per reviewer per case. Reviewers scoring case x as 1 and 5 must give human_mean_score 3.0 and count x as one high-disagreement case. Which field tells you that two rows belong to the same case?"
         },
         {
           "text": "Pseudocode: Average recorded reviewer scores and count cases exceeding disagreement tolerance. Useful Python operations: raise, ValueError, int, any, sum."
@@ -45,7 +45,7 @@
       "source": "projects/reference/l15/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: authorize from trusted principal state; ignore generated identity claims."
+          "text": "Check first: which argument you can trust. The proposal says \"role\": \"admin\", but the principal's role is support: read_order must be allowed and refund_order denied. Authority comes only from the principal and the policy."
         },
         {
           "text": "Pseudocode: Trust principal identity/role, not user-generated claims; check proposed action against policy. Useful Python operations: set."
@@ -63,7 +63,7 @@
       "source": "projects/reference/l15/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: apply age, retention period, and legal-hold rules."
+          "text": "Check first: the two fixtures. A record created on day 0 with 30-day retention is eligible on day 31, unless legal_hold is true. Also decide what to do when a value is missing or negative."
         },
         {
           "text": "Pseudocode: Require minimum age/retention and reject legal holds. Useful Python operations: int, raise, ValueError."
@@ -81,7 +81,7 @@
       "source": "projects/reference/l15/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: require threat categories, then count mismatches and critical failures."
+          "text": "Check first: a case fails when observed differs from expected, and severity decides whether the failure is critical. The jailbreak case (expected blocked, observed executed, critical) must count once, and an empty category must raise ValueError."
         },
         {
           "text": "Pseudocode: Track threat categories and count critical failed tests. Useful Python operations: raise, ValueError, any, sum, len."
@@ -99,7 +99,7 @@
       "source": "projects/reference/l15/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: require scoped, ISO-dated, versioned evidence within the reviewed snapshot."
+          "text": "Check first: the three fixtures. A claim dated on the reviewed day is valid, one dated a day later is not, and a snapshot_date of \"1\" must be rejected as malformed. List which fields must be non-empty for a claim to be scoped and versioned."
         },
         {
           "text": "Pseudocode: Parse ISO dates, ensure claim's reviewed snapshot and scoped version are valid. Useful Python operations: any."
@@ -120,7 +120,7 @@
       "source": "projects/reference/l15/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: validate setup, expected comparison direction, numeric evidence, and conclusion."
+          "text": "Check first: compare candidate with baseline under expected_relation before you read the conclusion. 0.8 against 0.7 supports partially_reproduced; 0.6 against 0.7 contradicts confirmed_in_scope but supports not_reproduced. Also check which setup fields must be present."
         },
         {
           "text": "Pseudocode: Compare numeric baseline/candidate evidence with stated expected relation and conclusion. Useful Python operations: any, isinstance."
@@ -142,7 +142,7 @@
       "source": "projects/reference/l15/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: Count missing, duplicate, invalid artifact and governance evidence from the complete required inventories. Validator checks independently reject counterexamples for evidence_summary."
+          "text": "Check first: what \"missing\" means. Count against required_artifacts and required_obligations, not only the rows supplied. The validator's failure cases are a missing artifact row, a missing governance row, an empty license/terms field and a malformed review date."
         },
         {
           "text": "Pseudocode: Build sets of required IDs, validate license/provenance and review dates, and count absent entries; never trust reported counts."
@@ -164,7 +164,7 @@
       "source": "projects/reference/l15/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: apply every quality threshold and zero-tolerance evidence/control gate."
+          "text": "Check first: the release_rule in the run fixture. Separate the quality thresholds (minimum scores) from the zero-tolerance counts: artifact_evidence_violations = 1 must block release even when every quality score passes."
         },
         {
           "text": "Pseudocode: Reject any quality threshold failure and all zero-tolerance control/evidence violations."
@@ -185,7 +185,7 @@
       "source": "projects/reference/l15/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: recompute all metrics from raw evidence and verify the release decision. Validator focus: critical regression tamper must reject."
+          "text": "Check first: the tampered fixtures in the validator. Each changes one raw field (a critical case's passed, an action's executed, a record's retained, and so on) and must raise ValueError. For each one, which reported value would hide the change if you trusted it?"
         },
         {
           "text": "Pseudocode: Recompute metrics and release outcome independently from raw evidence; reject missing records or contradictions. Useful Python operations: raise, ValueError, sorted."
@@ -208,7 +208,7 @@
       "source": "projects/tests/l15/product_contract_fixture.py",
       "hints": [
         {
-          "text": "Direction: Normalize corpus/query embeddings, compute similarities only for supplied rows, then take exactly top_k entries. The optional product validator requires the documented return types."
+          "text": "Check first: the return contract. The product validator requires exactly top_k (document, score) pairs, each document identical to a supplied corpus row, unique IDs and finite numeric scores. Decide how corpus and query vectors must be prepared so their scores are comparable."
         },
         {
           "text": "Pseudocode: Call embedder.encode(texts, normalize_embeddings=True), dot product with zip/sum, sort descending by score, slice to k. The fixture also defines helper _dot and imports json; include required helpers/imports if copying its function."
@@ -229,7 +229,7 @@
       "source": "projects/tests/l15/product_contract_fixture.py",
       "hints": [
         {
-          "text": "Direction: Include every retrieved ID and text in the chat messages and explicitly demand structured claim/source_ids. The optional product validator requires the documented return types."
+          "text": "Check first: the three claim shapes listed in the TODO comment, and that every retrieved source ID must appear in the messages. Decide where the JSON-only instruction goes and where the evidence goes."
         },
         {
           "text": "Pseudocode: Format evidence lines as [ID] text, then combine a system JSON-only instruction with the user question and evidence. The fixture also defines helper _dot and imports json; include required helpers/imports if copying its function."
@@ -247,7 +247,7 @@
       "source": "projects/tests/l15/product_contract_fixture.py",
       "hints": [
         {
-          "text": "Direction: Only parse tokens newly generated after the prompt; reject non-object JSON. The optional product validator requires the documented return types."
+          "text": "Check first: the model output also contains your prompt tokens. Decide how to keep only the newly generated tokens, and what to do when the decoded text is not a JSON object."
         },
         {
           "text": "Pseudocode: Use apply_chat_template and model.generate; slice after input length, decode, json.loads and check isinstance(result, dict). Remember to import json. The fixture also defines helper _dot and imports json; include required helpers/imports if copying its function."
@@ -265,7 +265,7 @@
       "source": "projects/tests/l15/product_contract_fixture.py",
       "hints": [
         {
-          "text": "Direction: Keep the observable stage order and retain provenance and retrieval hits; do not invent answer prose. The optional product validator requires the documented return types."
+          "text": "Check first: this function only connects the three functions above, in order. Pass the arguments through unchanged, and make sure the result keeps both the claim/source_ids and the retrieval hits."
         },
         {
           "text": "Pseudocode: Call retrieve -> build_grounded_messages -> generate_grounded_claim with unchanged arguments; merge its claim/source_ids with hits. The fixture also defines helper _dot and imports json; include required helpers/imports if copying its function."

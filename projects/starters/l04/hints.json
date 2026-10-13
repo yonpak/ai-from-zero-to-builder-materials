@@ -9,7 +9,7 @@
       "source": "projects/reference/l04/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: return deterministic word-like pieces. Validator checks: word_tokens should split words and punctuation deterministically."
+          "text": "Check first: the validator expects word_tokens(\"Cats nap.\") to be [\"cats\", \"nap\", \".\"]. Note the lowercase and that the period is its own piece. Decide which characters count as part of a word and which are separate punctuation before you write anything."
         },
         {
           "text": "Pseudocode: Use a Unicode-aware regex to emit lowercase words and individual punctuation marks. Relevant Python syntax: re."
@@ -27,7 +27,7 @@
       "source": "projects/reference/l04/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: reuse suffixes such as ing/ers/er/ed/s when present. Validator checks: subword_tokens should reuse the fixture suffix pieces."
+          "text": "Check first: \"players played\" must become [\"play\", \"ers\", \"play\", \"ed\"]. List the suffixes that appear in TRAIN_TEXT, and notice that the word stem and the suffix become separate pieces. Which function above already gives you the word pieces to start from?"
         },
         {
           "text": "Pseudocode: Call word_tokens, then split reusable suffixes only from long alphabetic pieces."
@@ -48,7 +48,7 @@
       "source": "projects/reference/l04/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: preserve the special-token IDs exactly. Validator checks: vocabulary construction must be deterministic."
+          "text": "Check first: the validator requires vocab[:4] to equal SPECIAL_TOKENS exactly, and two calls must return the same list. Look at TRAIN_TEXT to see which pieces belong after the special tokens, and choose an order that cannot change between runs."
         },
         {
           "text": "Pseudocode: Build a set of observed word pieces, sort it, and prefix SPECIAL_TOKENS in their fixed order. Relevant Python syntax: sorted."
@@ -66,7 +66,7 @@
       "source": "projects/reference/l04/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: use <unk> for missing pieces, keep BOS/EOS, and pad with <pad>. Validator checks: encode should return fixed-length ids and mask."
+          "text": "Check first: work the fixture by hand. \"tiny quokka\" with max_length=6 must give <bos> (id 2) at index 0, <unk> (id 1) for quokka, <eos> (id 3) at index 3, then two <pad> ids (0), with mask [1, 1, 1, 1, 0, 0]. Then check the long case: with max_length=5, both <bos> and <eos> must survive truncation."
         },
         {
           "text": "Pseudocode: Reserve one slot for BOS and EOS, truncate the middle, then pad IDs with 0 and mask positions with 0. Relevant Python syntax: int, raise, ValueError, enumerate, len."
@@ -84,7 +84,7 @@
       "source": "projects/reference/l04/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: Implement byte_tokens using the supplied inputs and output contract. Validator checks: byte_tokens should return byte integers."
+          "text": "Check first: the sample \"Token🙂\" contains a character outside ASCII. Find how many UTF-8 bytes the emoji needs, and make sure every value you return is an int from 0 to 255."
         },
         {
           "text": "Pseudocode: Encode the string as UTF-8 bytes and convert each byte to an integer. Relevant Python syntax: int."
@@ -102,7 +102,7 @@
       "source": "projects/reference/l04/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: Implement byte_decode using the supplied inputs and output contract. Validator checks: byte representation should round-trip UTF-8 text."
+          "text": "Check first: this is the inverse of byte_tokens. The validator calls byte_decode(byte_tokens(\"Token🙂\")) and expects exactly the original string, so both functions must agree on one text encoding."
         },
         {
           "text": "Pseudocode: Rebuild bytes from the integer list, then decode as UTF-8. Relevant Python syntax: int."
@@ -120,7 +120,7 @@
       "source": "projects/reference/l04/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: Implement lookup_embeddings using the supplied inputs and output contract."
+          "text": "Check first: what each row of EMBEDDING_TABLE represents and how many rows it has. The validator expects one vector per ID, every vector as wide as the table, and a clear error for an ID outside the table. Decide which error that should be."
         },
         {
           "text": "Pseudocode: For each ID, check table bounds and copy the matching embedding vector. Relevant Python syntax: int, float, len, raise, IndexError."
@@ -138,7 +138,7 @@
       "source": "projects/reference/l04/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: Implement attach_positions using the supplied inputs and output contract."
+          "text": "Check first: the mask. For the ids and mask from encode(\"tiny\", vocab, max_length=5), the validator expects pairs only for the three mask=1 positions, numbered 0, 1 and 2. Also decide what should happen when ids and mask have different lengths."
         },
         {
           "text": "Pseudocode: Reject length mismatches; enumerate paired IDs/masks and keep only mask=1. Relevant Python syntax: int, len, raise, ValueError, enumerate."
@@ -156,7 +156,7 @@
       "source": "projects/reference/l04/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: Implement unknown_rate using the supplied inputs and output contract. Validator checks: familiar fixture should have zero unknown rate."
+          "text": "Check first: what is being measured. It is word pieces compared with vocab: \"tiny models\" must give exactly 0.0, and \"quokka predicts\" must give a value above 0. Decide what an empty text should return before you divide."
         },
         {
           "text": "Pseudocode: Divide missing word pieces by total pieces; define the empty-text case. Relevant Python syntax: float, set, sum, len."
@@ -174,7 +174,7 @@
       "source": "projects/reference/l04/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: Implement evaluate_cases using the supplied inputs and output contract. Validator checks: evaluate_cases should return every fixed evaluation slice."
+          "text": "Check first: EVAL_CASES has four slices, and the result needs one entry for each slice key. Look at which metrics the validator reads for each slice (unknown_rate and byte_tokens), and which functions above already compute them."
         },
         {
           "text": "Pseudocode: Compare each case output with its expected support/provenance, count passes and failed case IDs. Relevant Python syntax: float, int, len, round."
@@ -192,7 +192,7 @@
       "source": "projects/reference/l04/reference_solution.py",
       "hints": [
         {
-          "text": "Direction: Implement build_report using the supplied inputs and output contract."
+          "text": "Check first: the five required keys and the fixed special_ids mapping {\"<pad>\": 0, \"<unk>\": 1, \"<bos>\": 2, \"<eos>\": 3}. worst_unknown_slice must name one of the held-out failure slices, and the conclusion needs at least 80 characters of evidence from your evaluated cases."
         },
         {
           "text": "Pseudocode: Assemble fixed special IDs, per-slice metrics, worst unseen-piece rate, and an evidence-based conclusion. Relevant Python syntax: enumerate, max, len."
